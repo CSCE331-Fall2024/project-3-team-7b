@@ -1,0 +1,19 @@
+.banner-div {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    text-align: center;
+}
+
+.banner {
+    margin: auto;
+}
+
+.button-div {
+    text-align: center;
+}
+
+Button {
+    width: 20vw;
+    height: 50vh;
+    margin: 2vw !important;
+}
