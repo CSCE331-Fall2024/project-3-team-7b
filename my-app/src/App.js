@@ -6,6 +6,7 @@ import CustomerHome from "./pages/customer/CustomerHome";
 import MenuItem from "./pages/order/MenuItem"
 import ItemSelection from "./pages/order/ItemSelection";
 import FinishOrder from "./pages/order/FinishOrder";
+import OrderConfirmation from "./pages/order/OrderConfirmation";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/customer/order" element={<MenuItem />}/>
           <Route path="/customer/order/select" element={<ItemSelection />}/>
           <Route path="/customer/order/finish" element={<FinishOrder />}/>
+          <Route path="/customer/order/confirmation" element={<OrderConfirmation />}/>
         </Routes>
       </BrowserRouter>
     </div>

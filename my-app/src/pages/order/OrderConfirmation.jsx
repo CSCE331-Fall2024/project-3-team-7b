@@ -4,11 +4,12 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 
-function FinishOrder() {
+function OrderConfirmation() {
+    const orderNumber = 123456;
     const navigate = useNavigate();
 
-    const placeOrder =() =>{
-        navigate("/customer/order/confirmation");
+    const newOrder = () => {
+        navigate("/customer");
     }
 
     return (
@@ -18,12 +19,14 @@ function FinishOrder() {
                     <Banner />
                 </div>
                 <div className="finish-content">
-                    <div className="finish-order-content">
-                        <h2>Current Order:</h2>
+                    <div className="order-confirmation">
+                        <h2>ORDER PLACED!</h2>
+                        <h4>YOUR ORDER # IS:</h4>
+                        <h2>{orderNumber}</h2>
+                        <h4>YOUR FOOD WILL BE OUT SHORTLY!</h4>
                     </div>
                     <div className="finish-buttons">
-                        <Button variant="contained" color="secondary">Cancel Order</Button>
-                        <Button variant="contained" onClick={placeOrder}>Pay Now</Button>
+                        <Button variant="contained" onClick={newOrder}>NEW ORDER</Button>
                     </div>
                 </div>
                 
@@ -32,4 +35,4 @@ function FinishOrder() {
     );
 }
 
-export default FinishOrder
+export default OrderConfirmation
