@@ -1,0 +1,65 @@
+.banner-image{
+    height: 10vh;
+    margin: auto;
+}
+
+
+/* ****** MENU DISPLAY ****** */
+.menu-display {
+    width: 70vw;
+    display: flex;
+    flex-wrap: wrap; /* Allows the items to wrap to the next line */
+    gap: 10px; /* Space between buttons */
+}
+
+.menu-button {
+    flex: 0 1 calc(25% - 20px); /* 4 buttons per row with spacing */
+    height: 20vh;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.menu-button:hover {
+    transform: scale(1.05);
+}
+
+.menu-image {
+    width: 100px;
+    height: 75px;
+    object-fit: cover;
+    margin-bottom: 1vh;
+}
+
+/* ****** ORDER AREAS ****** */
+.order-area {
+    height: 60vh;
+    width: 20vw;
+}
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    background-color: #DBDBDB;
+    margin-bottom: 2vh;
+    padding: 2vh;
+    border-radius: 10px;
+}
+
+.totals {
+    margin-top: auto;
+    text-align: right;
+}
+
+/* ****** SELECT ITEM ****** */
+.item-type {
+    display: flex;
+    flex-direction: column;
+}

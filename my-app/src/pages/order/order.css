@@ -1,0 +1,67 @@
+.menu-items{
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 15vh;
+    margin-top: 2vh;
+    border-radius: 15px;
+    background-color: #DBDBDB;
+}
+
+.order-menu-content {
+    margin-top: 2vh;
+    display: flex;
+}
+
+/* ***** FINISH ORDER ***** */
+
+.finish {
+    width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.finish-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    width: 60vw;
+}
+
+.finish-order-content {
+    width: 60vw;
+    height: 60vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    border-radius: 15px;
+    background-color: #DBDBDB;
+}
+
+.finish-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.order-confirmation {
+    width: 60vw;
+    height: 60vh;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    border-radius: 15px;
+    background-color: #DBDBDB;
+    text-align: center;
+}

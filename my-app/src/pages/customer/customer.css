@@ -1,0 +1,31 @@
+.translate-button{
+    margin: 3vh !important;
+    border-radius: 10px;
+}
+
+.customer-content-div {
+    text-align: center;
+}
+
+.logo-div {
+    margin-bottom: 5vh;
+}
+
+.logo {
+    height: 30vh;
+}
+
+.order-button {
+    height: 8vh;
+    width: 20vw;
+    border-radius: 10px !important;
+    margin-bottom: 5vh !important;
+}
+
+.weather-div {
+    margin: auto;
+    background-color: #DBDBDB;
+    border-radius: 20px;
+    width: 40vw;
+    height: 30vh;
+}

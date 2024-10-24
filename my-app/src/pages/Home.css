@@ -1,0 +1,20 @@
+.banner-div {
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    text-align: center;
+}
+
+.main-banner {
+    margin: auto;
+}
+
+.button-div {
+    text-align: center;
+}
+
+.home-buttons {
+    width: 20vw;
+    height: 50vh;
+    margin: 2vw !important;
+    border-radius: 20px !important;
+}
