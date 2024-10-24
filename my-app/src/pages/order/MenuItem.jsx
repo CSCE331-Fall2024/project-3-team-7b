@@ -5,6 +5,7 @@ import "./order.css"
 import theme from "../../createTheme"
 import Banner from '../../components/order/Banner';
 import MenuDisplay from '../../components/order/MenuDisplay';
+import OrderArea from '../../components/order/OrderArea';
 
 function MenuItem(){
     // const navigate = useNavigate();
@@ -12,7 +13,7 @@ function MenuItem(){
 
     return (
         <ThemeProvider theme={theme}>
-            <div>
+            <div className='menu-items'>
                 <div className='banner'>
                     <Banner />
                 </div>
@@ -21,7 +22,7 @@ function MenuItem(){
                         <MenuDisplay />
                     </div>
                     <div>
-                        {/* current order */}
+                        <OrderArea />
                     </div>
                 </div>
             </div>

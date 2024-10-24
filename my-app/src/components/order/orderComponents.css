@@ -3,22 +3,25 @@
     margin: auto;
 }
 
-/* orderComponents.css */
+
+/* ****** MENU DISPLAY ****** */
 .menu-display {
+    width: 70vw;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-wrap: wrap; /* Allows the items to wrap to the next line */
     gap: 10px; /* Space between buttons */
 }
 
 .menu-button {
+    flex: 0 1 calc(25% - 20px); /* 4 buttons per row with spacing */
+    height: 20vh;
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -29,12 +32,28 @@
 
 .menu-image {
     width: 100px;
-    height: 100px;
+    height: 75px;
     object-fit: cover;
-    margin-bottom: 10px;
+    margin-bottom: 1vh;
 }
 
-p {
-    font-size: 16px;
-    color: #333;
+/* ****** ORDER AREAS ****** */
+.order-area {
+    height: 60vh;
+    width: 20vw;
+}
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    background-color: #DBDBDB;
+    margin-bottom: 2vh;
+    padding: 2vh;
+    border-radius: 10px;
+}
+
+.totals {
+    margin-top: auto;
+    text-align: right;
 }
