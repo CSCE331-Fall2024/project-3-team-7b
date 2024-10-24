@@ -5,7 +5,7 @@ import Banner from '../../components/order/Banner';
 import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
 
-function MenuItem(){
+function MenuSelection(){
     return (
         <ThemeProvider theme={theme}>
             <div className='menu-items'>
@@ -25,4 +25,4 @@ function MenuItem(){
     );
 }
 
-export default MenuItem;
+export default MenuSelection;

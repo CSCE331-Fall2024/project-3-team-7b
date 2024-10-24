@@ -7,8 +7,12 @@ import { useNavigate } from "react-router-dom";
 function FinishOrder() {
     const navigate = useNavigate();
 
-    const placeOrder =() =>{
+    const placeOrder = () => {
         navigate("/customer/order/confirmation");
+    }
+
+    const cancelOrder = () => {
+        navigate("/customer");
     }
 
     return (
@@ -22,7 +26,7 @@ function FinishOrder() {
                         <h2>Current Order:</h2>
                     </div>
                     <div className="finish-buttons">
-                        <Button variant="contained" color="secondary">Cancel Order</Button>
+                        <Button variant="contained" color="secondary" onClick={cancelOrder}>Cancel Order</Button>
                         <Button variant="contained" onClick={placeOrder}>Pay Now</Button>
                     </div>
                 </div>

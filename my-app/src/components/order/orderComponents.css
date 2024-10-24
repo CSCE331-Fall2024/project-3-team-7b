@@ -6,10 +6,16 @@
 
 /* ****** MENU DISPLAY ****** */
 .menu-display {
-    width: 70vw;
+    width: 67vw;
+    height: fit-content;
     display: flex;
-    flex-wrap: wrap; /* Allows the items to wrap to the next line */
-    gap: 10px; /* Space between buttons */
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #D95451;
+    border-radius: 15px;
+    padding: 2vh;
 }
 
 .menu-button {
@@ -35,6 +41,10 @@
     height: 75px;
     object-fit: cover;
     margin-bottom: 1vh;
+}
+
+.labels {
+    padding-left: 2vh;
 }
 
 /* ****** ORDER AREAS ****** */
