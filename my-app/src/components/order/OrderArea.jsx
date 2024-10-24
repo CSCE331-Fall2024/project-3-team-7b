@@ -3,6 +3,7 @@ import React from "react";
 import "./orderComponents.css";
 import { Button } from "@mui/material";
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 
 // Dynamically load all images from a folder
 const importAll = (r) => {
@@ -13,9 +14,14 @@ const importAll = (r) => {
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function OrderArea() {
+    const navigate = useNavigate();
     const [subtotal, setSubtotal] = useState(0.00);
     const [tax, setTax] = useState(0.00);
     const [total, setTotal] = useState(0.00);
+
+    const finishOrder = () => {
+        navigate("/customer/order/finish");
+    }
 
     return (
         <div className="order-area">
@@ -30,7 +36,7 @@ function OrderArea() {
             </div>
             <div>
                 <Button variant="contained" color="secondary">Cancel Order</Button>
-                <Button variant="contained">Finish Order</Button>
+                <Button variant="contained" onClick={finishOrder}>Finish Order</Button>
             </div>
         </div>
     );

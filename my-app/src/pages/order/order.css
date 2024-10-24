@@ -1,4 +1,4 @@
-.menu-items {
+.menu-items, .finish {
     width: 90vw;
     margin-left: auto;
     margin-right: auto;
@@ -17,4 +17,22 @@
 .order-menu-content {
     margin-top: 2vh;
     display: flex;
+}
+
+.finish-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.finish-order-content {
+    width: 60vw;
+    height: 50vh;
+    margin-top: 5vh;
+    border-radius: 15px;
+    background-color: #DBDBDB;
+}
+
+.finish-buttons {
+    display: flex;
+    flex-direction: row;
 }

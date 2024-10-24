@@ -1,11 +1,16 @@
+// import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
+import { useLocation } from "react-router-dom";
 import "./order.css"
 import theme from "../../createTheme"
 import Banner from '../../components/order/Banner';
-import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
+import SelectItem from '../../components/order/SelectItem';
 
-function MenuItem(){
+function ItemSelection(){
+    const location = useLocation();
+    const item = location.state?.item.slice(0, -4); 
+    
     return (
         <ThemeProvider theme={theme}>
             <div className='menu-items'>
@@ -13,9 +18,11 @@ function MenuItem(){
                     <Banner />
                 </div>
                 <div className='order-menu-content'>
-                    <div>
-                        <MenuDisplay />
-                    </div>
+                    {item <= 3 && (
+                        <div>
+                            <SelectItem item={item} /> 
+                        </div>
+                    )}
                     <div>
                         <OrderArea />
                     </div>
@@ -25,4 +32,4 @@ function MenuItem(){
     );
 }
 
-export default MenuItem;
+export default ItemSelection;
