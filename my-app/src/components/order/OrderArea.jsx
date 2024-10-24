@@ -23,6 +23,10 @@ function OrderArea() {
         navigate("/customer/order/finish");
     }
 
+    const cancelOrder = () => {
+        navigate("/customer");
+    }
+
     return (
         <div className="order-area">
             <div className="order-list">
@@ -35,7 +39,7 @@ function OrderArea() {
                 </div>
             </div>
             <div>
-                <Button variant="contained" color="secondary">Cancel Order</Button>
+                <Button variant="contained" color="secondary" onClick={cancelOrder}>Cancel Order</Button>
                 <Button variant="contained" onClick={finishOrder}>Finish Order</Button>
             </div>
         </div>

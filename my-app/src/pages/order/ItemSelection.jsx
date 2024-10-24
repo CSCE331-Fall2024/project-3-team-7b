@@ -18,11 +18,9 @@ function ItemSelection(){
                     <Banner />
                 </div>
                 <div className='order-menu-content'>
-                    {item <= 3 && (
-                        <div>
-                            <SelectItem item={item} /> 
-                        </div>
-                    )}
+                    <div>
+                        <SelectItem item={item} /> 
+                    </div>
                     <div>
                         <OrderArea />
                     </div>
