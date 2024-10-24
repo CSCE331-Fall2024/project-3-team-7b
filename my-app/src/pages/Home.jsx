@@ -24,7 +24,7 @@ function Home(){
         <ThemeProvider theme={theme}>
             <div>
                 <div className="banner-div">
-                    <img className="banner" src={banner} alt="Panda Express Banner"></img>
+                    <img className="main-banner" src={banner} alt="Panda Express Banner"></img>
                 </div>
 
                 <div className="button-div">

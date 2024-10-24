@@ -3,6 +3,7 @@ import './App.css';
 import Home from "./pages/Home";
 import Login from './pages/Login';
 import CustomerHome from "./pages/customer/CustomerHome";
+import MenuItem from "./pages/order/MenuItem"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="" element={<Home />} />
           <Route path="/login" element={<Login />}/>
           <Route path="/customer" element={<CustomerHome />}/>
+          <Route path="/customer/order" element={<MenuItem />}/>
         </Routes>
       </BrowserRouter>
     </div>

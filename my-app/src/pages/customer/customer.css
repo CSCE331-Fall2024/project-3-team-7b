@@ -1,9 +1,9 @@
 .translate-button{
-    margin: 3vh;
+    margin: 3vh !important;
     border-radius: 10px;
 }
 
-.content-div {
+.customer-content-div {
     text-align: center;
 }
 
@@ -18,8 +18,8 @@
 .order-button {
     height: 8vh;
     width: 20vw;
-    border-radius: 10px;
-    margin-bottom: 5vh;
+    border-radius: 10px !important;
+    margin-bottom: 5vh !important;
 }
 
 .weather-div {

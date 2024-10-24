@@ -19,7 +19,7 @@ function CustomerHome(){
                     <Button className="translate-button" variant="contained">Select A Language</Button>
                 </div>
 
-                <div className="content-div">
+                <div className="customer-content-div">
                     <div className="logo-div">
                         <img className="logo" src={logo} alt="Panda Express Banner"></img>
                     </div>
