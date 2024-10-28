@@ -1,0 +1,31 @@
+.translate-button {
+    margin: 3vh !important;
+    border-radius: 10px;
+}
+
+.cashier-content-div {
+    text-align: center;
+}
+
+.logo-div {
+    margin-bottom: 5vh;
+}
+
+.logo {
+    height: 30vh;
+}
+
+.start-transaction-button, .back-button {
+    height: 8vh;
+    width: 20vw;
+    border-radius: 10px !important;
+    margin-bottom: 3vh !important;
+}
+
+.summary-div {
+    margin: auto;
+    background-color: #F5F5F5;
+    border-radius: 20px;
+    width: 40vw;
+    height: 30vh;
+}
