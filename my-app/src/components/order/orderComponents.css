@@ -1,6 +1,16 @@
+.banner {
+    display: flex;
+    flex-direction: row;
+} 
+
 .banner-image{
     height: 10vh;
     margin: auto;
+}
+
+.accesible-buttons {
+    display: flex;
+    flex-direction: column;
 }
 
 
