@@ -34,6 +34,7 @@ function App() {
             path="/cashier"
             element={isAuthenticated ? <CashierHome /> : <Navigate to="/login" replace />}
           />
+          <Route path="/cashier/order/" element={<MenuSelection />}/>
       
         </Routes>
       </BrowserRouter>
