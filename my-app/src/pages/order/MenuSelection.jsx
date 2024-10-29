@@ -5,7 +5,7 @@ import Banner from '../../components/order/Banner';
 import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
 
-function MenuSelection(){
+function MenuSelection() {
     return (
         <ThemeProvider theme={theme}>
             <div className='menu-items'>
