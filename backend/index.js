@@ -26,6 +26,16 @@ app.get('/api/employees', async (req, res) => {
   }
 });
 
+app.get('/api/menu_items', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM menu_items');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
