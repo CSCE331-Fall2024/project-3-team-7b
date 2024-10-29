@@ -9,7 +9,7 @@ function CustomerHome() {
     const navigate = useNavigate();
     
     const startOrder = () => {
-        navigate("/customer/order");
+        navigate("/customer/order", {state: {view: "customer"}});
     }
 
     return (

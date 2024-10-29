@@ -31,16 +31,21 @@ function App() {
             element={<Login onLogin={handleLogin} />} // Pass the handleLogin function here
           />
           <Route path="/customer" element={<CustomerHome />}/>
-          <Route path="/customer/order" element={<MenuSelection />}/>
-          <Route path="/customer/order/select" element={<ItemSelection />}/>
-          <Route path="/customer/order/finish" element={<FinishOrder />}/>
-          <Route path="/customer/order/confirmation" element={<OrderConfirmation />}/>
+          <Route path="/customer/order" element={<MenuSelection view="customer"/>}/>
+          <Route path="/customer/order/select" element={<ItemSelection view="customer"/>}/>
+          <Route path="/customer/order/finish" element={<FinishOrder view="customer"/>}/>
+          <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer"/>}/>
+            
           {/* Protected Cashier Route */}
           <Route
             path="/cashier"
             element={isAuthenticated ? <CashierHome /> : <Navigate to="/login" replace />}
           />
-          <Route path="/cashier/order/" element={<MenuSelection />}/>
+          <Route path="/cashier/order/" element={<MenuSelection view="cashier"/>}/>
+          <Route path="/cashier/order/select" element={<ItemSelection view="cashier"/>}/>
+          <Route path="/cashier/order/finish" element={<FinishOrder view="cashier"/>}/>
+          <Route path="/cashier/order/confirmation" element={<OrderConfirmation view="cashier"/>}/>
+     
           <Route path="/manager/" element={<ManagerHome />}/>
           <Route path="/manager/inventory" element={<Inventory />}/>
           <Route path="/manager/trends" element={<Trends />}/>

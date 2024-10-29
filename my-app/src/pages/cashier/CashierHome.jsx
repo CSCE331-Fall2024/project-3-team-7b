@@ -9,7 +9,7 @@ function CashierHome() {
     const navigate = useNavigate();
     
     const startTransaction = () => {
-        navigate("/cashier/order"); // Adjust route as needed for starting a transaction
+        navigate("/cashier/order", {state: {view: "cashier"}}); // Adjust route as needed for starting a transaction
     }
 
     const goBack = () => {
