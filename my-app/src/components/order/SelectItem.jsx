@@ -20,11 +20,14 @@ const drinkImages = importImages(require.context("../../images/components/drinks
 const appetizerImages = importImages(require.context("../../images/components/appetizers", false, /\.(png)$/));
 
 
-function SelectItem({item}) {
-    console.log(item);
+function SelectItem(props) {
+    console.log(props.item);
+    const item = props.item;
+    const view = props.view;
     const navigate = useNavigate();
+
     const backToMenu = () => {
-        navigate("/customer/order")
+        navigate("/" + view + "/order", {state: {view: view}})
     }
 
     // write code to determine number of entrees that can be selected

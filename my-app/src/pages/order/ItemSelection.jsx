@@ -7,9 +7,10 @@ import Banner from '../../components/order/Banner';
 import OrderArea from '../../components/order/OrderArea';
 import SelectItem from '../../components/order/SelectItem';
 
-function ItemSelection( {view, setAuthentication} ){
+function ItemSelection(props){
     const location = useLocation();
-    const item = location.state?.item.slice(0, -4); 
+    const item = location.state?.item.slice(0, -4);
+    const view = props.view;
     
     return (
         <ThemeProvider theme={theme}>
@@ -19,10 +20,10 @@ function ItemSelection( {view, setAuthentication} ){
                 </div>
                 <div className='order-menu-content'>
                     <div>
-                        <SelectItem item={item} /> 
+                        <SelectItem item={item} view={view}/> 
                     </div>
                     <div>
-                        <OrderArea />
+                        <OrderArea view={view}/>
                     </div>
                 </div>
             </div>

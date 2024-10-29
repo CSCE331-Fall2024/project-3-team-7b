@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import "./customer.css"
 import theme from "../../createTheme"
 
-function CustomerHome(){
+function CustomerHome() {
     const navigate = useNavigate();
     
     const startOrder = () => {
-        navigate("/customer/order");
+        navigate("/customer/order", {state: {view: "customer"}});
     }
 
     return (

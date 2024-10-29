@@ -39,10 +39,11 @@ function App() {
             element={<Login onLogin={handleLogin} userType="Cashier" />} 
           />
           <Route path="/customer" element={<CustomerHome />}/>
-          <Route path="/customer/order" element={<MenuSelection view={"Customer"}/>}/>
-          <Route path="/customer/order/select" element={<ItemSelection />}/>
-          <Route path="/customer/order/finish" element={<FinishOrder />}/>
-          <Route path="/customer/order/confirmation" element={<OrderConfirmation />}/>
+          <Route path="/customer/order" element={<MenuSelection view="customer"/>}/>
+          <Route path="/customer/order/select" element={<ItemSelection view="customer"/>}/>
+          <Route path="/customer/order/finish" element={<FinishOrder view="customer"/>}/>
+          <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer"/>}/>
+            
           {/* Protected Cashier Route */}
           <Route 
             path="/cashier" 
