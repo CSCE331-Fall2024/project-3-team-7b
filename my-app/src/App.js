@@ -9,7 +9,6 @@ import FinishOrder from "./pages/order/FinishOrder";
 import OrderConfirmation from "./pages/order/OrderConfirmation";
 import ManagerHome from "./pages/manager/ManagerHome";
 import CashierHome from "./pages/cashier/CashierHome";
-import ManagerHome from "./pages/manager/ManagerHome";
 import Inventory from "./pages/inventory/inventory";
 import Trends from "./pages/trends/trends";
 import Items from "./pages/items/items";
@@ -28,8 +27,12 @@ function App() {
         <Routes>
           <Route path="" element={<Home />} />
           <Route 
-            path="/login" 
-            element={<Login onLogin={handleLogin} />} // Pass the handleLogin function here
+            path="/login/manager" 
+            element={<Login onLogin={handleLogin} userType="Manager" />} 
+          />
+          <Route 
+            path="/login/cashier" 
+            element={<Login onLogin={handleLogin} userType="Cashier" />} 
           />
           <Route path="/customer" element={<CustomerHome />}/>
           <Route path="/customer/order" element={<MenuSelection />}/>
@@ -37,12 +40,15 @@ function App() {
           <Route path="/customer/order/finish" element={<FinishOrder />}/>
           <Route path="/customer/order/confirmation" element={<OrderConfirmation />}/>
           {/* Protected Cashier Route */}
-          <Route
-            path="/cashier"
-            element={isAuthenticated ? <CashierHome /> : <Navigate to="/login" replace />}
+          <Route 
+            path="/cashier" 
+            element={isAuthenticated ? <CashierHome /> : <Navigate to="/login/cashier" replace />}
           />
           <Route path="/cashier/order/" element={<MenuSelection />}/>
-          <Route path="/manager/" element={<ManagerHome />}/>
+          <Route 
+            path="/manager" 
+            element={isAuthenticated ? <ManagerHome /> : <Navigate to="/login/manager" replace />}
+          />
           <Route path="/manager/inventory" element={<Inventory />}/>
           <Route path="/manager/trends" element={<Trends />}/>
           <Route path="/manager/items" element={<Items />}/>
