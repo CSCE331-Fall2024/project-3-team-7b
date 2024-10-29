@@ -7,6 +7,7 @@ import MenuSelection from "./pages/order/MenuSelection"
 import ItemSelection from "./pages/order/ItemSelection";
 import FinishOrder from "./pages/order/FinishOrder";
 import OrderConfirmation from "./pages/order/OrderConfirmation";
+import ManagerHome from "./pages/manager/ManagerHome";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/customer/order/select" element={<ItemSelection />}/>
           <Route path="/customer/order/finish" element={<FinishOrder />}/>
           <Route path="/customer/order/confirmation" element={<OrderConfirmation />}/>
+          <Route path="/manager" element={<ManagerHome />}/>
         </Routes>
       </BrowserRouter>
     </div>
