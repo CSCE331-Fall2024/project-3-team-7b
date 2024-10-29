@@ -1,11 +1,11 @@
-import banner from '../../images/banner.PNG';
-import Button from '@mui/material/Button';
+import Banner from '../../components/order/Banner';
+import { Button } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
-import "./ManagerHome.css";
-import theme from "../../createTheme"
+import styles from "./managerBanner.module.css";
+import theme from '../../createTheme';
 
-function ManagerHome(){
+function ManagerBanner(){
     const navigate = useNavigate();
     
     const handleTrends = () => {
@@ -23,21 +23,21 @@ function ManagerHome(){
     return (
         <ThemeProvider theme={theme}>
             <div>
-                <div className="banner-div">
-                    <img className="main-banner" src={banner} alt="Panda Express Banner"></img>
+                <div className={styles['banner']}>
+                    <Banner />
                 </div>
 
-                <div className="button-div">
-                    <Button className="home-buttons" variant="contained" onClick={handleTrends}>
+                <div className={styles["button-div"]}>
+                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleTrends}>
                         Trends
                     </Button>
-                    <Button className="home-buttons" variant="contained" onClick={handleInventory}>
+                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleInventory}>
                         Inventory
                         </Button>
-                    <Button className="home-buttons" variant="contained" onClick={handleItems}>
+                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleItems}>
                         Items
                         </Button>
-                    <Button className="home-buttons" variant="contained" onClick={handleEmployees}>
+                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleEmployees}>
                         Employees
                         </Button>
                 </div>
@@ -46,4 +46,4 @@ function ManagerHome(){
     );
 }
 
-export default ManagerHome;
+export default ManagerBanner;

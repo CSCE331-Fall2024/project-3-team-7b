@@ -9,6 +9,10 @@ import FinishOrder from "./pages/order/FinishOrder";
 import OrderConfirmation from "./pages/order/OrderConfirmation";
 import ManagerHome from "./pages/manager/ManagerHome";
 import CashierHome from "./pages/cashier/CashierHome";
+import Inventory from "./pages/inventory/inventory";
+import Trends from "./pages/trends/trends";
+import Items from "./pages/items/items";
+import Employees from "./pages/employees/employees";
 import { useState } from "react";
 
 function App() {
@@ -31,6 +35,7 @@ function App() {
           <Route path="/customer/order/select" element={<ItemSelection view="customer"/>}/>
           <Route path="/customer/order/finish" element={<FinishOrder view="customer"/>}/>
           <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer"/>}/>
+            
           {/* Protected Cashier Route */}
           <Route
             path="/cashier"
@@ -40,8 +45,12 @@ function App() {
           <Route path="/cashier/order/select" element={<ItemSelection view="cashier"/>}/>
           <Route path="/cashier/order/finish" element={<FinishOrder view="cashier"/>}/>
           <Route path="/cashier/order/confirmation" element={<OrderConfirmation view="cashier"/>}/>
-      
-          <Route path="/manager" element={<ManagerHome />}/>
+     
+          <Route path="/manager/" element={<ManagerHome />}/>
+          <Route path="/manager/inventory" element={<Inventory />}/>
+          <Route path="/manager/trends" element={<Trends />}/>
+          <Route path="/manager/items" element={<Items />}/>
+          <Route path="/manager/employees" element={<Employees />}/>
         </Routes>
       </BrowserRouter>
     </div>
