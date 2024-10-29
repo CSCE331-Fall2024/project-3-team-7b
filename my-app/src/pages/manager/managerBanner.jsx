@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import styles from "./managerBanner.module.css";
 import theme from '../../createTheme';
 
-function ManagerBanner(){
+function ManagerBanner(props){
     const navigate = useNavigate();
+    const view = props.view;
+    const setAuthentication = props.setAuthentication;
     
     const handleTrends = () => {
         navigate("/manager/trends");
@@ -20,11 +22,12 @@ function ManagerBanner(){
     const handleEmployees = () => {
         navigate("/manager/employees");
     }
+
     return (
         <ThemeProvider theme={theme}>
             <div>
                 <div className={styles['banner']}>
-                    <Banner />
+                    <Banner view={view} setAuthentication={setAuthentication} />
                 </div>
 
                 <div className={styles["button-div"]}>

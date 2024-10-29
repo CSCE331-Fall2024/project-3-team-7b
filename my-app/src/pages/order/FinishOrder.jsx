@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function FinishOrder(props) {
     const view = props.view;
+    const setAuthentication = props.setAuthentication;
     const navigate = useNavigate();
 
     const placeOrder = () => {

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function OrderConfirmation(props) {
     const orderNumber = 123456;
     const view = props.view;
+    const setAuthentication = props.setAuthentication;
     const navigate = useNavigate();
 
     const newOrder = () => {

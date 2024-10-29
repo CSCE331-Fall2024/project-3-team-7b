@@ -8,6 +8,7 @@ import theme from "../createTheme"
 import axios from 'axios';
 
 function Login({ onLogin, userType }) {
+    console.log("here");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [data, setData] = useState([]);

@@ -6,9 +6,13 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 import "./orderComponents.css"
 
-function Banner( {view, setAuthentication} ){
+function Banner(props){
     const navigate = useNavigate();
     const [selectedLanguage, setSelectedLanguage] = useState("en");
+    const view = props.view;
+    const setAuthentication = props.setAuthentication;
+
+    console.log(view);
 
     const logout = () => {
         navigate("/");
@@ -17,7 +21,7 @@ function Banner( {view, setAuthentication} ){
 
     return (
         <div className="banner">
-            { (view === "Cashier" || view === "Manager") && (
+            { (view === "cashier" || view === "manager") && (
                 <div>
                     <Button variant="contained" onClick={logout}>Logout</Button>
                 </div>

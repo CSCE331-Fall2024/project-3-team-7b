@@ -6,9 +6,10 @@ import Banner from '../../components/order/Banner';
 import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
 
-function MenuSelection() {
+function MenuSelection(props) {
     const {state} = useLocation();
     const view = state.view;
+    const setAuthentication = props.setAuthentication;
     
     return (
         <ThemeProvider theme={theme}>

@@ -38,7 +38,7 @@ function SelectItem(props) {
                 <Button variant="contained" color="secondary" onClick={backToMenu}>BACK TO MENU</Button>
             </div>
             {/* SIDES */}
-            { (item <= 3 || item == 9 || item == 11) && (
+            { (item <= 3 || item === 9 || item === 11) && (
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Side:</h2>
@@ -53,7 +53,7 @@ function SelectItem(props) {
                 </div>
             )}
             {/* ENTREES */}
-            { (item <= 3 || item == 9 || item == 11) && ( 
+            { (item <= 3 || item === 9 || item === 11) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Entree(s):</h2>
@@ -68,7 +68,7 @@ function SelectItem(props) {
                 </div>
             )}
             {/* DRINKS */}
-            { (item == 19 ) && ( 
+            { (item === 19 ) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Drink:</h2>
@@ -83,7 +83,7 @@ function SelectItem(props) {
                 </div>
             )}
             {/* APPETIZERS */}
-            { (item == 13 ) && ( 
+            { (item === 13 ) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Appetizer:</h2>

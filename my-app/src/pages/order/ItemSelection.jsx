@@ -11,6 +11,7 @@ function ItemSelection(props){
     const location = useLocation();
     const item = location.state?.item.slice(0, -4);
     const view = props.view;
+    const setAuthentication = props.setAuthentication;
     
     return (
         <ThemeProvider theme={theme}>

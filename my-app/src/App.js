@@ -18,7 +18,6 @@ import { useState } from "react";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState("");
-
   // Function to set user as authenticated after login
   const handleLogin = (role) => {
     setIsAuthenticated(true);
@@ -39,7 +38,7 @@ function App() {
             element={<Login onLogin={handleLogin} userType="Cashier" />} 
           />
           <Route path="/customer" element={<CustomerHome />}/>
-          <Route path="/customer/order" element={<MenuSelection view="customer"/>}/>
+          <Route path="/customer/order" element={<MenuSelection view="customer" />}/>
           <Route path="/customer/order/select" element={<ItemSelection view="customer"/>}/>
           <Route path="/customer/order/finish" element={<FinishOrder view="customer"/>}/>
           <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer"/>}/>
@@ -49,15 +48,19 @@ function App() {
             path="/cashier" 
             element={isAuthenticated && userRole === "Cashier" ? <CashierHome /> : <Navigate to="/login/cashier" replace />}
           />
-          <Route path="/cashier/order/" element={<MenuSelection view={"Cashier"} setAuthentication={setIsAuthenticated}/>}/>
+          <Route path="/cashier/order/" element={<MenuSelection view="cashier" setAuthentication={setIsAuthenticated}/>}/>
+          <Route path="/cashier/order/select" element={<ItemSelection view="cashier" setAuthentication={setIsAuthenticated}/>}/>
+          <Route path="/cashier/order/finish" element={<FinishOrder view="cashier" setAuthentication={setIsAuthenticated}/>}/>
+          <Route path="/cashier/order/confirmation" element={<OrderConfirmation view="cashier" setAuthentication={setIsAuthenticated}/>}/>
+     
           <Route 
             path="/manager" 
             element={isAuthenticated && userRole === "Manager" ? <ManagerHome /> : <Navigate to="/login/manager" replace />}
           />
-          <Route path="/manager/inventory" element={<Inventory />}/>
-          <Route path="/manager/trends" element={<Trends />}/>
-          <Route path="/manager/items" element={<Items />}/>
-          <Route path="/manager/employees" element={<Employees />}/>
+          <Route path="/manager/inventory" element={<Inventory view="manager" setAuthentication={setIsAuthenticated}/>}/>
+          <Route path="/manager/trends" element={<Trends view="manager" setAuthentication={setIsAuthenticated}/>}/>
+          <Route path="/manager/items" element={<Items view="manager" setAuthentication={setIsAuthenticated}/>}/>
+          <Route path="/manager/employees" element={<Employees view="manager" setAuthentication={setIsAuthenticated}/>}/>
         </Routes>
       </BrowserRouter>
     </div>
