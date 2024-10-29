@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./cashier.css";
 import theme from "../../createTheme";
 
-function CashierHome(){
+function CashierHome() {
     const navigate = useNavigate();
     
     const startTransaction = () => {
