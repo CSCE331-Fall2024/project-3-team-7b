@@ -7,6 +7,7 @@ import MenuSelection from "./pages/order/MenuSelection"
 import ItemSelection from "./pages/order/ItemSelection";
 import FinishOrder from "./pages/order/FinishOrder";
 import OrderConfirmation from "./pages/order/OrderConfirmation";
+import ManagerHome from "./pages/manager/ManagerHome";
 import CashierHome from "./pages/cashier/CashierHome";
 import { useState } from "react";
 function App() {
@@ -36,6 +37,7 @@ function App() {
           />
           <Route path="/cashier/order/" element={<MenuSelection />}/>
       
+          <Route path="/manager" element={<ManagerHome />}/>
         </Routes>
       </BrowserRouter>
     </div>
