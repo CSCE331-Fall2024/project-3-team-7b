@@ -10,6 +10,7 @@ import OrderConfirmation from "./pages/order/OrderConfirmation";
 import ManagerHome from "./pages/manager/ManagerHome";
 import CashierHome from "./pages/cashier/CashierHome";
 import { useState } from "react";
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // Function to set user as authenticated after login

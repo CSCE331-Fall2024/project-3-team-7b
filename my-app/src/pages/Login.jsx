@@ -1,6 +1,10 @@
+import logo from "../images/logo.png"
+import { Button } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
 import './Login.css';
+import theme from "../createTheme"
 
 function Login({ onLogin }) {
     const [username, setUsername] = useState("");
@@ -18,28 +22,32 @@ function Login({ onLogin }) {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-box">
-                <h1 className="login-title">Login</h1>
-                <input
-                    type="text"
-                    className="login-input"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-                <input
-                    type="password"
-                    className="login-input"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                <button className="login-button" onClick={handleLogin}>
-                    Login
-                </button>
+
+        <ThemeProvider theme={theme}>
+            <div className="login-container">
+                <div className="login-box">
+                    <img className="logo" src={logo} alt="Panda Express Banner"></img>
+                    <h1 className="login-title">Login</h1>
+                    <input
+                        type="text"
+                        className="login-input"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <input
+                        type="password"
+                        className="login-input"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <Button variant="contained" color='primary' className="login-button" onClick={handleLogin}>
+                        Login
+                    </Button>
+                </div>
             </div>
-        </div>
+        </ThemeProvider>
     );
 }
 

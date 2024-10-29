@@ -10,30 +10,6 @@ function Banner(){
     // const navigate = useNavigate();
     const [selectedLanguage, setSelectedLanguage] = useState("en");
 
-    async function translateText() {
-    const apiKey = 'AIzaSyAFi_eWEJWwh-Jm4HA5KZcQr0klUHLDklo';  // Replace with your actual API key
-    const text = document.getElementById("textToTranslate").innerText;
-    const targetLanguage = document.getElementById("languageSelect").value;
-
-    const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
-    const data = {
-        q: text,
-        target: targetLanguage,
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-        });
-        const result = await response.json();
-        document.getElementById("translatedText").innerText = result.data.translations[0].translatedText;
-    } catch (error) {
-        console.error("Error with translation:", error);
-    }
-}
-
     
 
     return (
@@ -45,7 +21,8 @@ function Banner(){
                     id="demo-simple-select"
                     value={selectedLanguage}
                     label="SELECT A LANGUAGE"
-                    onChange={translateText}
+                    // onChange={translateText}
+                    // variant="contained"
                 >
                     <MenuItem value={'en'}>English</MenuItem>
                     <MenuItem value={'span'}>Spanish</MenuItem>
