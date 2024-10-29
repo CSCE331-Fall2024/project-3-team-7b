@@ -9,7 +9,6 @@ import FinishOrder from "./pages/order/FinishOrder";
 import OrderConfirmation from "./pages/order/OrderConfirmation";
 import ManagerHome from "./pages/manager/ManagerHome";
 import CashierHome from "./pages/cashier/CashierHome";
-import ManagerHome from "./pages/manager/ManagerHome";
 import Inventory from "./pages/inventory/inventory";
 import Trends from "./pages/trends/trends";
 import Items from "./pages/items/items";
