@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@mui/material/styles';
+import { useLoaderData, useLocation } from 'react-router-dom';
 import "./order.css"
 import theme from "../../createTheme"
 import Banner from '../../components/order/Banner';
@@ -6,6 +7,9 @@ import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
 
 function MenuSelection() {
+    const {state} = useLocation();
+    const view = state.view;
+    
     return (
         <ThemeProvider theme={theme}>
             <div className='menu-items'>
@@ -14,10 +18,10 @@ function MenuSelection() {
                 </div>
                 <div className='order-menu-content'>
                     <div>
-                        <MenuDisplay />
+                        <MenuDisplay/>
                     </div>
                     <div>
-                        <OrderArea />
+                        <OrderArea view={view}/>
                     </div>
                 </div>
             </div>

@@ -4,12 +4,13 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 
-function OrderConfirmation() {
+function OrderConfirmation(props) {
     const orderNumber = 123456;
+    const view = props.view;
     const navigate = useNavigate();
 
     const newOrder = () => {
-        navigate("/customer");
+        navigate("/" + view);
     }
 
     return (
