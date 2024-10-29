@@ -1,0 +1,26 @@
+.banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 2%;
+    margin-right: 2%;
+    height: 15vh;
+    margin-top: 2vh;
+    border-radius: 15px;
+    background-color: #DBDBDB;
+}
+
+.main-banner {
+    margin: auto;
+}
+
+.button-div {
+    text-align: center;
+}
+
+.home-buttons {
+    width: 20%;
+    height: 15%;
+    margin: 2vw !important;
+    border-radius: 20px !important;
+}
