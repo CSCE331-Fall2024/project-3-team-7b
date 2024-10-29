@@ -9,6 +9,11 @@ import FinishOrder from "./pages/order/FinishOrder";
 import OrderConfirmation from "./pages/order/OrderConfirmation";
 import ManagerHome from "./pages/manager/ManagerHome";
 import CashierHome from "./pages/cashier/CashierHome";
+import ManagerHome from "./pages/manager/ManagerHome";
+import Inventory from "./pages/inventory/inventory";
+import Trends from "./pages/trends/trends";
+import Items from "./pages/items/items";
+import Employees from "./pages/employees/employees";
 import { useState } from "react";
 
 function App() {
@@ -37,8 +42,11 @@ function App() {
             element={isAuthenticated ? <CashierHome /> : <Navigate to="/login" replace />}
           />
           <Route path="/cashier/order/" element={<MenuSelection />}/>
-      
-          <Route path="/manager" element={<ManagerHome />}/>
+          <Route path="/manager/" element={<ManagerHome />}/>
+          <Route path="/manager/inventory" element={<Inventory />}/>
+          <Route path="/manager/trends" element={<Trends />}/>
+          <Route path="/manager/items" element={<Items />}/>
+          <Route path="/manager/employees" element={<Employees />}/>
         </Routes>
       </BrowserRouter>
     </div>
