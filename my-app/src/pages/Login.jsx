@@ -27,12 +27,13 @@ function Login({ onLogin, userType }) {
 
     const handleLogin = () => {
         // Find the user in the data array by matching the entered username
+        console.log(data);
         const user = data.find((user) => user.username === username && user.role === userType);
-        console.log(userType);
         console.log(user);
+        console.log(password);
 
         if (user && user.password === password) {
-            onLogin(); // Set authentication state
+            onLogin(user.role); // Set authentication state
             if (userType === "Manager") {
                 navigate("/manager");
             } else if (userType === "Cashier") {

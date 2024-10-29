@@ -7,7 +7,7 @@ import Banner from '../../components/order/Banner';
 import OrderArea from '../../components/order/OrderArea';
 import SelectItem from '../../components/order/SelectItem';
 
-function ItemSelection(){
+function ItemSelection( {view, setAuthentication} ){
     const location = useLocation();
     const item = location.state?.item.slice(0, -4); 
     
@@ -15,7 +15,7 @@ function ItemSelection(){
         <ThemeProvider theme={theme}>
             <div className='menu-items'>
                 <div className='banner'>
-                    <Banner />
+                    <Banner view={view} setAuthentication={setAuthentication}/>
                 </div>
                 <div className='order-menu-content'>
                     <div>

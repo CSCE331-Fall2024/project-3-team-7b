@@ -5,12 +5,12 @@ import Banner from '../../components/order/Banner';
 import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
 
-function MenuSelection(){
+function MenuSelection( {view, setAuthentication} ){
     return (
         <ThemeProvider theme={theme}>
             <div className='menu-items'>
                 <div className='banner'>
-                    <Banner />
+                    <Banner view={view} setAuthentication={setAuthentication}/>
                 </div>
                 <div className='order-menu-content'>
                     <div>

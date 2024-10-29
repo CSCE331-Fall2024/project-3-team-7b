@@ -4,7 +4,7 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 
-function FinishOrder() {
+function FinishOrder( {view, setAuthentication} ) {
     const navigate = useNavigate();
 
     const placeOrder = () => {
@@ -19,7 +19,7 @@ function FinishOrder() {
         <ThemeProvider theme={theme}>
             <div className="finish">
                 <div className="banner">
-                    <Banner />
+                    <Banner view={view} setAuthentication={setAuthentication}/>
                 </div>
                 <div className="finish-content">
                     <div className="finish-order-content">

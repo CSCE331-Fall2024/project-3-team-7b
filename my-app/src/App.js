@@ -17,10 +17,14 @@ import { useState } from "react";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState("");
+
   // Function to set user as authenticated after login
-  const handleLogin = () => {
+  const handleLogin = (role) => {
     setIsAuthenticated(true);
+    setUserRole(role);
   };
+
   return (
     <div>
       <BrowserRouter>
@@ -35,19 +39,19 @@ function App() {
             element={<Login onLogin={handleLogin} userType="Cashier" />} 
           />
           <Route path="/customer" element={<CustomerHome />}/>
-          <Route path="/customer/order" element={<MenuSelection />}/>
+          <Route path="/customer/order" element={<MenuSelection view={"Customer"}/>}/>
           <Route path="/customer/order/select" element={<ItemSelection />}/>
           <Route path="/customer/order/finish" element={<FinishOrder />}/>
           <Route path="/customer/order/confirmation" element={<OrderConfirmation />}/>
           {/* Protected Cashier Route */}
           <Route 
             path="/cashier" 
-            element={isAuthenticated ? <CashierHome /> : <Navigate to="/login/cashier" replace />}
+            element={isAuthenticated && userRole === "Cashier" ? <CashierHome /> : <Navigate to="/login/cashier" replace />}
           />
-          <Route path="/cashier/order/" element={<MenuSelection />}/>
+          <Route path="/cashier/order/" element={<MenuSelection view={"Cashier"} setAuthentication={setIsAuthenticated}/>}/>
           <Route 
             path="/manager" 
-            element={isAuthenticated ? <ManagerHome /> : <Navigate to="/login/manager" replace />}
+            element={isAuthenticated && userRole === "Manager" ? <ManagerHome /> : <Navigate to="/login/manager" replace />}
           />
           <Route path="/manager/inventory" element={<Inventory />}/>
           <Route path="/manager/trends" element={<Trends />}/>
