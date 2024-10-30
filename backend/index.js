@@ -15,6 +15,10 @@ const pool = new Pool({
   port: process.env.PSQL_PORT,
 });
 
+app.get('/', function (req, res) {
+  res.render('index', {});
+});
+
 // Example route to fetch all users
 app.get('/api/employees', async (req, res) => {
   try {
