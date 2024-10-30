@@ -1,33 +1,48 @@
-// your-react-project/src/App.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import "./manager.css"
+import banner from '../../images/banner.PNG';
+import Button from '@mui/material/Button';
+import { ThemeProvider } from '@mui/material/styles';
+import { useNavigate } from "react-router-dom";
+import "./ManagerHome.css";
+import theme from "../../createTheme"
 
-function ManagerHome() {
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-        try {
-            const response = await axios.get('http://localhost:5001/api/employees');
-            setData(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-        };
-
-        fetchData();
-    }, []);
-  
+function ManagerHome(){
+    const navigate = useNavigate();
+    
+    const handleTrends = () => {
+        navigate("/manager/trends");
+    }
+    const handleInventory = () => {
+        navigate("/manager/inventory");
+    }
+    const handleItems = () => {
+        navigate("/manager/items");
+    }
+    const handleEmployees = () => {
+        navigate("/manager/employees");
+    }
     return (
-        <div>
-            <h1>Data from PostgreSQL:</h1>
-            <ul>
-                {data.map((item) => (
-                <li key={item.employeeid}>{item.name}</li>
-                ))}
-            </ul>
-        </div>
+        <ThemeProvider theme={theme}>
+            <div>
+                <div className="banner-div">
+                    <img className="main-banner" src={banner} alt="Panda Express Banner"></img>
+                </div>
+
+                <div className="button-div">
+                    <Button className="home-buttons" variant="contained" onClick={handleTrends}>
+                        Trends
+                    </Button>
+                    <Button className="home-buttons" variant="contained" onClick={handleInventory}>
+                        Inventory
+                        </Button>
+                    <Button className="home-buttons" variant="contained" onClick={handleItems}>
+                        Items
+                        </Button>
+                    <Button className="home-buttons" variant="contained" onClick={handleEmployees}>
+                        Employees
+                        </Button>
+                </div>
+            </div>
+       </ThemeProvider>
     );
 }
 

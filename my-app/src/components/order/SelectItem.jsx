@@ -20,11 +20,14 @@ const drinkImages = importImages(require.context("../../images/components/drinks
 const appetizerImages = importImages(require.context("../../images/components/appetizers", false, /\.(png)$/));
 
 
-function SelectItem({item}) {
-    console.log(item);
+function SelectItem(props) {
+    console.log(props.item);
+    const item = props.item;
+    const view = props.view;
     const navigate = useNavigate();
+
     const backToMenu = () => {
-        navigate("/customer/order")
+        navigate("/" + view + "/order", {state: {view: view}})
     }
 
     // write code to determine number of entrees that can be selected
@@ -35,7 +38,7 @@ function SelectItem({item}) {
                 <Button variant="contained" color="secondary" onClick={backToMenu}>BACK TO MENU</Button>
             </div>
             {/* SIDES */}
-            { (item <= 3 || item == 9 || item == 11) && (
+            { (item <= 3 || item === 9 || item === 11) && (
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Side:</h2>
@@ -50,7 +53,7 @@ function SelectItem({item}) {
                 </div>
             )}
             {/* ENTREES */}
-            { (item <= 3 || item == 9 || item == 11) && ( 
+            { (item <= 3 || item === 9 || item === 11) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Entree(s):</h2>
@@ -65,7 +68,7 @@ function SelectItem({item}) {
                 </div>
             )}
             {/* DRINKS */}
-            { (item == 19 ) && ( 
+            { (item === 19 ) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Drink:</h2>
@@ -80,7 +83,7 @@ function SelectItem({item}) {
                 </div>
             )}
             {/* APPETIZERS */}
-            { (item == 13 ) && ( 
+            { (item === 13 ) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Appetizer:</h2>
