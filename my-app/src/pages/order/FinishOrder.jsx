@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function FinishOrder(props) {
     const view = props.view;
+    const setAuthentication = props.setAuthentication;
     const navigate = useNavigate();
 
     const placeOrder = () => {
@@ -20,7 +21,7 @@ function FinishOrder(props) {
         <ThemeProvider theme={theme}>
             <div className="finish">
                 <div className="banner">
-                    <Banner />
+                    <Banner view={view} setAuthentication={setAuthentication}/>
                 </div>
                 <div className="finish-content">
                     <div className="finish-order-content">

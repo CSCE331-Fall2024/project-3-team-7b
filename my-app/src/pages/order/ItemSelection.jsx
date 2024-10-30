@@ -11,12 +11,13 @@ function ItemSelection(props){
     const location = useLocation();
     const item = location.state?.item.slice(0, -4);
     const view = props.view;
+    const setAuthentication = props.setAuthentication;
     
     return (
         <ThemeProvider theme={theme}>
             <div className='menu-items'>
                 <div className='banner'>
-                    <Banner />
+                    <Banner view={view} setAuthentication={setAuthentication}/>
                 </div>
                 <div className='order-menu-content'>
                     <div>
