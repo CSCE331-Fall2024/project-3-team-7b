@@ -13,18 +13,19 @@ const importAll = (r) => {
 // Import all images from the images folder (you can adjust the path)
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
-function OrderArea() {
-    const navigate = useNavigate();
+function OrderArea(props) {
     const [subtotal, setSubtotal] = useState(0.00);
     const [tax, setTax] = useState(0.00);
     const [total, setTotal] = useState(0.00);
+    const view = props.view;
+    const navigate = useNavigate();
 
     const finishOrder = () => {
-        navigate("/customer/order/finish");
+        navigate("/" + view + "/order/finish");
     }
 
     const cancelOrder = () => {
-        navigate("/customer");
+        navigate("/" + view);
     }
 
     return (

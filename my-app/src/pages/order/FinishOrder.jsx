@@ -4,22 +4,24 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 
-function FinishOrder() {
+function FinishOrder(props) {
+    const view = props.view;
+    const setAuthentication = props.setAuthentication;
     const navigate = useNavigate();
 
     const placeOrder = () => {
-        navigate("/customer/order/confirmation");
+        navigate("/" + view + "/order/confirmation");
     }
 
     const cancelOrder = () => {
-        navigate("/customer");
+        navigate("/" + view);
     }
 
     return (
         <ThemeProvider theme={theme}>
             <div className="finish">
                 <div className="banner">
-                    <Banner />
+                    <Banner view={view} setAuthentication={setAuthentication}/>
                 </div>
                 <div className="finish-content">
                     <div className="finish-order-content">
