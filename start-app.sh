@@ -2,14 +2,19 @@
 
 # Navigate to the backend directory, install express, and start the server
 cd backend || exit
-echo "Installing express in backend..."
+echo "Installing dependencies in backend..."
 npm install
 
-echo "Starting backend server..."
-node index.js &  # Run backend server in the background
-
-# Navigate to the frontend directory and start the frontend
+# Build the frontend in my-app to generate the build folder
+echo "Building frontend..."
 cd ../my-app || exit
-echo "Starting frontend..."
 npm install
-npm run start
+npm run build
+
+# Move the build folder into the backend directory if required by your setup
+mv build ../backend/
+
+# Start the backend server (which serves the built frontend)
+cd ../backend || exit
+echo "Starting backend server..."
+node index.js
