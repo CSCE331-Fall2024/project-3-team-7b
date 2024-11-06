@@ -5,10 +5,10 @@
     flex: 1;
 }
 .table-container{
-    width: 50%;
+    /* width: 50%; */
     background-color: aliceblue;
 }
 .editor-container{
-    width: 50%;
+    /* width: 50%; */
     background-color: blue;
 }

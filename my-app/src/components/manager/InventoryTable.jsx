@@ -1,11 +1,12 @@
 import React from "react";
+import styles from "./InventoryTable.module.css";
 
-const Table = ({data}) => {
+const InventoryTable = ({data, rowColor}) => {
     return(
         <table>
             <thead>
                 <tr>
-                    {Object.keys(data[0]).map((key) => (
+                    {Object.keys(data[0]||{}).map((key) => (
                         <th key={key}>
                             {key}
                         </th>
@@ -14,7 +15,8 @@ const Table = ({data}) => {
             </thead> 
             <tbody>
                 {data.map((row, index) => (
-                    <tr key={index}>
+                    <tr key={index}
+                        className={rowColor[row.item_name] ? styles.highlight : ''}>
                         {Object.values(row).map((value, i) => (
                             <td key={i}>
                                 {value}
@@ -27,4 +29,4 @@ const Table = ({data}) => {
     );
 };
 
-export default Table;
+export default InventoryTable;

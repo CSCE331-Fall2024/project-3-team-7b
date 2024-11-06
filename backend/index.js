@@ -36,6 +36,27 @@ app.get('/api/menu_items', async (req, res) => {
   }
 });
 
+app.get('/api/inventory', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold FROM inventory');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+app.get('/api/threshold/:name', async (req, res) => {
+  const name = req.params.name;
+  try {
+    const result = await pool.query('SELECT threshold FROM inventory WHERE item_name = $1', [name]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

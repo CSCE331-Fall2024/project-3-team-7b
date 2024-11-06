@@ -1,28 +1,42 @@
 import ManagerBanner from '../manager/managerBanner';
-import Table from '../../components/table';
 import React, {useEffect, useState} from "react";
 import { ThemeProvider } from '@mui/material/styles';
 import styles from "./inventory.module.css";
 import theme from "../../createTheme"
 import axios from "axios";
+import InventoryTable from '../../components/manager/InventoryTable';
 
 
 function Inventory(props){
-    // const[inventory, setInventory] = useState([]);
-    // useEffect(() => {
-    //     const getInventory = async () => {
-    //         try{
-    //             const response = await axios.get("http://localhost:5001/api/Inventory");
-    //             console.log("inventory: ", response.data);
-    //             setInventory(response.data);
-                
-    //         } catch(error){
-    //             console.error("Error getting inventory information: ", error);
-    //         }
-    //     };
+    const[inventory, setInventory] = useState([]);
+    const[thresholds, setThresholds] = useState([]);
+    useEffect(() => {
+        const getInventory = async () => {
+            try{
+                const response = await axios.get("http://localhost:5001/api/inventory");
+                setInventory(response.data);
 
-    //     getInventory();
-    // }, []);
+                const threshold = await Promise.all(
+                    response.data.map(async (item) => {
+                        const need = await axios.get(`http://localhost:5001/api/threshold/${item.item_name}`);
+                        return {itemName: item.item_name, highlight: need.data.needs_restock};
+                    })
+                );
+
+                const updateColor = threshold.reduce((acc, {itemName, highlight}) =>{
+                    acc[itemName] = highlight;
+                    return acc;
+                }, {});
+
+                setThresholds(updateColor);
+                
+            } catch(error){
+                console.error("Error getting inventory information: ", error);
+            }
+        };
+
+        getInventory();
+    }, []);
     
 
     const view = props.view;
@@ -35,7 +49,7 @@ function Inventory(props){
             </div>
             <div className={styles['divider']}>
                 <div className={styles['table-container']}> 
-                    {/* <Table data={inventory}/> */}
+                    <InventoryTable data={inventory} rowColor={thresholds} />
                 </div>
                 <div className={styles['editor-container']}>
                     bye
