@@ -39,6 +39,17 @@ app.get('/api/menu_items', async (req, res) => {
   }
 });
 
+// API route to fetch all components
+app.get('/api/components', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM components');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
 // Serve static files from the React app's build directory
 app.use(express.static(path.join(__dirname, '../my-app/build')));
 
