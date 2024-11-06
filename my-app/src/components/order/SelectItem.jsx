@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Button } from "@mui/material";
-import React from "react";
 import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
 
@@ -13,11 +14,6 @@ const importImages = (r) => {
     });
 }
 
-// Import all images from the images folder (you can adjust the path)
-const sideImages = importImages(require.context("../../images/components/sides", false, /\.(png)$/));
-const entreeImages = importImages(require.context("../../images/components/entrees", false, /\.(png)$/));
-const drinkImages = importImages(require.context("../../images/components/drinks", false, /\.(png)$/));
-const appetizerImages = importImages(require.context("../../images/components/appetizers", false, /\.(png)$/));
 
 
 function SelectItem(props) {
@@ -25,6 +21,83 @@ function SelectItem(props) {
     const item = props.item;
     const view = props.view;
     const navigate = useNavigate();
+
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+                const response = await axios.get(`${baseURL}/api/components`);
+                setData(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    // Create a dictionary with `itemid` as keys for easy lookup
+    const itemsDictionary = data.reduce((dict, item) => {
+        dict[item.componentid] = item;
+        return dict;
+    }, {});
+
+
+    // Import all images from the images folder (you can adjust the path)
+    const sideImages = importImages(
+        require.context("../../images/components/sides", false, /\.(png)$/)
+    )
+        .filter(
+            (imageObj) =>
+                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+        ) // Filter out images without a match
+        .sort((a, b) => {
+            const idA = parseInt(a.name.split(".")[0], 10);
+            const idB = parseInt(b.name.split(".")[0], 10);
+            return idA - idB;
+        });
+
+    const entreeImages = importImages(
+        require.context("../../images/components/entrees", false, /\.(png)$/)
+    )
+        .filter(
+            (imageObj) =>
+                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+        ) // Filter out images without a match
+        .sort((a, b) => {
+            const idA = parseInt(a.name.split(".")[0], 10);
+            const idB = parseInt(b.name.split(".")[0], 10);
+            return idA - idB;
+        });
+
+    const drinkImages = importImages(
+        require.context("../../images/components/drinks", false, /\.(png)$/)
+    )
+        .filter(
+            (imageObj) =>
+                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+        ) // Filter out images without a match
+        .sort((a, b) => {
+            const idA = parseInt(a.name.split(".")[0], 10);
+            const idB = parseInt(b.name.split(".")[0], 10);
+            return idA - idB;
+        });
+
+    const appetizerImages = importImages(
+        require.context("../../images/components/appetizers", false, /\.(png)$/)
+    )
+        .filter(
+            (imageObj) =>
+                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+        ) // Filter out images without a match
+        .sort((a, b) => {
+            const idA = parseInt(a.name.split(".")[0], 10);
+            const idB = parseInt(b.name.split(".")[0], 10);
+            return idA - idB;
+        });
+
 
     const backToMenu = () => {
         navigate("/" + view + "/order", {state: {view: view}})
@@ -44,11 +117,17 @@ function SelectItem(props) {
                         <h2>Select Your Side:</h2>
                     </div>
                     <div className="menu-display">
-                        {sideImages.map((imageObj, index) => (
-                            <button key={index} className="menu-button">
-                                <img src={imageObj.src} alt={`Side Item ${index + 1}`} className="menu-image" />
-                            </button>
-                        ))}
+                        {sideImages.map((imageObj, index) => {
+                            const itemId = parseInt(imageObj.name.split(".")[0], 10);
+                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                
+                            return (
+                                <button key={index} className="menu-button">
+                                    <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className="menu-image" />
+                                    {itemName}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             )}
@@ -59,11 +138,17 @@ function SelectItem(props) {
                         <h2>Select Your Entree(s):</h2>
                     </div>
                     <div className="menu-display">
-                        {entreeImages.map((imageObj, index) => (
-                            <button key={index} className="menu-button">
-                                <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className="menu-image" />
-                            </button>
-                        ))}
+                        {entreeImages.map((imageObj, index) => {
+                            const itemId = parseInt(imageObj.name.split(".")[0], 10);
+                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                
+                            return (
+                                <button key={index} className="menu-button">
+                                    <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className="menu-image" />
+                                    {itemName}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             )}
@@ -74,11 +159,17 @@ function SelectItem(props) {
                         <h2>Select Your Drink:</h2>
                     </div>
                     <div className="menu-display">
-                        {drinkImages.map((imageObj, index) => (
-                            <button key={index} className="menu-button">
-                                <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className="menu-image" />
-                            </button>
-                        ))}
+                        {drinkImages.map((imageObj, index) => {
+                            const itemId = parseInt(imageObj.name.split(".")[0], 10);
+                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                
+                            return (
+                                <button key={index} className="menu-button">
+                                    <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className="menu-image" />
+                                    {itemName}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             )}
@@ -89,11 +180,17 @@ function SelectItem(props) {
                         <h2>Select Your Appetizer:</h2>
                     </div>
                     <div className="menu-display">
-                        {appetizerImages.map((imageObj, index) => (
-                            <button key={index} className="menu-button">
-                                <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className="menu-image" />
-                            </button>
-                        ))}
+                        {appetizerImages.map((imageObj, index) => {
+                            const itemId = parseInt(imageObj.name.split(".")[0], 10);
+                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                
+                            return (
+                                <button key={index} className="menu-button">
+                                    <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className="menu-image" />
+                                    {itemName}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             )}
