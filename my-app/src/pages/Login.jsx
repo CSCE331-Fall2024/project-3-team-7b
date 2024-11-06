@@ -17,7 +17,8 @@ function Login({ onLogin, userType }) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:5001/api/employees');
+                const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+                const response = await axios.get(`${baseURL}/api/employees`);
                 setData(response.data);
             } catch (error) {
                 console.error(error);
