@@ -5,9 +5,12 @@ import { useNavigate } from "react-router-dom";
 import "./customer.css"
 import theme from "../../createTheme"
 
+// Purpose: Overall home page for the customers
+
 function CustomerHome() {
     const navigate = useNavigate();
     
+    // Navigates customer to start their order
     const startOrder = () => {
         navigate("/customer/order", {state: {view: "customer"}});
     }
@@ -15,19 +18,25 @@ function CustomerHome() {
     return (
         <ThemeProvider theme={theme}>
             <div>
+                {/* Accessibility features */}
                 <div>
                     <Button className="translate-button" variant="contained">Select A Language</Button>
                 </div>
 
+                {/* Main content of page */}
                 <div className="customer-content-div">
                     <div className="logo-div">
                         <img className="logo" src={logo} alt="Panda Express Banner"></img>
                     </div>
+
                     <div>
-                    <Button className="order-button" variant="contained" onClick={startOrder}>Start Order</Button>
+                        <Button className="order-button" variant="contained" onClick={startOrder}>Start Order</Button>
                     </div>
+
+                    {/* Content to display whether & item of day */}
                     <div className="weather-div">
                         <h1>Today's Weather:</h1>
+                        
                         <div>
                             <p>Something that shows the current weather</p>
                         </div>

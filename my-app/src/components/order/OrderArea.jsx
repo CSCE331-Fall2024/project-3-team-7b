@@ -5,6 +5,8 @@ import { Button } from "@mui/material";
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
+// Purpose: Displays everything the user has selected for the order
+
 // Dynamically load all images from a folder
 const importAll = (r) => {
     return r.keys().map(r);
@@ -20,10 +22,12 @@ function OrderArea(props) {
     const view = props.view;
     const navigate = useNavigate();
 
+    // Navigates user to complete the order
     const finishOrder = () => {
         navigate("/" + view + "/order/finish");
     }
 
+    // Brings user back to "Start Order" page
     const cancelOrder = () => {
         navigate("/" + view);
     }
@@ -31,8 +35,10 @@ function OrderArea(props) {
     return (
         <div className="order-area">
             <div className="order-list">
+                {/* Lists contents of current order */}
                 <h3>Current Order:</h3>
                 
+                {/* Calulates and displays the price of the order */}
                 <div className="totals">
                     <p>Subtotal: ${subtotal}</p>
                     <p>Tax: ${tax}</p>

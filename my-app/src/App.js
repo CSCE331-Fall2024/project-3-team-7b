@@ -15,9 +15,12 @@ import Items from "./pages/items/items";
 import Employees from "./pages/employees/employees";
 import { useState } from "react";
 
+
+// Purpose: directs the webpage to a specific route and renders the proper page
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState("");
+
   // Function to set user as authenticated after login
   const handleLogin = (role) => {
     setIsAuthenticated(true);
@@ -29,6 +32,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Home />} />
+
+          {/* 2 different login pages for manager & cashier */}
           <Route 
             path="/login/manager" 
             element={<Login onLogin={handleLogin} userType="Manager" />} 
@@ -37,13 +42,15 @@ function App() {
             path="/login/cashier" 
             element={<Login onLogin={handleLogin} userType="Cashier" />} 
           />
+
+          {/* Pages related to the customer view */}
           <Route path="/customer" element={<CustomerHome />}/>
           <Route path="/customer/order" element={<MenuSelection view="customer" />}/>
           <Route path="/customer/order/select" element={<ItemSelection view="customer"/>}/>
           <Route path="/customer/order/finish" element={<FinishOrder view="customer"/>}/>
           <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer"/>}/>
             
-          {/* Protected Cashier Route */}
+          {/* Pages related to the cashier view */}
           <Route 
             path="/cashier" 
             element={isAuthenticated && userRole === "Cashier" ? <CashierHome /> : <Navigate to="/login/cashier" replace />}
@@ -53,6 +60,7 @@ function App() {
           <Route path="/cashier/order/finish" element={<FinishOrder view="cashier" setAuthentication={setIsAuthenticated}/>}/>
           <Route path="/cashier/order/confirmation" element={<OrderConfirmation view="cashier" setAuthentication={setIsAuthenticated}/>}/>
      
+          {/* Pages related to the manager view */}
           <Route 
             path="/manager" 
             element={isAuthenticated && userRole === "Manager" ? <ManagerHome /> : <Navigate to="/login/manager" replace />}
