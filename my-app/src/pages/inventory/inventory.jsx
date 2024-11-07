@@ -9,26 +9,12 @@ import InventoryTable from '../../components/manager/InventoryTable';
 
 function Inventory(props){
     const[inventory, setInventory] = useState([]);
-    const[thresholds, setThresholds] = useState([]);
+    //const[thresholds, setThresholds] = useState([]);
     useEffect(() => {
         const getInventory = async () => {
             try{
                 const response = await axios.get("http://localhost:5001/api/inventory");
                 setInventory(response.data);
-
-                const threshold = await Promise.all(
-                    response.data.map(async (item) => {
-                        const need = await axios.get(`http://localhost:5001/api/threshold/${item.item_name}`);
-                        return {itemName: item.item_name, highlight: need.data.needs_restock};
-                    })
-                );
-
-                const updateColor = threshold.reduce((acc, {itemName, highlight}) =>{
-                    acc[itemName] = highlight;
-                    return acc;
-                }, {});
-
-                setThresholds(updateColor);
                 
             } catch(error){
                 console.error("Error getting inventory information: ", error);
@@ -49,10 +35,21 @@ function Inventory(props){
             </div>
             <div className={styles['divider']}>
                 <div className={styles['table-container']}> 
-                    <InventoryTable data={inventory} rowColor={thresholds} />
+                    <InventoryTable data={inventory}/>
                 </div>
                 <div className={styles['editor-container']}>
-                    bye
+                    <div className={styles['text-boxes']}>
+                        <input type="text" placeholder='Item'/>
+                        <input type="text" placeholder='Quantity'/>
+                        <input type="text" placeholder='Unit'/>
+                        <input type="text" placeholder='Supplier'/>
+                        <input type="text" placeholder='Threshold'/>
+                    </div>
+                    <div className={styles['buttons']}>
+                        <button>Save</button>
+                        <button>Add</button>
+                        <button>Delete</button>
+                    </div>
                 </div>
             </div>
        </ThemeProvider>

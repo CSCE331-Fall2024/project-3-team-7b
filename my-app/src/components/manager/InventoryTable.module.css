@@ -1,3 +1,21 @@
-.highlight{
-    background-color: red;
+.total{
+    text-align: center;
+    margin-bottom: 2%;
+    width: 100%;
+    border-color: black;
+}
+.supplier{
+    width: 35%;
+}
+.item{
+    width: 20%;
+}
+.threshold{
+    width: 15%;
+}
+.quantity{
+    width: 15%;
+}
+.unit{
+    width: 15%;
 }

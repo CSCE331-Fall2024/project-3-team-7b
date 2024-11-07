@@ -41,7 +41,7 @@ app.get('/api/menu_items', async (req, res) => {
 
 app.get('/api/inventory', async (req, res) => {
   try {
-    const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold FROM inventory');
+    const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold, needs_restock FROM inventory');
     res.json(result.rows);
   } catch (error) {
     console.error(error);
