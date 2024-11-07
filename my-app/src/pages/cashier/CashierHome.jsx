@@ -5,24 +5,30 @@ import { useNavigate } from "react-router-dom";
 import "./cashier.css";
 import theme from "../../createTheme";
 
+// Purpose: Overall home page for the cashiers
+
 function CashierHome() {
     const navigate = useNavigate();
     
+    // Navigates cashier to start an order
     const startTransaction = () => {
-        navigate("/cashier/order", {state: {view: "cashier"}}); // Adjust route as needed for starting a transaction
+        navigate("/cashier/order", {state: {view: "cashier"}});
     }
 
+    // Navigates back to overall home page
     const goBack = () => {
-        navigate("/"); // Adjust route to go back to the main home page
+        navigate("/"); 
     }
 
     return (
         <ThemeProvider theme={theme}>
             <div>
+                {/* Accessibility features */}
                 <div>
                     <Button className="translate-button" variant="contained">Select A Language</Button>
                 </div>
 
+                {/* Main content of page */}
                 <div className="cashier-content-div">
                     <div className="logo-div">
                         <img className="logo" src={logo} alt="Panda Express Banner"></img>
@@ -33,6 +39,8 @@ function CashierHome() {
                     <div>
                         <Button className="back-button" variant="contained" onClick={goBack}>Back</Button>
                     </div>
+
+                    {/* Customized information + details */}
                     <div className="summary-div">
                         <h1>Transaction Summary:</h1>
                         <div>
