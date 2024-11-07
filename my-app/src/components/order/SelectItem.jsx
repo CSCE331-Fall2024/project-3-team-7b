@@ -4,6 +4,8 @@ import { Button } from "@mui/material";
 import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
 
+// Purpose: Displays individual items such as orange chicken, dr. pepper, cream cheese rangoons, etc
+
 // Dynamically load all images from a folder
 const importImages = (r) => {
     return r.keys().map((fileName) => {
@@ -14,8 +16,6 @@ const importImages = (r) => {
     });
 }
 
-
-
 function SelectItem(props) {
     console.log(props.item);
     const item = props.item;
@@ -24,6 +24,7 @@ function SelectItem(props) {
 
     const [data, setData] = useState([]);
 
+    // Makes API call to retreive component information
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -46,6 +47,7 @@ function SelectItem(props) {
 
 
     // Import all images from the images folder (you can adjust the path)
+    // Sides
     const sideImages = importImages(
         require.context("../../images/components/sides", false, /\.(png)$/)
     )
@@ -59,6 +61,7 @@ function SelectItem(props) {
             return idA - idB;
         });
 
+    // Entrees
     const entreeImages = importImages(
         require.context("../../images/components/entrees", false, /\.(png)$/)
     )
@@ -72,6 +75,7 @@ function SelectItem(props) {
             return idA - idB;
         });
 
+    // Drinks
     const drinkImages = importImages(
         require.context("../../images/components/drinks", false, /\.(png)$/)
     )
@@ -85,6 +89,7 @@ function SelectItem(props) {
             return idA - idB;
         });
 
+    // Appetizers
     const appetizerImages = importImages(
         require.context("../../images/components/appetizers", false, /\.(png)$/)
     )
@@ -99,6 +104,7 @@ function SelectItem(props) {
         });
 
 
+    // Navigates user back to the main menu
     const backToMenu = () => {
         navigate("/" + view + "/order", {state: {view: view}})
     }
@@ -110,6 +116,7 @@ function SelectItem(props) {
             <div>
                 <Button variant="contained" color="secondary" onClick={backToMenu}>BACK TO MENU</Button>
             </div>
+
             {/* SIDES */}
             { (item <= 3 || item === 9 || item === 11) && (
                 <div className="item-type"> 
@@ -131,6 +138,7 @@ function SelectItem(props) {
                     </div>
                 </div>
             )}
+
             {/* ENTREES */}
             { (item <= 3 || item === 9 || item === 11) && ( 
                 <div className="item-type"> 
@@ -152,6 +160,7 @@ function SelectItem(props) {
                     </div>
                 </div>
             )}
+
             {/* DRINKS */}
             { (item === 19 ) && ( 
                 <div className="item-type"> 
@@ -173,6 +182,7 @@ function SelectItem(props) {
                     </div>
                 </div>
             )}
+            
             {/* APPETIZERS */}
             { (item === 13 ) && ( 
                 <div className="item-type"> 
