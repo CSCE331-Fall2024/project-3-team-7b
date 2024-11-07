@@ -6,14 +6,16 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 import "./orderComponents.css"
 
+// Purpose: banner to be displayed at the top of all ordering pages
 function Banner(props){
     const navigate = useNavigate();
     const [selectedLanguage, setSelectedLanguage] = useState("en");
     const view = props.view;
     const setAuthentication = props.setAuthentication;
 
-    console.log(view);
+    // console.log(view);
 
+    // handles logout function for cashiers & managers
     const logout = () => {
         navigate("/");
         setAuthentication(false);
@@ -21,11 +23,14 @@ function Banner(props){
 
     return (
         <div className="banner">
+            {/* only displays logout button for cashiers and managers */}
             { (view === "cashier" || view === "manager") && (
                 <div>
                     <Button variant="contained" onClick={logout}>Logout</Button>
                 </div>
             )}
+
+            {/* Overall banner content */}
             <img className="banner-image" src={banner} alt="Panda Express Banner w/ Logo" ></img>
             <div className="accesible-buttons">
                 <Select

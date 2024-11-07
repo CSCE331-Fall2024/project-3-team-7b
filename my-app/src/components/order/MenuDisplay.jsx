@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import "./orderComponents.css";
 
+// Purpose: Displays the menu items such as bowls, plates, etc
+
 // Dynamically load all images from a folder
 const importAll = (r) => {
     return r.keys().map((fileName) => {
@@ -20,6 +22,7 @@ function MenuDisplay() {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
 
+    // Makes API call to retreive menu item information
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -40,6 +43,7 @@ function MenuDisplay() {
         return dict;
     }, {});
     
+    // Navigates user to the next stage of the order
     const directOrder = (index) => {
         navigate("/customer/order/select", { state: { item: index } });
     }
@@ -54,6 +58,7 @@ function MenuDisplay() {
         });
 
     return (
+        // Displats all the buttons for menu items w/ corresponding names
         <div className="menu-display">
             {sortedImages.map((imageObj, index) => {
                 const itemId = parseInt(imageObj.name.split(".")[0], 10);
