@@ -39,10 +39,9 @@ app.get('/api/menu_items', async (req, res) => {
   }
 });
 
-// API route to fetch all components
-app.get('/api/components', async (req, res) => {
+app.get('/api/inventory', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM components');
+    const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold, needs_restock FROM inventory');
     res.json(result.rows);
   } catch (error) {
     console.error(error);
@@ -50,20 +49,17 @@ app.get('/api/components', async (req, res) => {
   }
 });
 
-// Serve static files from the React app's build directory
-app.use(express.static(path.join(__dirname, '../my-app/build')));
-
-// Route for the root URL to serve `index.html`
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../my-app/build', 'index.html'));
+app.get('/api/threshold/:name', async (req, res) => {
+  const name = req.params.name;
+  try {
+    const result = await pool.query('SELECT threshold FROM inventory WHERE item_name = $1', [name]);
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
 });
 
-// Catch-all handler to serve `index.html` for any unhandled routes (for React Router)
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../my-app/build', 'index.html'));
-});
-
-// Start the server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
