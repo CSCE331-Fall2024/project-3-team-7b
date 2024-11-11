@@ -11,7 +11,7 @@ function Inventory(props){
     const[inventory, setInventory] = useState([]);
     const[whichRow, setRow] = useState(null);
     const[error, setError] = useState('');
-    const[newItemID, setItemID] = useState(null);
+    const[render, setRender] = useState(false);
     const[data, setData] = useState({
         name: '',
         quant: '',
@@ -33,7 +33,7 @@ function Inventory(props){
 
 
         getInventory();
-    }, []);
+    }, [render]);
 
     const updateInventory = async (itemID, newData) => {
         try{
@@ -55,12 +55,30 @@ function Inventory(props){
 
     const addInventory = async (newData) => {
         try{
-            const response = await axios.post(`http://localhost:5001/api/inventory/add`, newData);
+            const response = await axios.post(`http://localhost:5001/api/inventory/add/${newData.itemID}`, newData);
             return response.data;
         } catch(error){
-            console.error("Unable to add inventory item");
+            console.error("Fails post: ", error);
         }
     };
+
+    const deleteInventory = async(itemName) => {
+        try{
+            const response = await axios.delete(`http://localhost:5001/api/inventory/delete/${itemName}`);
+            console.log("Inventory item deleted")
+        } catch(error){
+            console.log("Error deleting inventory item: ", error);
+        }
+    };
+
+    const doesInventoryExist = async(itemName) => {
+        try{
+            const response = await axios.get(`http://localhost:5001/api/inventory/check/${itemName}`)
+            return response.data;
+        } catch (error){
+            console.log("Error checking item: ", error);
+        }
+    }
     
     const getRow = (row) =>{
         if(whichRow && whichRow.item_name == row.item_name){
@@ -118,7 +136,7 @@ function Inventory(props){
         } catch (error){
         console.error("Can't update item: ", error);
         }
-    }
+    };
 
     const addButton = async () => {
         console.log("current data: ", data);
@@ -130,6 +148,15 @@ function Inventory(props){
             setError("Can't get the new ID");
             return;
         }
+        setError('');
+        
+        const ex = await doesInventoryExist(data.name);
+        if(ex){
+            setError("Please create a new item");
+            return;
+        }
+        setError('');
+
         console.log("after data: ", data);
         try {
             const newData = {
@@ -164,17 +191,35 @@ function Inventory(props){
             }
             setError('');
             console.log("up to here", newData);
-        
-            // Send POST request to API
-            const response = await axios.post('http://localhost:5001/api/inventory/add', newData);
-        
-            // Handle the response (if item was successfully added)
-            console.log('Item added successfully:', response.data);
+
+            const additional = await addInventory(newData);
+            setInventory((prev) =>
+                [...prev, additional]
+            );
           } catch (error) {
             // Handle errors
             console.error('Error adding item:', error);
           }
-    }
+    };
+
+    const deleteButton = async () =>{
+        const deleteName = data.name;
+        try{
+            const ex = await doesInventoryExist(deleteName);
+            console.log("exists: ", ex);
+
+            if(!ex){
+                setError("Please select an iventory item");
+                return;
+            }
+            setError('');
+            await deleteInventory(deleteName);
+            setRender((prev) => !prev);
+
+        } catch (error){
+            console.log(error);
+        }
+    };
 
     const view = props.view;
     const setAuthentication = props.setAuthentication;
@@ -200,7 +245,7 @@ function Inventory(props){
                     <div className={styles['buttons']}>
                         <button onClick={updateButton}>Update</button>
                         <button onClick={addButton}>Add</button>
-                        <button>Delete</button>
+                        <button onClick={deleteButton}>Delete</button>
                     </div>
                 </div>
             </div>

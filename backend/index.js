@@ -60,6 +60,18 @@ app.get('/api/inventoryID', async (req, res) => {
   }
 });
 
+app.get('/api/inventory/check/:itemName', async (req, res) =>{
+  const {itemName} = req.params;
+  try{
+    const result = await pool.query(`SELECT EXISTS (SELECT 1 FROM Inventory WHERE item_name ILIKE $1)`, [itemName]);
+    res.json(result.rows[0].exists);
+    return result.rows[0].exists;
+  } catch (error){
+    console.error("Error in API checking inventory: ", error);
+    res.status(500).send('Server error');
+  }
+});
+
 app.put('/api/inventory/:initialName', async(req, res) => {
   const initialName = req.params.initialName;
   const {item_name, quantity, unit, supplier, threshold, needs_restock} = req.body;
@@ -82,28 +94,44 @@ app.put('/api/inventory/:initialName', async(req, res) => {
   }
 });
 
-app.post('/api/inventory/add', async(req, res) => {
-  console.log('hello');
-  const testConnection = await pool.query('SELECT NOW()');
-  console.log('Database connection test:', testConnection.rows[0]);
-  // const {itemid, item_name, quantity, unit, supplier, needs_restock, threshold} = req.body;
+app.delete('/api/inventory/delete/:itemName', async (req, res) => {
+  const {itemName} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM Inventory WHERE item_name ILIKE $1 RETURNING*`, [itemName]
+    );
+    if(result.rowCount > 0){
+      res.json({message: 'Inventory item deleted', item: result.rows[0]});
+    } else{
+      res.status(404).send('Inventory item not found');
+    }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
 
-  // try{
-  //   const result = await pool.query(
-  //     `INSERT INTO Inventory (itemid, item_name, quantity, unit, supplier, needs_restock, threshold) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
-  //     [itemid, item_name, quantity, unit, supplier, needs_restock, threshold]
-  //   );
+app.post('/api/inventory/add/:itemid', async(req, res) => {
+  const {itemid} = req.params;
+  console.log(req.body);
+  const {item_name, quantity, unit, supplier, needs_restock, threshold} = req.body;
 
-  //   if(result.rowCount > 0){
-  //     res.json(result.rows[0]);
-  //   }
-  //   else{
-  //     res.status(404).send('Item not found');
-  //   }
-  // } catch (error){
-  //   console.error(error);
-  //   res.status(500).send('Server Error');
-  // }
+  try{
+    const result = await pool.query(
+      `INSERT INTO Inventory (itemid, item_name, quantity, unit, supplier, needs_restock, threshold) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+      [itemid, item_name, quantity, unit, supplier, needs_restock, threshold]
+    );
+
+    if(result.rowCount > 0){
+      res.json(result.rows[0]);
+    }
+    else{
+      res.status(404).send('Item not found');
+    }
+  } catch (error){
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
 });
 
 const PORT = process.env.PORT || 5001;
