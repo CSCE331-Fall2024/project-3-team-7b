@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./InventoryTable.module.css";
 
-const InventoryTable = ({data}) => {
+const InventoryTable = ({data, rowSelect}) => {
     return(
         <table className={styles.total}>
             <thead>
@@ -12,13 +12,13 @@ const InventoryTable = ({data}) => {
                 <th className={styles.threshold}>Threshold</th>
             </thead>
             <tbody>
-                {data.map((item, index) => (
+                {data.map((item) => (
                     <tr key={item.item_name} style={{
                         backgroundColor: item.needs_restock ? 'lightcoral' : 'white'
-                    }}>
-                        {console.log(item.item_name + ": " + item.needs_restock)}
+                    }} onClick={() => rowSelect(item)}>
+                        {/* {console.log(item.item_name + ": " + item.needs_restock)} */}
                         <td>{item.item_name}</td>
-                        <td>{item.quantity.toFixed(2)}</td>
+                        <td>{parseFloat(item.quantity).toFixed(2)}</td>
                         <td>{item.unit}</td>
                         <td>{item.supplier}</td>
                         <td>{item.threshold}</td>
