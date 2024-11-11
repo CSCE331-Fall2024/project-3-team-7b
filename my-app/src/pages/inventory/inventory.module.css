@@ -28,6 +28,7 @@
 .text-boxes input{
     width: 90%;
     height: 18%;
+    text-align: center;
 }
 .buttons{
     height: 20%;
@@ -39,4 +40,10 @@
 .buttons button{
     height: 90%;
     width: 30%;
+}
+
+.error{
+    color: red;
+    font-weight: bold;
+    text-align: center;
 }
