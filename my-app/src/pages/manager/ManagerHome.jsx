@@ -20,6 +20,9 @@ function ManagerHome(){
     const handleEmployees = () => {
         navigate("/manager/employees");
     }
+    const handleComponents = () => {
+        navigate("/manager/components");
+    }
     return (
         <ThemeProvider theme={theme}>
             <div>
@@ -28,18 +31,21 @@ function ManagerHome(){
                 </div>
 
                 <div className="button-div">
-                    <Button className="home-buttons" variant="contained" onClick={handleTrends}>
+                    <Button className="man-home-buttons" variant="contained" onClick={handleTrends}>
                         Trends
                     </Button>
-                    <Button className="home-buttons" variant="contained" onClick={handleInventory}>
-                        Inventory
-                        </Button>
-                    <Button className="home-buttons" variant="contained" onClick={handleItems}>
+                    <Button className="man-home-buttons" variant="contained" onClick={handleItems}>
                         Items
-                        </Button>
-                    <Button className="home-buttons" variant="contained" onClick={handleEmployees}>
+                    </Button>
+                    <Button className="man-home-buttons" variant="contained" onClick={handleComponents}>
+                        Components
+                    </Button>
+                    <Button className="man-home-buttons" variant="contained" onClick={handleInventory}>
+                        Inventory
+                    </Button>
+                    <Button className="man-home-buttons" variant="contained" onClick={handleEmployees}>
                         Employees
-                        </Button>
+                    </Button>
                 </div>
             </div>
        </ThemeProvider>
