@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const { Pool } = require('pg');
+const { escape } = require('querystring');
 require('dotenv').config();
 
 const app = express();
@@ -41,7 +42,7 @@ app.get('/api/menu_items', async (req, res) => {
 
 app.get('/api/inventory', async (req, res) => {
   try {
-    const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold, needs_restock FROM inventory');
+    const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold, needs_restock, itemID FROM inventory');
     res.json(result.rows);
   } catch (error) {
     console.error(error);
@@ -49,15 +50,60 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
-app.get('/api/threshold/:name', async (req, res) => {
-  const name = req.params.name;
+app.get('/api/inventoryID', async (req, res) => {
   try {
-    const result = await pool.query('SELECT threshold FROM inventory WHERE item_name = $1', [name]);
-    res.json(result.rows);
+    const result = await pool.query('SELECT MAX(itemid) AS id FROM inventory');
+    res.json(result.rows[0].id);
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
   }
+});
+
+app.put('/api/inventory/:initialName', async(req, res) => {
+  const initialName = req.params.initialName;
+  const {item_name, quantity, unit, supplier, threshold, needs_restock} = req.body;
+
+  try{
+    const result = await pool.query(
+      'UPDATE Inventory SET Item_Name = $1, Quantity = $2, Unit = $3, Supplier = $4, Threshold = $5, Needs_Restock = $6 WHERE Item_Name = $7 RETURNING *;',
+      [item_name, quantity, unit, supplier, threshold, needs_restock, initialName]
+    );
+
+    if(result.rowCount > 0){
+      res.json(result.rows[0]);
+    }
+    else{
+      res.status(404).send('Item not found');
+    }
+  } catch(error){
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
+app.post('/api/inventory/add', async(req, res) => {
+  console.log('hello');
+  const testConnection = await pool.query('SELECT NOW()');
+  console.log('Database connection test:', testConnection.rows[0]);
+  // const {itemid, item_name, quantity, unit, supplier, needs_restock, threshold} = req.body;
+
+  // try{
+  //   const result = await pool.query(
+  //     `INSERT INTO Inventory (itemid, item_name, quantity, unit, supplier, needs_restock, threshold) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+  //     [itemid, item_name, quantity, unit, supplier, needs_restock, threshold]
+  //   );
+
+  //   if(result.rowCount > 0){
+  //     res.json(result.rows[0]);
+  //   }
+  //   else{
+  //     res.status(404).send('Item not found');
+  //   }
+  // } catch (error){
+  //   console.error(error);
+  //   res.status(500).send('Server Error');
+  // }
 });
 
 const PORT = process.env.PORT || 5001;
