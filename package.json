@@ -6,6 +6,7 @@
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix my-app\""
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.7"
   }
 }
