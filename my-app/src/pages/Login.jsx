@@ -11,9 +11,8 @@ import axios from 'axios';
 // Purpose: Provides login logic for managers and cashiers
 
 function Login({ onLogin, userType }) {
-    console.log("here");
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("sjohnson@panda.com"); // TODO: change back to empty string when done
+    const [password, setPassword] = useState("pass123");
     const [data, setData] = useState([]);
     const navigate = useNavigate();
 
@@ -36,11 +35,13 @@ function Login({ onLogin, userType }) {
         event.preventDefault()
         
         // Find the user in the data array by matching the entered username
-        const user = data.find((user) => user.username === username && user.role === userType);
+        const user = data.find((user) => (
+            user.username === username && (userType === "Cashier" ? (user.role === userType || user.role === "Manager") : user.role === userType)
+        ));
 
         // If user is correctly authenticated
         if (user && user.password === password) {
-            onLogin(user.role); // Set authentication state
+            onLogin(userType); // Set authentication state
             if (userType === "Manager") {
                 navigate("/manager");
             } else if (userType === "Cashier") {
