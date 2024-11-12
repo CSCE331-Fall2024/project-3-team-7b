@@ -6,6 +6,7 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useState } from 'react';
 import ItemPerfomance from '../../components/manager/ItemPerfomance';
 import "./trends.css"
+import ProductUsage from '../../components/manager/ProductUsage';
 
 // Purpose: Displays the different trends a manager can view
 
@@ -46,6 +47,11 @@ function Trends(props){
                 { trend === "item-performance" && (
                     <div className="performance-container">
                         <ItemPerfomance />
+                    </div>
+                )}
+                { trend === "product-usage" && (
+                    <div className="performance-container">
+                        <ProductUsage />
                     </div>
                 )}
             </div>
