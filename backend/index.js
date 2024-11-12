@@ -145,6 +145,40 @@ app.post('/api/inventory/add/:itemid', async(req, res) => {
   }
 });
 
+// API to fetch name of component with specific componentID 
+app.get('/api/component-names', async(req, res) => {
+  try {
+    const result = await pool.query("SELECT Component_Name FROM Components WHERE ComponentID = ");
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+// API to fetch highest performing items
+app.get('/api/fetch-highest', async(req, res) => {
+  try {
+    const result = await pool.query('SELECT COUNT(*), ComponentID FROM OrderXComponents GROUP BY ComponentID ORDER BY COUNT(ComponentID) DESC LIMIT 5;');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+// API to fetch lowest performing items
+app.get('/api/fetch-lowest', async(req, res) => {
+  try {
+    const result = await pool.query('SELECT COUNT(*), ComponentID FROM OrderXComponents GROUP BY ComponentID ORDER BY COUNT(ComponentID) LIMIT 5;');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+
 // Serve static files from the React app's build directory
 app.use(express.static(path.join(__dirname, '../my-app/build')));
 

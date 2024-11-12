@@ -1,15 +1,15 @@
 import React from "react";
-import styles from "./InventoryTable.module.css";
+import "./Manager.css";
 
 const InventoryTable = ({data, rowSelect}) => {
     return(
-        <table className={styles.total}>
+        <table className="total">
             <thead>
-                <th className={styles.item}> Item</th>
-                <th className={styles.quantity}>Quantity</th>
-                <th className={styles.unit}>Unit</th>
-                <th className={styles.supplier}>Supplier</th>
-                <th className={styles.threshold}>Threshold</th>
+                <th className="item"> Item</th>
+                <th className="quantity">Quantity</th>
+                <th className="unit">Unit</th>
+                <th className="supplier">Supplier</th>
+                <th className="threshold">Threshold</th>
             </thead>
             <tbody>
                 {data.map((item) => (
