@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const { Pool } = require('pg');
 const { escape } = require('querystring');
+const { start } = require('repl');
 require('dotenv').config();
 
 const app = express();
@@ -179,16 +180,33 @@ app.get('/api/fetch-lowest', async(req, res) => {
 });
 
 // API to fetch product usage for trends
-// app.get('/api/product-usage', async(req, res) => {
-//   try {
-//     query = "SELECT Inventory.ItemID, Inventory.Item_Name, SUM(COALESCE(ComponentXInventory.Num_Required, 0)) AS Total_Used FROM Inventory JOIN ComponentXInventory ON Inventory.ItemID = ComponentXInventory.ItemID JOIN OrderXComponents ON ComponentXInventory.ComponentID = OrderXComponents.ComponentID JOIN Orders ON OrderXComponents.OrderID = Orders.OrderID JOIN Transactions ON Orders.OrderID = Transactions.OrderID WHERE Transactions.Timestamp BETWEEN ? AND ? -- specify your date range here GROUP BY Inventory.ItemID, Inventory.Item_Name ORDER BY Total_Used DESC;"
-//     const result = await pool.query(query);
-//     res.json(result.rows);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send('Server error');
-//   }
-// });
+app.get('/api/product-usage', async(req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    console.log("start date: " + startDate);
+
+    const query = `
+      SELECT Inventory.ItemID, Inventory.Item_Name, SUM(COALESCE(ComponentXInventory.Num_Required, 0)) AS Total_Used 
+      FROM Inventory 
+      JOIN ComponentXInventory ON Inventory.ItemID = ComponentXInventory.ItemID 
+      JOIN OrderXComponents ON ComponentXInventory.ComponentID = OrderXComponents.ComponentID 
+      JOIN Orders ON OrderXComponents.OrderID = Orders.OrderID 
+      JOIN Transactions ON Orders.OrderID = Transactions.OrderID 
+      WHERE Transactions.Timestamp BETWEEN $1 AND $2 
+      GROUP BY Inventory.ItemID, Inventory.Item_Name 
+      ORDER BY Total_Used DESC;
+    `;
+
+    // Pass startDate and endDate as query parameters
+    const result = await pool.query(query, [startDate, endDate]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching product usage data:", error);
+    res.status(500).send('Server error');
+  }
+});
 
 // Serve static files from the React app's build directory
 app.use(express.static(path.join(__dirname, '../my-app/build')));

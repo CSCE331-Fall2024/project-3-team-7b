@@ -12,24 +12,7 @@ function ProductUsage() {
     const [selectedStart, setSelectedStart] = useState(null);
     const [selectedEnd, setSelectedEnd] = useState(null);
 
-    // const [productUsageData, setProductUsageData] = useState([]);
-
-    // // retreives all necessary data (highest/lowest performing items & component names)
-    // const fetchData = async () => {
-    //     const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-    //     try {
-    //         const [usageResponse] = await Promise.all([
-    //             axios.get(`${baseURL}/api/product-usage`),
-    //         ]);
-    //         setProductUsageData(usageResponse.data);
-    //     } catch (error) {
-    //         console.error("Error fetching item performance data:", error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
+    const [productUsageData, setProductUsageData] = useState([]);
 
     const handleStartChange = (startDate) => {
         setSelectedStart(startDate);
@@ -56,6 +39,8 @@ function ProductUsage() {
                 const formattedStart = selectedStart.format("YYYY-MM-DD");
                 const formattedEnd = selectedEnd.format("YYYY-MM-DD");
 
+                console.log(formattedStart);
+
                 // Make an API call with axios, including the start and end dates as query parameters
                 const response = await axios.get(`${baseURL}/api/product-usage`, {
                     params: {
@@ -66,7 +51,7 @@ function ProductUsage() {
 
                 // Handle the response data as needed (for example, setting it to state)
                 console.log("Report Data:", response.data);
-                // setProductUsageData(response.data);
+                setProductUsageData(response.data);
             } catch (error) {
                 console.error("Error generating report:", error);
             }
@@ -75,38 +60,63 @@ function ProductUsage() {
 
     return (
         <div className="product-usage">
-            <div className="date-select">
-                <h3>Select a Start Date: </h3>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker 
-                        value={selectedStart}
-                        onChange={handleStartChange}
-                        slotProps={{
-                            textField: {
-                              helperText: 'Start Date',
-                            },
-                          }}
-                    />
-                </LocalizationProvider>
+            <div className="data-select-container">
+                <div className="date-select">
+                    <h3>Select a Start Date: </h3>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker 
+                            value={selectedStart}
+                            onChange={handleStartChange}
+                            slotProps={{
+                                textField: {
+                                helperText: 'Start Date',
+                                },
+                            }}
+                        />
+                    </LocalizationProvider>
+                </div>
+
+                <div className="date-select">
+                    <h3>Select an End Date: </h3>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker 
+                            value={selectedEnd}
+                            onChange={handleEndChange}
+                            slotProps={{
+                                textField: {
+                                helperText: 'End Date',
+                                },
+                            }}
+                        />
+                    </LocalizationProvider>
+                </div>
+
+                <div>
+                    <Button variant="contained" onClick={generateReport}>Generate Report</Button>
+                </div>
             </div>
 
-            <div className="date-select">
-                <h3>Select an End Date: </h3>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker 
-                        value={selectedEnd}
-                        onChange={handleEndChange}
-                        slotProps={{
-                            textField: {
-                              helperText: 'End Date',
-                            },
-                          }}
-                    />
-                </LocalizationProvider>
-            </div>
-
-            <div>
-                <Button variant="contained" onClick={generateReport}>Generate Report</Button>
+            <div className="usage-chart">
+                {productUsageData.length > 0 && (
+                    <table className="product-usage-table">
+                        <thead>
+                            <tr>
+                                <th>Item ID</th>
+                                <th>Item Name</th>
+                                <th>Total Used</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {productUsageData.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.itemid}</td>
+                                    <td>{item.item_name}</td>
+                                    <td>{item.total_used}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                )}
             </div>
             
         </div>
