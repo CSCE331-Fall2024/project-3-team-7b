@@ -53,3 +53,16 @@
 .item-label {
     text-align: center;
 }
+
+/* ******* Components Table ******* */
+.component {
+    width: 40%
+}
+
+.category {
+    width: 30%;
+}
+
+.premium, .seasonal, .availability{
+    width: 10%;
+}

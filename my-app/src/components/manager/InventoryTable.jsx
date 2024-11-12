@@ -16,7 +16,6 @@ const InventoryTable = ({data, rowSelect}) => {
                     <tr key={item.item_name} style={{
                         backgroundColor: item.needs_restock ? 'lightcoral' : 'white'
                     }} onClick={() => rowSelect(item)}>
-                        {/* {console.log(item.item_name + ": " + item.needs_restock)} */}
                         <td>{item.item_name}</td>
                         <td>{parseFloat(item.quantity).toFixed(2)}</td>
                         <td>{item.unit}</td>
