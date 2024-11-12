@@ -22,6 +22,9 @@ function ManagerBanner(props){
     const handleEmployees = () => {
         navigate("/manager/employees");
     }
+    const handleComponents = () => {
+        navigate("/manager/components");
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -31,18 +34,21 @@ function ManagerBanner(props){
                 </div>
 
                 <div className={styles["button-div"]}>
-                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleTrends}>
+                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleTrends}>
                         Trends
                     </Button>
-                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleInventory}>
-                        Inventory
-                        </Button>
-                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleItems}>
+                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleItems}>
                         Items
-                        </Button>
-                    <Button className={styles["home-buttons"]} variant="contained" onClick={handleEmployees}>
+                    </Button>
+                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleComponents}>
+                        Components
+                    </Button>
+                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleInventory}>
+                        Inventory
+                    </Button>
+                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleEmployees}>
                         Employees
-                        </Button>
+                    </Button>
                 </div>
             </div>
        </ThemeProvider>

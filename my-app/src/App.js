@@ -14,6 +14,7 @@ import Trends from "./pages/trends/trends";
 import Items from "./pages/items/items";
 import Employees from "./pages/employees/employees";
 import MenuBoard from "./pages/menuboard/MenuBoard";
+import Components from "./pages/components/ComponentsHome";
 import { useState } from "react";
 
 
@@ -72,6 +73,9 @@ function App() {
           <Route path="/manager/employees" element={<Employees view="manager" setAuthentication={setIsAuthenticated}/>}/>
 
           <Route path="/menu" element={<MenuBoard />}/>
+          <Route path="/manager/components" element={<Components view="manager" setAuthentication={setIsAuthenticated}/>}/>
+          
+
         </Routes>
       
       </BrowserRouter>
