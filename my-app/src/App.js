@@ -14,7 +14,7 @@ import Trends from "./pages/trends/trends";
 import Items from "./pages/items/items";
 import Employees from "./pages/employees/employees";
 import MenuBoard from "./pages/menuboard/MenuBoard";
-import Components from "./pages/components/ComponentsHome";
+import Components from "./pages/components/components";
 import { useState } from "react";
 
 
