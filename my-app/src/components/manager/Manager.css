@@ -53,3 +53,21 @@
 .item-label {
     text-align: center;
 }
+
+
+/* ******* PRODUCT USAGE ******* */
+.product-usage {
+    margin-top: 3vh;
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+    justify-content: center;
+    align-items: center;
+    gap: 5vw;
+}
+
+.date-select {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
