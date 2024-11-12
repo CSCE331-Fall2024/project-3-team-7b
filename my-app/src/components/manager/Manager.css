@@ -66,3 +66,34 @@
 .premium, .seasonal, .availability{
     width: 10%;
 }
+
+
+/* ******* PRODUCT USAGE ******* */
+.product-usage {
+    margin-top: 3vh;
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+    justify-content: center;
+    align-items: center;
+    gap: 5vw;
+}
+
+.data-select-container {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+}
+
+.date-select {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+.usage-chart {
+    width: 60%;
+    max-height: 60vh;
+    overflow-y: auto;
+}
