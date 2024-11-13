@@ -187,7 +187,7 @@ app.get('/api/product-usage', async(req, res) => {
     console.log("start date: " + startDate);
 
     const query = `
-      SELECT Inventory.ItemID, Inventory.Item_Name, SUM(COALESCE(ComponentXInventory.Num_Required, 0)) AS Total_Used 
+      SELECT Inventory.ItemID, Inventory.Item_Name, Inventory.unit, SUM(COALESCE(ComponentXInventory.Num_Required, 0)) AS Total_Used 
       FROM Inventory 
       JOIN ComponentXInventory ON Inventory.ItemID = ComponentXInventory.ItemID 
       JOIN OrderXComponents ON ComponentXInventory.ComponentID = OrderXComponents.ComponentID 

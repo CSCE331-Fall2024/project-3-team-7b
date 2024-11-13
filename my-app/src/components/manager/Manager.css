@@ -31,23 +31,44 @@
     justify-content: center;
     align-items: center;
     gap: 5vw;
+    padding-bottom: 5vh;
 }
 
 .highest-perf {
     display: flex;
     flex-direction: column;
     width: 45%;
+    border: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 2vw;
+    margin-top: 5vh;
 }
 
 .lowest-perf {
     display: flex;
     flex-direction: column;
     width: 45%;
+    border: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 2vw;
+    margin-top: 5vh;
 }
 
 .item-table {
+    text-align: left;
     margin-top: 2vh;
     margin-bottom: 5vh;
+}
+
+.item-table th {
+    background-color: #D95451;
+    color: white;
+    font-weight: bold; 
+    padding: 1vh;
+    position: sticky;
+    top: 0; 
 }
 
 .item-label {
@@ -77,6 +98,7 @@
     justify-content: center;
     align-items: center;
     gap: 5vw;
+    padding-bottom: 5vh;
 }
 
 .data-select-container {
@@ -84,6 +106,9 @@
     display: flex;
     flex-direction: column;
     gap: 1vw;
+    position: fixed;
+    left: 8vw;
+    top: 45vh;
 }
 
 .date-select {
@@ -93,7 +118,20 @@
 }
 
 .usage-chart {
-    width: 60%;
-    max-height: 60vh;
+    width: 50%;
+    height: 50vh;
     overflow-y: auto;
+    position: fixed;
+    left: 40vw;
+    top: 45vh;
+    margin-bottom: 5vh;
+}
+
+.usage-chart th {
+    background-color: #D95451;
+    color: white;
+    font-weight: bold; 
+    padding: 1vh;
+    position: sticky;
+    top: 0; 
 }

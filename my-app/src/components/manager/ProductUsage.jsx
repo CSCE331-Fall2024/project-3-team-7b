@@ -5,25 +5,35 @@ import axios from 'axios';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Paper from '@mui/material/Paper';
 
 // Purpose: Displays the highest and lowest performing items
 
 function ProductUsage() {
     const [selectedStart, setSelectedStart] = useState(null);
     const [selectedEnd, setSelectedEnd] = useState(null);
-
     const [productUsageData, setProductUsageData] = useState([]);
+    const [order, setOrder] = useState('asc');
+    const [orderBy, setOrderBy] = useState('itemid');
 
+    // changes the start date
     const handleStartChange = (startDate) => {
         setSelectedStart(startDate);
-        console.log("Selected date:", startDate);
     }
 
+    // changes the end date
     const handleEndChange = (endDate) => {
         setSelectedEnd(endDate);
-        console.log("Selected date:", endDate);
     }
 
+    // retreives the product usage in the timeframe by calling API
     const generateReport = async () => {
         if (selectedStart === null || selectedEnd === null) {
             alert("Please fill out both dates.");
@@ -35,13 +45,12 @@ function ProductUsage() {
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
         
             try {
-                // Format the dates to a suitable format for the API (e.g., "YYYY-MM-DD")
+                // formats the dates to a suitable format for the API (e.g., "YYYY-MM-DD")
                 const formattedStart = selectedStart.format("YYYY-MM-DD");
                 const formattedEnd = selectedEnd.format("YYYY-MM-DD");
 
-                console.log(formattedStart);
 
-                // Make an API call with axios, including the start and end dates as query parameters
+                // makes the API call with the correct parameters
                 const response = await axios.get(`${baseURL}/api/product-usage`, {
                     params: {
                         startDate: formattedStart,
@@ -49,8 +58,7 @@ function ProductUsage() {
                     }
                 });
 
-                // Handle the response data as needed (for example, setting it to state)
-                console.log("Report Data:", response.data);
+                // sets the state of the data
                 setProductUsageData(response.data);
             } catch (error) {
                 console.error("Error generating report:", error);
@@ -58,9 +66,23 @@ function ProductUsage() {
         }
     }
 
+    // sorts the table based on column
+    const handleSort = (property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+        const sortedData = [...productUsageData].sort((a, b) => {
+            if (a[property] < b[property]) return order === 'asc' ? -1 : 1;
+            if (a[property] > b[property]) return order === 'asc' ? 1 : -1;
+            return 0;
+        });
+        setProductUsageData(sortedData);
+    };
+
     return (
         <div className="product-usage">
             <div className="data-select-container">
+                {/* Allows user to select start date with date picker */}
                 <div className="date-select">
                     <h3>Select a Start Date: </h3>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -76,6 +98,7 @@ function ProductUsage() {
                     </LocalizationProvider>
                 </div>
 
+                {/* Allows user to select end date with date picker */}
                 <div className="date-select">
                     <h3>Select an End Date: </h3>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -91,31 +114,68 @@ function ProductUsage() {
                     </LocalizationProvider>
                 </div>
 
+                {/* Button to generate the table */}
                 <div>
                     <Button variant="contained" onClick={generateReport}>Generate Report</Button>
                 </div>
             </div>
 
+            {/* table to display the product usage */}
             <div className="usage-chart">
                 {productUsageData.length > 0 && (
-                    <table className="product-usage-table">
-                        <thead>
-                            <tr>
-                                <th>Item ID</th>
-                                <th>Item Name</th>
-                                <th>Total Used</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow component="th">
+                                <TableCell>
+                                <TableSortLabel
+                                            active={orderBy === 'itemid'}
+                                            direction={orderBy === 'itemid' ? order : 'asc'}
+                                            onClick={() => handleSort('itemid')}
+                                            hideSortIcon={false}
+                                        >
+                                            Item ID
+                                        </TableSortLabel>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <TableSortLabel
+                                        active={orderBy === 'item_name'}
+                                        direction={orderBy === 'item_name' ? order : 'asc'}
+                                        onClick={() => handleSort('item_name')}
+                                        hideSortIcon={false}
+                                    >
+                                        Item Name
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell align="right">
+                                    <TableSortLabel
+                                        active={orderBy === 'total_used'}
+                                        direction={orderBy === 'total_used' ? order : 'asc'}
+                                        onClick={() => handleSort('total_used')}
+                                        hideSortIcon={false}
+                                    >
+                                        Total Used
+                                    </TableSortLabel>
+                                </TableCell>
+                                <TableCell align="right"> Units </TableCell>
+                                
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
                             {productUsageData.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.itemid}</td>
-                                    <td>{item.item_name}</td>
-                                    <td>{item.total_used}</td>
-                                </tr>
+                            <TableRow
+                                key={index}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell scope="row"> {item.itemid} </TableCell>
+                                <TableCell align="right">{item.item_name}</TableCell>
+                                <TableCell align="right">{item.total_used}</TableCell>
+                                <TableCell align="right">{item.unit}</TableCell>
+                            </TableRow>
                             ))}
-                        </tbody>
-                    </table>
+                        </TableBody>
+                        </Table>
+                    </TableContainer>
                 )}
             </div>
             

@@ -2,6 +2,14 @@ import { Button } from "@mui/material";
 import "./Manager.css"
 import { useState, useEffect } from "react";
 import axios from 'axios';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Paper from '@mui/material/Paper';
 
 // Purpose: Displays the highest and lowest performing items
 
@@ -44,24 +52,28 @@ function ItemPerfomance() {
                 <h3 className="item-label">HIGHEST PERFORMING ITEMS</h3>
                 
                 {/* displays highest performing items in a table */}
-                <table className="item-table">
-                    <thead>
-                        <tr>
-                            <th>Component Name</th>
-                            <th>Component ID</th>
-                            <th>Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {highestData.map((item, index) => (
-                            <tr key={index}>
-                                <td>{componentNameMap[item.componentid] || "N/A"}</td>
-                                <td>{item.componentid}</td>
-                                <td>{item.count}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div className="item-table">
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell> Component Name </TableCell>
+                                    <TableCell> Component ID </TableCell>
+                                    <TableCell> Component Count </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {highestData.map((item, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{componentNameMap[item.componentid] || "N/A"}</TableCell>
+                                        <TableCell>{item.componentid}</TableCell>
+                                        <TableCell>{item.count}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
                 <Button variant="contained" onClick={fetchData}> Refresh Items </Button>
             </div>
 
@@ -70,24 +82,28 @@ function ItemPerfomance() {
                 <h3 className="item-label">LOWEST PERFORMING ITEMS</h3>
 
                 {/* displays lowest performing items in a table */}
-                <table className="item-table">
-                    <thead>
-                        <tr>
-                            <th>Component Name</th>
-                            <th>Component ID</th>
-                            <th>Count</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {lowestData.map((item, index) => (
-                            <tr key={index}>
-                                <td>{componentNameMap[item.componentid] || "N/A"}</td>
-                                <td>{item.componentid}</td>
-                                <td>{item.count}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <div className="item-table">
+                    <TableContainer component={Paper}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell> Component Name </TableCell>
+                                    <TableCell> Component ID </TableCell>
+                                    <TableCell> Component Count </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {lowestData.map((item, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell>{componentNameMap[item.componentid] || "N/A"}</TableCell>
+                                        <TableCell>{item.componentid}</TableCell>
+                                        <TableCell>{item.count}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </div>
                 <Button variant="contained" onClick={fetchData}> Refresh Items </Button>
             </div>
         </div>
