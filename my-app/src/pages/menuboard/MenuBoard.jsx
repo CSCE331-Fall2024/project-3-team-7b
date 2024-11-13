@@ -15,13 +15,14 @@ import "./menu.css";
 
 // Image import function for menu items
 const importAll = (r) => {
+  // Import all files from a specified directory and return as an object
   return r.keys().reduce((acc, fileName) => {
     acc[fileName.replace('./', '').split('.')[0]] = r(fileName);
     return acc;
   }, {});
 };
 
-// Import all images from respective folders
+// Import images for different menu item categories
 const menuImages = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 const sideImages = importAll(require.context("../../images/components/sides", false, /\.(png)$/));
 const entreeImages = importAll(require.context("../../images/components/entrees", false, /\.(png)$/));
@@ -29,6 +30,7 @@ const drinkImages = importAll(require.context("../../images/components/drinks", 
 const appetizerImages = importAll(require.context("../../images/components/appetizers", false, /\.(png)$/));
 
 const MenuBoard = () => {
+  // State hooks to store menu items, components, loading state, errors, and alert messages
   const [menuItems, setMenuItems] = useState([]);
   const [components, setComponents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,7 @@ const MenuBoard = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
+  // Fetch data from the API on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -67,22 +70,25 @@ const MenuBoard = () => {
           })));
         }
 
-        setLoading(false);
+        setLoading(false); // Stop loading when data is fetched
       } catch (error) {
         console.error('Fetch error:', error);
-        setError('Failed to load menu data');
-        setLoading(false);
+        setError('Failed to load menu data'); // Set error message
+        setLoading(false); // Stop loading in case of error
       }
     };
 
     fetchData();
   }, []);
 
+  // Extract unique categories from menu items and components
   const categories = [...new Set(menuItems.map(item => item.category))];
   const componentCategories = [...new Set(components.map(comp => comp.category))];
 
+  // Toggle availability status for menu items or components
   const toggleAvailability = (itemId, isComponent = false) => {
     if (isComponent) {
+      // Toggle availability of components
       setComponents(prevComponents =>
         prevComponents.map(comp =>
           comp.id === itemId
@@ -98,6 +104,7 @@ const MenuBoard = () => {
         setTimeout(() => setShowAlert(false), 3000);
       }
     } else {
+      // Toggle availability of menu items
       setMenuItems(prevItems =>
         prevItems.map(item =>
           item.id === itemId
@@ -115,6 +122,7 @@ const MenuBoard = () => {
     }
   };
 
+  // Display loading spinner while data is being fetched
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -123,6 +131,7 @@ const MenuBoard = () => {
     );
   }
 
+  // Display error message if data fetching fails
   if (error) {
     return (
       <Alert severity="error" sx={{ m: 2 }}>
@@ -131,6 +140,7 @@ const MenuBoard = () => {
     );
   }
 
+  // Get the appropriate image for a menu item or component based on category
   const getImageSource = (id, category) => {
     const imageMap = {
       'Sides': sideImages,
