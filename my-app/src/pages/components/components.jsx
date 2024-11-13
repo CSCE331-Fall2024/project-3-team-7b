@@ -68,8 +68,7 @@ function Components(props){
                 <ManagerBanner view={view} setAuthentication={setAuthentication}/>
             </div>
             <div className={styles['divider']}>
-                <div className={styles['table-container']}> 
-                    {/* <InventoryTable data={inventory} rowSelect={getRow}/> */}
+                <div className={styles['table-container']}>
                     <ComponentsTable data={components} rowSelect={getRow}/>
                 </div>
                 <div className={styles['editor-container']}>
@@ -84,25 +83,21 @@ function Components(props){
                             <option value="Beverage">Beverage</option>
                             <option value="Dessert">Dessert</option>
                         </select>
-                        <select name="avail" onChange={input} value={data.avail}>
+                        <select name="avail" onChange={input} value={data.avail ? "True" : "False"}>
                             <option value="" disabled>Is this available?</option>
                             <option value="True">Yes</option>
                             <option value="False">No</option>
                         </select>
-                        <select name="prem" onChange={input} value={data.prem}>
+                        <select name="prem" onChange={input} value={data.prem ? "True" : "False"}>
                             <option value="" disabled>Is this premium?</option>
                             <option value="True">Yes</option>
                             <option value="False">No</option>
                         </select>
-                        <select name="avail" onChange={input} value={data.seasonal}>
+                        <select name="avail" onChange={input} value={data.seas ? "True" : "False"}>
                             <option value="" disabled>Is this seasonal?</option>
                             <option value="True">Yes</option>
                             <option value="False">No</option>
                         </select>
-                        {/* <input type="text" name='quant' onChange={input} placeholder='Category' value={data.cat}/>
-                        <input type="text" name='unit' onChange={input} placeholder='Availability' value={data.avail}/>
-                        <input type="text" name='sup' onChange={input} placeholder='Premium' value={data.prem}/>
-                        <input type="text" name='thresh' onChange={input} placeholder='Seasonal' value={data.seas}/> */}
                     </div>
                     <div className={styles['buttons']}>
                         <button>Update</button>
