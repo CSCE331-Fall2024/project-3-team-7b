@@ -37,9 +37,9 @@ function Trends(props){
                         >
                             <MenuItem value="item-performance">Item Performance</MenuItem>
                             <MenuItem value="product-usage">Product Usage Chart</MenuItem>
-                            <MenuItem value="x-report">X Report</MenuItem>
-                            <MenuItem value="y-report">Y Report</MenuItem>
-                            <MenuItem value="sales-report">Sales Report</MenuItem>
+                            <MenuItem value="x-report">Today's Sales Report by Hour</MenuItem>
+                            <MenuItem value="y-report">End of Day Report</MenuItem>
+                            <MenuItem value="sales-report">Custom Sales Report</MenuItem>
                         </Select>
                     </FormControl>
                 </div>

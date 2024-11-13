@@ -14,7 +14,7 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from '@mui/material/Paper';
 
-// Purpose: Displays the highest and lowest performing items
+// Purpose: Displays the amount of each item sold in a time period
 
 function SalesReport() {
     const [selectedStart, setSelectedStart] = useState(null);

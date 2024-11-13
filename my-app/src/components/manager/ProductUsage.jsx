@@ -116,7 +116,7 @@ function ProductUsage() {
 
                 {/* Button to generate the table */}
                 <div>
-                    <Button variant="contained" onClick={generateReport}>Generate Report</Button>
+                    <Button variant="contained" onClick={generateReport}>Generate Product Usage Report</Button>
                 </div>
             </div>
 
