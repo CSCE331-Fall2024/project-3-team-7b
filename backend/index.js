@@ -184,8 +184,6 @@ app.get('/api/product-usage', async(req, res) => {
   try {
     const { startDate, endDate } = req.query;
 
-    console.log("start date: " + startDate);
-
     const query = `
       SELECT Inventory.ItemID, Inventory.Item_Name, Inventory.unit, SUM(COALESCE(ComponentXInventory.Num_Required, 0)) AS Total_Used 
       FROM Inventory 
@@ -204,6 +202,30 @@ app.get('/api/product-usage', async(req, res) => {
     res.json(result.rows);
   } catch (error) {
     console.error("Error fetching product usage data:", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// API to fetch sales report for trends
+app.get('/api/sales-report', async(req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const query = `
+      SELECT c.Component_Name, COUNT(DISTINCT t.OrderID) as order_count, SUM(t.Amount) as total_sales
+      FROM Transactions t 
+      JOIN OrderXComponents oxc ON t.OrderID = oxc.OrderID
+      JOIN Components c ON oxc.ComponentID = c.ComponentID
+      WHERE t.Timestamp BETWEEN $1 AND $2 
+      GROUP BY c.ComponentID, c.Component_Name;
+    `;
+
+    // Pass startDate and endDate as query parameters
+    const result = await pool.query(query, [startDate, endDate]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching sales report data:", error);
     res.status(500).send('Server error');
   }
 });
