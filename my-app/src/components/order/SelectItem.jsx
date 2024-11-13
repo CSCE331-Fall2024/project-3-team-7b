@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 // Purpose: Displays individual items such as orange chicken, dr. pepper, cream cheese rangoons, etc
 
 // Dynamically load all images from a folder
-const importImages = (r) => {
+const importAll = (r) => {
     return r.keys().map((fileName) => {
         return {
             src: r(fileName), // The image source
@@ -18,19 +18,27 @@ const importImages = (r) => {
 
 function SelectItem(props) {
     console.log(props.item);
-    const item = props.item;
+    const item = parseInt(props.item, 10);
     const view = props.view;
     const navigate = useNavigate();
 
-    const [data, setData] = useState([]);
+    const [compData, setCompData] = useState([]);
+    const [menuData, setMenuData] = useState([]);
 
-    // Makes API call to retreive component information
+    // Fetch component and menu data concurrently
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-                const response = await axios.get(`${baseURL}/api/components`);
-                setData(response.data);
+
+                // Use Promise.all to fetch both data sources at the same time
+                const [compResponse, menuResponse] = await Promise.all([
+                    axios.get(`${baseURL}/api/components`),
+                    axios.get(`${baseURL}/api/menu_items`)
+                ]);
+
+                setCompData(compResponse.data);
+                setMenuData(menuResponse.data);
             } catch (error) {
                 console.error(error);
             }
@@ -40,20 +48,25 @@ function SelectItem(props) {
     }, []);
 
     // Create a dictionary with `itemid` as keys for easy lookup
-    const itemsDictionary = data.reduce((dict, item) => {
+    const compItemsDictionary = compData.reduce((dict, item) => {
         dict[item.componentid] = item;
+        return dict;
+    }, {});
+
+    const menuItemsDictionary = menuData.reduce((dict, item) => {
+        dict[item.itemid] = item;
         return dict;
     }, {});
 
 
     // Import all images from the images folder (you can adjust the path)
     // Sides
-    const sideImages = importImages(
+    const sideImages = importAll(
         require.context("../../images/components/sides", false, /\.(png)$/)
     )
         .filter(
             (imageObj) =>
-                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+                compItemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
         ) // Filter out images without a match
         .sort((a, b) => {
             const idA = parseInt(a.name.split(".")[0], 10);
@@ -62,12 +75,12 @@ function SelectItem(props) {
         });
 
     // Entrees
-    const entreeImages = importImages(
+    const entreeImages = importAll(
         require.context("../../images/components/entrees", false, /\.(png)$/)
     )
         .filter(
             (imageObj) =>
-                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+                compItemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
         ) // Filter out images without a match
         .sort((a, b) => {
             const idA = parseInt(a.name.split(".")[0], 10);
@@ -76,12 +89,12 @@ function SelectItem(props) {
         });
 
     // Drinks
-    const drinkImages = importImages(
+    const drinkImages = importAll(
         require.context("../../images/components/drinks", false, /\.(png)$/)
     )
         .filter(
             (imageObj) =>
-                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+                compItemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
         ) // Filter out images without a match
         .sort((a, b) => {
             const idA = parseInt(a.name.split(".")[0], 10);
@@ -90,12 +103,12 @@ function SelectItem(props) {
         });
 
     // Appetizers
-    const appetizerImages = importImages(
+    const appetizerImages = importAll(
         require.context("../../images/components/appetizers", false, /\.(png)$/)
     )
         .filter(
             (imageObj) =>
-                itemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+                compItemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
         ) // Filter out images without a match
         .sort((a, b) => {
             const idA = parseInt(a.name.split(".")[0], 10);
@@ -103,6 +116,33 @@ function SelectItem(props) {
             return idA - idB;
         });
 
+    // Panda Cub Meals
+    const cubImages = importAll(
+        require.context("../../images/components/panda_cub_meals", false, /\.(png)$/)
+    )
+        .filter(
+            (imageObj) =>
+                menuItemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+        ) // Filter out images without a match
+        .sort((a, b) => {
+            const idA = parseInt(a.name.split(".")[0], 10);
+            const idB = parseInt(b.name.split(".")[0], 10);
+            return idA - idB;
+        });
+
+    // A La Carte Options
+    const aLaCarteimages = importAll(
+        require.context("../../images/components/a_la_carte", false, /\.(png)$/)
+    )
+        .filter(
+            (imageObj) =>
+                compItemsDictionary[parseInt(imageObj.name.split(".")[0], 10)]
+        ) // Filter out images without a match
+        .sort((a, b) => {
+            const idA = parseInt(a.name.split(".")[0], 10);
+            const idB = parseInt(b.name.split(".")[0], 10);
+            return idA - idB;
+        });
 
     // Navigates user back to the main menu
     const backToMenu = () => {
@@ -126,7 +166,7 @@ function SelectItem(props) {
                     <div className="menu-display">
                         {sideImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
-                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
                                 <button key={index} className="menu-button">
@@ -148,7 +188,7 @@ function SelectItem(props) {
                     <div className="menu-display">
                         {entreeImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
-                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
                                 <button key={index} className="menu-button">
@@ -162,7 +202,7 @@ function SelectItem(props) {
             )}
 
             {/* DRINKS */}
-            { (item === 19 ) && ( 
+            { (item === 19) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Drink:</h2>
@@ -170,7 +210,7 @@ function SelectItem(props) {
                     <div className="menu-display">
                         {drinkImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
-                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
                                 <button key={index} className="menu-button">
@@ -184,7 +224,7 @@ function SelectItem(props) {
             )}
             
             {/* APPETIZERS */}
-            { (item === 13 ) && ( 
+            { (item === 13) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Appetizer:</h2>
@@ -192,7 +232,7 @@ function SelectItem(props) {
                     <div className="menu-display">
                         {appetizerImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
-                            const itemName = itemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
                                 <button key={index} className="menu-button">
@@ -204,7 +244,51 @@ function SelectItem(props) {
                     </div>
                 </div>
             )}
-        
+
+            {/* PANDA CUB MEALS */}
+            { (item === 5) && ( 
+                <div className="item-type"> 
+                    <div className="labels">   
+                        <h2>Select Your Meal:</h2>
+                    </div>
+                    <div className="menu-display">
+                        {cubImages.map((imageObj, index) => {
+                            const itemId = parseInt(imageObj.name.split(".")[0], 10);
+                            const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
+                
+                            return (
+                                <button key={index} className="menu-button">
+                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className="menu-image" />
+                                    {itemName}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
+            {/* A LA CARTE */}
+            { (item === 15) && ( 
+                <div className="item-type"> 
+                    <div className="labels">   
+                        <h2>Select Your Item:</h2>
+                    </div>
+                    <div className="menu-display">
+                        {aLaCarteimages.map((imageObj, index) => {
+                            const itemId = parseInt(imageObj.name.split(".")[0], 10);
+                            const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
+                
+                            return (
+                                <button key={index} className="menu-button">
+                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className="menu-image" />
+                                    {itemName}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
