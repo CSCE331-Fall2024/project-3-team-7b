@@ -18,9 +18,13 @@ const importAll = (r) => {
 // Import all images from the images folder (adjust the path if necessary)
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
-function MenuDisplay() {
+function MenuDisplay(props) {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
+    const subtotal = props.subtotal;
+    const tax = props.tax;
+    const total = props.total;
+    const order = props.order;
 
     // Makes API call to retreive menu item information
     useEffect(() => {
@@ -45,7 +49,8 @@ function MenuDisplay() {
     
     // Navigates user to the next stage of the order
     const directOrder = (index) => {
-        navigate("/customer/order/select", { state: { item: index } });
+        props.update(1, 1, 1, "a");
+        navigate("/customer/order/select", { state: { item: index, subtotal: subtotal, tax: tax, total:total, order: order, update: props.update } });
     }
 
     // Sort images based on `itemid`

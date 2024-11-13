@@ -21,6 +21,10 @@ function SelectItem(props) {
     const item = props.item;
     const view = props.view;
     const navigate = useNavigate();
+    const subtotal = props.subtotal;
+    const tax = props.tax;
+    const total = props.total;
+    const order = props.order;
 
     const [data, setData] = useState([]);
 

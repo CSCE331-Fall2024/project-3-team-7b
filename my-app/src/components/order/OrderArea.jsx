@@ -2,7 +2,6 @@
 import React from "react";
 import "./orderComponents.css";
 import { Button } from "@mui/material";
-import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 // Purpose: Displays everything the user has selected for the order
@@ -16,9 +15,10 @@ const importAll = (r) => {
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function OrderArea(props) {
-    const [subtotal, setSubtotal] = useState(0.00);
-    const [tax, setTax] = useState(0.00);
-    const [total, setTotal] = useState(0.00);
+    const subtotal = props.subtotal;
+    const tax = props.tax;
+    const total = props.total;
+    const order = props.order;
     const view = props.view;
     const navigate = useNavigate();
 
@@ -37,6 +37,7 @@ function OrderArea(props) {
             <div className="order-list">
                 {/* Lists contents of current order */}
                 <h3>Current Order:</h3>
+                <p>{order}</p>
                 
                 {/* Calulates and displays the price of the order */}
                 <div className="totals">
