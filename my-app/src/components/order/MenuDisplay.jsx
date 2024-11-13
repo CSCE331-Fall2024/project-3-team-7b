@@ -63,11 +63,19 @@ function MenuDisplay(props) {
         });
 
     return (
-        // Displats all the buttons for menu items w/ corresponding names
+        // Displays all the buttons for menu items w/ corresponding names
         <div className="menu-display">
             {sortedImages.map((imageObj, index) => {
                 const itemId = parseInt(imageObj.name.split(".")[0], 10);
-                const itemName = itemsDictionary[itemId]?.item_name || "Unknown Item";
+                const itemName = 
+                    itemId === 5 ? "Panda Cub Meal" :
+                    itemId === 9 ? "Panda Bundles" :
+                    itemId === 13 ? "Appetizers and More" :
+                    itemId === 15 ? "A La Carte" :
+                    itemId === 19 ? "Drinks" :
+                    itemId === 23 ? "Catering" :
+                    itemsDictionary[itemId]?.item_name || "Unknown Item";
+
                 
                 return (
                     <button key={index} className="menu-button" onClick={() => directOrder(imageObj.name)}>

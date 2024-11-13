@@ -1,0 +1,137 @@
+/* ******* INVENTORY TABLE ******* */
+
+.total {
+    text-align: center;
+    margin-bottom: 2%;
+    width: 100%;
+    border-color: black;
+}
+.supplier {
+    width: 35%;
+}
+.item {
+    width: 20%;
+}
+.threshold {
+    width: 15%;
+}
+.quantity {
+    width: 15%;
+}
+.unit {
+    width: 15%;
+}
+
+
+/* ******* ITEM PERFORMANCE ******* */
+.item-performance {
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+    justify-content: center;
+    align-items: center;
+    gap: 5vw;
+    padding-bottom: 5vh;
+}
+
+.highest-perf {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    border: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 2vw;
+    margin-top: 5vh;
+}
+
+.lowest-perf {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    border: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 2vw;
+    margin-top: 5vh;
+}
+
+.item-table {
+    text-align: left;
+    margin-top: 2vh;
+    margin-bottom: 5vh;
+}
+
+.item-table th {
+    background-color: #D95451;
+    color: white;
+    font-weight: bold; 
+    padding: 1vh;
+    position: sticky;
+    top: 0; 
+}
+
+.item-label {
+    text-align: center;
+}
+
+/* ******* Components Table ******* */
+.component {
+    width: 40%
+}
+
+.category {
+    width: 30%;
+}
+
+.premium, .seasonal, .availability{
+    width: 10%;
+}
+
+
+/* ******* PRODUCT USAGE & SALES REPORT  ******* */
+.product-usage {
+    margin-top: 3vh;
+    display: flex;
+    flex-direction: row;
+    width: 90vw;
+    justify-content: center;
+    align-items: center;
+    gap: 5vw;
+    padding-bottom: 5vh;
+}
+
+.data-select-container {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 1vw;
+    position: fixed;
+    left: 8vw;
+    top: 45vh;
+}
+
+.date-select {
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+}
+
+.usage-chart {
+    width: 50%;
+    height: 50vh;
+    overflow-y: auto;
+    position: fixed;
+    left: 40vw;
+    top: 45vh;
+    margin-bottom: 5vh;
+}
+
+.usage-chart th {
+    background-color: #D95451;
+    color: white;
+    font-weight: bold; 
+    padding: 1vh;
+    position: sticky;
+    top: 0; 
+}

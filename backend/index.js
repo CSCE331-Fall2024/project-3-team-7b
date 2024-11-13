@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require('path');
 const { Pool } = require('pg');
 const { escape } = require('querystring');
+const { start } = require('repl');
 require('dotenv').config();
 
 const app = express();
@@ -142,6 +143,90 @@ app.post('/api/inventory/add/:itemid', async(req, res) => {
   } catch (error){
     console.error("Inside API error: ", error);
     res.status(500).send('Server Error');
+  }
+});
+
+// API to fetch name of component with specific componentID 
+app.get('/api/component-names', async(req, res) => {
+  try {
+    const result = await pool.query("SELECT Component_Name FROM Components WHERE ComponentID = ");
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+// API to fetch highest performing items
+app.get('/api/fetch-highest', async(req, res) => {
+  try {
+    const result = await pool.query('SELECT COUNT(*), ComponentID FROM OrderXComponents GROUP BY ComponentID ORDER BY COUNT(ComponentID) DESC LIMIT 5;');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+// API to fetch lowest performing items
+app.get('/api/fetch-lowest', async(req, res) => {
+  try {
+    const result = await pool.query('SELECT COUNT(*), ComponentID FROM OrderXComponents GROUP BY ComponentID ORDER BY COUNT(ComponentID) LIMIT 5;');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+// API to fetch product usage for trends
+app.get('/api/product-usage', async(req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const query = `
+      SELECT Inventory.ItemID, Inventory.Item_Name, Inventory.unit, SUM(COALESCE(ComponentXInventory.Num_Required, 0)) AS Total_Used 
+      FROM Inventory 
+      JOIN ComponentXInventory ON Inventory.ItemID = ComponentXInventory.ItemID 
+      JOIN OrderXComponents ON ComponentXInventory.ComponentID = OrderXComponents.ComponentID 
+      JOIN Orders ON OrderXComponents.OrderID = Orders.OrderID 
+      JOIN Transactions ON Orders.OrderID = Transactions.OrderID 
+      WHERE Transactions.Timestamp BETWEEN $1 AND $2 
+      GROUP BY Inventory.ItemID, Inventory.Item_Name 
+      ORDER BY Total_Used DESC;
+    `;
+
+    // Pass startDate and endDate as query parameters
+    const result = await pool.query(query, [startDate, endDate]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching product usage data:", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// API to fetch sales report for trends
+app.get('/api/sales-report', async(req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    const query = `
+      SELECT c.Component_Name, COUNT(DISTINCT t.OrderID) as order_count, SUM(t.Amount) as total_sales
+      FROM Transactions t 
+      JOIN OrderXComponents oxc ON t.OrderID = oxc.OrderID
+      JOIN Components c ON oxc.ComponentID = c.ComponentID
+      WHERE t.Timestamp BETWEEN $1 AND $2 
+      GROUP BY c.ComponentID, c.Component_Name;
+    `;
+
+    // Pass startDate and endDate as query parameters
+    const result = await pool.query(query, [startDate, endDate]);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching sales report data:", error);
+    res.status(500).send('Server error');
   }
 });
 

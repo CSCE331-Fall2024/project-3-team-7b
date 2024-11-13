@@ -12,6 +12,16 @@ const theme = createTheme({
       },
       
   },
+
+  components: {
+    MuiButton: {
+        styleOverrides: {
+            root: {
+                fontWeight: 'bold',
+            },
+        },
+    },
+  },
 });
 
 export default theme

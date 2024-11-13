@@ -23,15 +23,6 @@ function Banner(props){
 
     return (
         <div className="banner">
-            {/* only displays logout button for cashiers and managers */}
-            { (view === "cashier" || view === "manager") && (
-                <div>
-                    <Button variant="contained" onClick={logout}>Logout</Button>
-                </div>
-            )}
-
-            {/* Overall banner content */}
-            <img className="banner-image" src={banner} alt="Panda Express Banner w/ Logo" ></img>
             <div className="accesible-buttons">
                 <Select
                     labelId="demo-simple-select-label"
@@ -46,6 +37,17 @@ function Banner(props){
                 </Select>
                 <Button variant="contained">ENLARGE TEXT</Button>
             </div>
+
+            {/* Overall banner content */}
+            <img className="banner-image" src={banner} alt="Panda Express Banner w/ Logo" ></img>
+
+            {/* only displays logout button for cashiers and managers */}
+            { (view === "cashier" || view === "manager") && (
+                <div>
+                    <Button variant="contained" onClick={logout}>Logout</Button>
+                </div>
+            )}
+            
         </div>
     );
 }

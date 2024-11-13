@@ -1,0 +1,10 @@
+.trend-select {
+    width: 20vw;
+    margin: 0 auto; 
+}
+
+.performance-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
