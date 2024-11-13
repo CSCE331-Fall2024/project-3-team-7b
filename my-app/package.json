@@ -40,7 +40,7 @@
     ]
   },
   "devDependencies": {
-    "@mui/material": "^6.1.6",
+    "@mui/material": "^6.1.7",
     "@mui/x-date-pickers": "^7.22.2",
     "dayjs": "^1.11.13"
   }
