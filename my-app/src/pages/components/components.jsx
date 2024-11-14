@@ -11,10 +11,15 @@ function Components(props){
     const view = props.view;
     const setAuthentication = props.setAuthentication;
 
+    //stores the components in components table and function used to set the components
     const[components, setComponents] = useState([]);
+    //contains the data for the row that is selected within the table, function used to find the selected row
     const[whichRow, setRow] = useState(null);
+    //stores error message output for invalid requests, function used to set the error message
     const[error, setError] = useState('');
+    //boolean value used to rerender the table once new components have been added
     const[render, setRender] = useState(false);
+    //data variable storing all of the data in any given row, function used to set that data variable
     const[data, setData] = useState({
         name: '',
         cat: '',
@@ -24,6 +29,7 @@ function Components(props){
     });
 
     useEffect(() => {
+        // retrieves all of the components from the components table within the database
         const getComponents = async () => {
             try{
                 const response = await axios.get("http://localhost:5001/api/components");
@@ -38,7 +44,9 @@ function Components(props){
         getComponents();
     }, [render]);
 
+    //function used to get all of the data associated with a given row
     const getRow = (row) =>{
+        //this conditional is used to give deselection functionality - if you click a selected row again, it becomes deselected
         if(whichRow && whichRow.component_name == row.component_name){
             setRow(null);
             setData({
@@ -61,6 +69,7 @@ function Components(props){
         }
     }; 
 
+    //handles user input in the editor panel 
     const input = (e) => {
         const {name, value} = e.target;
         setData((original) => ({
@@ -88,6 +97,7 @@ function Components(props){
         }
     };
 
+    //returns the maximum componentID in the components table
     const getComponentID = async () =>{
         try{
             const response = await axios.get("http://localhost:5001/api/componentID");
@@ -109,6 +119,7 @@ function Components(props){
         }
     };
 
+    // call that requests specified component to be deleted from components table
     const deleteComponent = async(compName) => {
         try{
             const response = await axios.delete(`http://localhost:5001/api/components/delete/${compName}`);
@@ -155,6 +166,7 @@ function Components(props){
 
     };
 
+    // function that is called when add button is pressed
     const addButton = async () => {
         // console.log("current data: ", data);
         if(data.name == null || data.name == ""){
