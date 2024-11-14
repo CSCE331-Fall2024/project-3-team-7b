@@ -101,6 +101,17 @@ app.get('/api/menu_items', async (req, res) => {
   }
 });
 
+// API route to fetch all menu items
+app.get('/api/menu', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT Item_Name, Price, Availability FROM menu_items');
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
 // API route to fetch all components
 app.get('/api/components', async (req, res) => {
   try {
@@ -135,6 +146,17 @@ app.get('/api/inventoryID', async (req, res) => {
 });
 
 //retrives the max componentID from the components table from the database
+app.get('/api/menuID', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(ItemID) AS id FROM menu_items;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+//retrives the max itemID from the menu_items table from the database
 app.get('/api/componentID', async (req, res) => {
   try {
     const result = await pool.query('SELECT MAX(ComponentID) AS id FROM Components;');
@@ -158,6 +180,19 @@ app.get('/api/inventory/check/:itemName', async (req, res) =>{
   }
 });
 
+// Call to database that returns if given inventory item exists within the inventory table
+app.get('/api/menu/check/:itemName', async (req, res) =>{
+  const {itemName} = req.params;
+  try{
+    const result = await pool.query(`SELECT EXISTS (SELECT 1 FROM menu_items WHERE item_name ILIKE $1)`, [itemName]);
+    res.json(result.rows[0].exists);
+    return result.rows[0].exists;
+  } catch (error){
+    console.error("Error in API checking inventory: ", error);
+    res.status(500).send('Server error');
+  }
+});
+
 // Call to database that returns if given component exists within the components table
 app.get('/api/components/check/:compName', async (req, res) =>{
   const {compName} = req.params;
@@ -168,6 +203,29 @@ app.get('/api/components/check/:compName', async (req, res) =>{
   } catch (error){
     console.error("Error in checking components: ", error);
     res.status(500).send('Server error');
+  }
+});
+
+//Updates specified inventory with updated values
+app.put('/api/menu/:initialName', async(req, res) => {
+  const initialName = req.params.initialName;
+  const {item_name, price, availability} = req.body;
+
+  try{
+    const result = await pool.query(
+      'UPDATE menu_items SET Item_Name = $1, price = $2, availability = $3 WHERE item_name ilike $4 RETURNING *;',
+      [item_name, price, availability, initialName]
+    );
+
+    if(result.rowCount > 0){
+      res.json(result.rows[0]);
+    }
+    else{
+      res.status(404).send('Item not found');
+    }
+  } catch(error){
+    console.error(error);
+    res.status(500).send('Server Error');
   }
 });
 
@@ -253,6 +311,24 @@ app.delete('/api/components/delete/:compName', async (req, res) => {
   }
 });
 
+//deletes the given component from the components table in the database
+app.delete('/api/menu/delete/:itemName', async (req, res) => {
+  const {itemName} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM menu_items WHERE item_name ILIKE $1 RETURNING*`, [itemName]
+    );
+    if(result.rowCount > 0){
+      res.json({message: 'Item deleted', item: result.rows[0]});
+    } else{
+      res.status(404).send('Item item not found');
+    }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
 //generates a new inventory item within the inventory table
 app.post('/api/inventory/add/:itemid', async(req, res) => {
   const {itemid} = req.params;
@@ -285,6 +361,28 @@ app.post('/api/components/add/:componentID', async(req, res) => {
     const result = await pool.query(
       `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal) VALUES ($1, $2, $3, $4, $5, $6) RETURNING*;`,
       [componentID, component_name, category, availability, premium, seasonal]
+    );
+    if(result.rowCount > 0){
+      res.json(result.rows[0]);
+    }
+    else{
+      res.status(404).send('Item not found');
+    }
+  } catch (error){
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new menu item to the menu_items table within the database
+app.post('/api/menu/add/:itemID', async(req, res) => {
+  const {itemID} = req.params;
+  const {item_name, price, availability} = req.body;
+
+  try{
+    const result = await pool.query(
+      `INSERT INTO menu_items (ItemID, item_name, price, availability) VALUES ($1, $2, $3, $4) RETURNING*;`,
+      [itemID, item_name, price, availability]
     );
     if(result.rowCount > 0){
       res.json(result.rows[0]);
