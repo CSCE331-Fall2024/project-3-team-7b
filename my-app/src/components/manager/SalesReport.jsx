@@ -14,9 +14,9 @@ import TableRow from '@mui/material/TableRow';
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from '@mui/material/Paper';
 
-// Purpose: Displays the highest and lowest performing items
+// Purpose: Displays the amount of each item sold in a time period
 
-function ProductUsage() {
+function SalesReport() {
     const [selectedStart, setSelectedStart] = useState(null);
     const [selectedEnd, setSelectedEnd] = useState(null);
     const [productUsageData, setProductUsageData] = useState([]);
@@ -33,8 +33,8 @@ function ProductUsage() {
         setSelectedEnd(endDate);
     }
 
-    // retreives the product usage in the timeframe by calling API
-    const generateReport = async () => {
+    // retreives the sales report in the timeframe by calling API
+    const generateSalesReport = async () => {
         if (selectedStart === null || selectedEnd === null) {
             alert("Please fill out both dates.");
         }
@@ -51,7 +51,7 @@ function ProductUsage() {
 
 
                 // makes the API call with the correct parameters
-                const response = await axios.get(`${baseURL}/api/product-usage`, {
+                const response = await axios.get(`${baseURL}/api/sales-report`, {
                     params: {
                         startDate: formattedStart,
                         endDate: formattedEnd
@@ -116,7 +116,7 @@ function ProductUsage() {
 
                 {/* Button to generate the table */}
                 <div>
-                    <Button variant="contained" onClick={generateReport}>Generate Product Usage Report</Button>
+                    <Button variant="contained" onClick={generateSalesReport}>Generate Sales Report</Button>
                 </div>
             </div>
 
@@ -129,35 +129,34 @@ function ProductUsage() {
                             <TableRow component="th">
                                 <TableCell>
                                 <TableSortLabel
-                                            active={orderBy === 'itemid'}
-                                            direction={orderBy === 'itemid' ? order : 'asc'}
-                                            onClick={() => handleSort('itemid')}
+                                            active={orderBy === 'component_name'}
+                                            direction={orderBy === 'component_name' ? order : 'asc'}
+                                            onClick={() => handleSort('component_name')}
                                             hideSortIcon={false}
                                         >
-                                            Item ID
+                                            Component Name
                                         </TableSortLabel>
                                 </TableCell>
                                 <TableCell align="right">
                                     <TableSortLabel
-                                        active={orderBy === 'item_name'}
-                                        direction={orderBy === 'item_name' ? order : 'asc'}
-                                        onClick={() => handleSort('item_name')}
+                                        active={orderBy === 'order_count'}
+                                        direction={orderBy === 'order_count' ? order : 'asc'}
+                                        onClick={() => handleSort('order_count')}
                                         hideSortIcon={false}
                                     >
-                                        Item Name
+                                        Order Count
                                     </TableSortLabel>
                                 </TableCell>
                                 <TableCell align="right">
                                     <TableSortLabel
-                                        active={orderBy === 'total_used'}
+                                        active={orderBy === 'total_sales'}
                                         direction={orderBy === 'total_used' ? order : 'asc'}
-                                        onClick={() => handleSort('total_used')}
+                                        onClick={() => handleSort('total_sales')}
                                         hideSortIcon={false}
                                     >
-                                        Total Used
+                                        Total Sales
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell align="right"> Units </TableCell>
                                 
                             </TableRow>
                         </TableHead>
@@ -167,10 +166,9 @@ function ProductUsage() {
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell scope="row"> {item.itemid} </TableCell>
-                                <TableCell align="right">{item.item_name}</TableCell>
-                                <TableCell align="right">{item.total_used}</TableCell>
-                                <TableCell align="right">{item.unit}</TableCell>
+                                <TableCell scope="row"> {item.component_name} </TableCell>
+                                <TableCell align="right">{item.order_count}</TableCell>
+                                <TableCell align="right">{item.total_sales}</TableCell>
                             </TableRow>
                             ))}
                         </TableBody>
@@ -183,4 +181,4 @@ function ProductUsage() {
     )
 }
 
-export default ProductUsage;
+export default SalesReport;

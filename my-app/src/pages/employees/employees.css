@@ -1,0 +1,10 @@
+.employee-select {
+    width: 20vw;
+    margin: 0 auto; 
+}
+
+.employee-container {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import "./orderComponents.css";
+import { useDispatch, useSelector } from 'react-redux';
 
 // Purpose: Displays the menu items such as bowls, plates, etc
 
@@ -18,9 +19,13 @@ const importAll = (r) => {
 // Import all images from the images folder (adjust the path if necessary)
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
-function MenuDisplay() {
+function MenuDisplay(props) {
+    // Fetch current values of subtotal and order from redux storage
     const navigate = useNavigate();
     const [data, setData] = useState([]);
+    const view = props.view;
+    const subtotal = useSelector((state) => state.subtotal);
+    const order = useSelector((state) => state.order);
 
     // Makes API call to retreive menu item information
     useEffect(() => {
@@ -43,9 +48,16 @@ function MenuDisplay() {
         return dict;
     }, {});
     
+    // Update values of subtotal and order in redux storage
+    const dispatch = useDispatch();
+    const handleUpdate = (new_subtotal, new_order) => {
+        dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});
+    }
+
     // Navigates user to the next stage of the order
-    const directOrder = (index) => {
-        navigate("/customer/order/select", { state: { item: index } });
+    const handleOrder = (index) => {
+        handleUpdate(subtotal + parseFloat(itemsDictionary[parseInt(index)].price), order + "\n" + itemsDictionary[parseInt(index)].item_name);
+        navigate("/customer/order/select", {state: {item: index, view: view}});
     }
 
     // Sort images based on `itemid`
@@ -58,14 +70,22 @@ function MenuDisplay() {
         });
 
     return (
-        // Displats all the buttons for menu items w/ corresponding names
+        // Displays all the buttons for menu items w/ corresponding names
         <div className="menu-display">
             {sortedImages.map((imageObj, index) => {
                 const itemId = parseInt(imageObj.name.split(".")[0], 10);
-                const itemName = itemsDictionary[itemId]?.item_name || "Unknown Item";
+                const itemName = 
+                    itemId === 5 ? "Panda Cub Meal" :
+                    itemId === 9 ? "Panda Bundles" :
+                    itemId === 13 ? "Appetizers and More" :
+                    itemId === 15 ? "A La Carte" :
+                    itemId === 19 ? "Drinks" :
+                    itemId === 23 ? "Catering" :
+                    itemsDictionary[itemId]?.item_name || "Unknown Item";
+
                 
                 return (
-                    <button key={index} className="menu-button" onClick={() => directOrder(imageObj.name)}>
+                    <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
                         <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className="menu-image" />
                         {itemName}
                     </button>

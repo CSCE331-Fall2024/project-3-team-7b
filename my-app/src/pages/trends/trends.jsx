@@ -7,6 +7,7 @@ import { useState } from 'react';
 import ItemPerfomance from '../../components/manager/ItemPerfomance';
 import "./trends.css"
 import ProductUsage from '../../components/manager/ProductUsage';
+import SalesReport from '../../components/manager/SalesReport';
 
 // Purpose: Displays the different trends a manager can view
 
@@ -36,9 +37,9 @@ function Trends(props){
                         >
                             <MenuItem value="item-performance">Item Performance</MenuItem>
                             <MenuItem value="product-usage">Product Usage Chart</MenuItem>
-                            <MenuItem value="x-report">X Report</MenuItem>
-                            <MenuItem value="y-report">Y Report</MenuItem>
-                            <MenuItem value="sales-report">Sales Report</MenuItem>
+                            <MenuItem value="x-report">Today's Sales Report by Hour</MenuItem>
+                            <MenuItem value="y-report">End of Day Report</MenuItem>
+                            <MenuItem value="sales-report">Custom Sales Report</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -52,6 +53,11 @@ function Trends(props){
                 { trend === "product-usage" && (
                     <div className="performance-container">
                         <ProductUsage />
+                    </div>
+                )}
+                { trend === "sales-report" && (
+                    <div className="performance-container">
+                        <SalesReport />
                     </div>
                 )}
             </div>

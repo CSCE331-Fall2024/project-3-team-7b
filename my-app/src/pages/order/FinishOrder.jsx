@@ -3,10 +3,12 @@ import Banner from "../../components/order/Banner";
 import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 
 function FinishOrder(props) {
     const view = props.view;
     const setAuthentication = props.setAuthentication;
+    const order = useSelector((state) => state.order);
     const navigate = useNavigate();
 
     const placeOrder = () => {
@@ -17,6 +19,8 @@ function FinishOrder(props) {
         navigate("/" + view);
     }
 
+    // Format order to be displayed in the HTML code
+    const formattedOrder = order.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
     return (
         <ThemeProvider theme={theme}>
             <div className="finish">
@@ -26,6 +30,7 @@ function FinishOrder(props) {
                 <div className="finish-content">
                     <div className="finish-order-content">
                         <h2>Current Order:</h2>
+                        <p dangerouslySetInnerHTML={{__html: formattedOrder}}></p>
                     </div>
                     <div className="finish-buttons">
                         <Button variant="contained" color="secondary" onClick={cancelOrder}>Cancel Order</Button>

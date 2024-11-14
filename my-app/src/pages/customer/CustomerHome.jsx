@@ -1,15 +1,20 @@
+import { useCallback, useState } from 'react';
 import logo from "../../images/logo.png"
 import Button from '@mui/material/Button';
 import { ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import "./customer.css"
 import theme from "../../createTheme"
+import { useDispatch, useSelector } from 'react-redux';
 
 // Purpose: Overall home page for the customers
 
 function CustomerHome() {
+    // Fetch current values of subtotal and order from redux storage
     const navigate = useNavigate();
-    
+    const subtotal = useSelector((state) => state.subtotal);
+    const order = useSelector((state) => state.order);
+
     // Navigates customer to start their order
     const startOrder = () => {
         navigate("/customer/order", {state: {view: "customer"}});
