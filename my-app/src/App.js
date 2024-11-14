@@ -16,6 +16,7 @@ import Employees from "./pages/employees/employees";
 import MenuBoard from "./pages/menuboard/MenuBoard";
 import Components from "./pages/components/components";
 import { useState } from "react";
+import MealOptions from "./pages/order/MealOptions";
 
 
 // Purpose: directs the webpage to a specific route and renders the proper page
@@ -49,6 +50,7 @@ function App() {
           <Route path="/customer" element={<CustomerHome />}/>
           <Route path="/customer/order" element={<MenuSelection view="customer" />}/>
           <Route path="/customer/order/select" element={<ItemSelection view="customer"/>}/>
+          <Route path="/customer/order/choose-meal" element={<MealOptions view="customer"/>}/>
           <Route path="/customer/order/finish" element={<FinishOrder view="customer"/>}/>
           <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer"/>}/>
             

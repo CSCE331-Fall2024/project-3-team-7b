@@ -206,7 +206,7 @@ app.put('/api/components/:origComponent', async(req, res) =>{
       res.json(result.rows[0]);
     }
     else{
-      console.log(result.rowCount);
+      // console.log(result.rowCount);
       res.status(404).send('Item not found');
     }
   } catch(error){

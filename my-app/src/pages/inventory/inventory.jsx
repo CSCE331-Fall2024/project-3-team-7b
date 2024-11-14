@@ -65,7 +65,7 @@ function Inventory(props){
     const deleteInventory = async(itemName) => {
         try{
             const response = await axios.delete(`http://localhost:5001/api/inventory/delete/${itemName}`);
-            console.log("Inventory item deleted")
+            // console.log("Inventory item deleted")
         } catch(error){
             console.log("Error deleting inventory item: ", error);
         }
@@ -139,11 +139,11 @@ function Inventory(props){
     };
 
     const addButton = async () => {
-        console.log("current data: ", data);
+        // console.log("current data: ", data);
 
         const newID = await getInventoryID();
         
-        console.log("returned id: ", newID);
+        // console.log("returned id: ", newID);
         if(newID == null){
             setError("Can't get the new ID");
             return;
@@ -157,7 +157,7 @@ function Inventory(props){
         }
         setError('');
 
-        console.log("after data: ", data);
+        // console.log("after data: ", data);
         try {
             const newData = {
                 itemID: (parseInt(newID) + 1),
@@ -190,7 +190,7 @@ function Inventory(props){
                 return;
             }
             setError('');
-            console.log("up to here", newData);
+            // console.log("up to here", newData);
 
             const additional = await addInventory(newData);
             setInventory((prev) =>
@@ -206,7 +206,7 @@ function Inventory(props){
         const deleteName = data.name;
         try{
             const ex = await doesInventoryExist(deleteName);
-            console.log("exists: ", ex);
+            // console.log("exists: ", ex);
 
             if(!ex){
                 setError("Please select an iventory item");

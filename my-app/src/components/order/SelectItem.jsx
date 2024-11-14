@@ -21,6 +21,7 @@ const importAll = (r) => {
 function SelectItem(props) {
     // Fetch current values of subtotal and order from redux storage
     const item = parseInt(props.item, 10);
+
     const view = props.view;
     const navigate = useNavigate();
     const subtotal = useSelector((state) => state.subtotal);
@@ -35,19 +36,19 @@ function SelectItem(props) {
 
     let maxSides = 1;
     let maxEntrees = 1;
-    if (item == 1) {
+    if (item === 1 || item === 7 || item === 8) {
         maxEntrees = 1;
     }
-    else if (item == 2) {
+    else if (item === 2 || item === 9) {
         maxEntrees = 2;
     }
-    else if (item == 3 || item == 9 || item == 11) {
+    else if (item === 3 || item === 10 || item === 11) {
         maxEntrees = 3;
     }
-    else if (item == 5 || item == 13 || item == 15 || item == 19) {
+    else if (item === 13 || item === 15 || item === 19) {
         maxSides = 0;
     }
-    else if (item == 23) {
+    else if (item === 23) {
         maxSides = 0;
         maxEntrees = 0;
     }
@@ -97,7 +98,6 @@ function SelectItem(props) {
     let tempNumSides = numSides;
     let tempNumEntrees = numEntrees;
     const handleOrder = (index) => {
-        console.log(index);
         if (parseInt(index) == 6 || parseInt(index) == 7 || parseInt(index) == 12 || parseInt(index) == 13) { // Side
             tempNumSides += 1;
             setNumSides(current => current + 1);
@@ -114,7 +114,7 @@ function SelectItem(props) {
         }
 
         if (tempNumSides >= maxSides && tempNumEntrees >= maxEntrees) {
-            console.log(tempNumEntrees, maxEntrees, tempNumSides, maxSides);
+            // console.log(tempNumEntrees, maxEntrees, tempNumSides, maxSides);
             setDisableBack(false); // Let user go back to add more food items
         }
         handleUpdate(subtotal, order + "\n\t" + compItemsDictionary[parseInt(index)].component_name);
@@ -179,7 +179,7 @@ function SelectItem(props) {
 
     // Panda Cub Meals
     const cubImages = importAll(
-        require.context("../../images/components/panda_cub_meals", false, /\.(png)$/)
+        require.context("../../images/full_menu_items/panda_cub_meals", false, /\.(png)$/)
     )
         .filter(
             (imageObj) =>
@@ -219,7 +219,7 @@ function SelectItem(props) {
             </div>
 
             {/* SIDES */}
-            { (item <= 3 || item === 9 || item === 11) && (
+            { (item <= 11) && (
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Side:</h2>
@@ -241,7 +241,7 @@ function SelectItem(props) {
             )}
 
             {/* ENTREES */}
-            { (item <= 3 || item === 9 || item === 11) && ( 
+            { (item <= 3 || (item >= 7 && item <= 11)) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Entree(s):</h2>
@@ -263,7 +263,7 @@ function SelectItem(props) {
             )}
 
             {/* DRINKS */}
-            { (item === 19) && ( 
+            { ((item >= 4 && item <=10 )|| item === 19) && ( 
                 <div className="item-type"> 
                     <div className="labels">   
                         <h2>Select Your Drink:</h2>
