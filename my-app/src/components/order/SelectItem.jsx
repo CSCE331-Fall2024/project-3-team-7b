@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button } from "@mui/material";
 import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 
 // Purpose: Displays individual items such as orange chicken, dr. pepper, cream cheese rangoons, etc
 
@@ -17,13 +18,15 @@ const importAll = (r) => {
 }
 
 function SelectItem(props) {
-    console.log(props.item);
     const item = parseInt(props.item, 10);
     const view = props.view;
     const navigate = useNavigate();
+    const subtotal = useSelector((state) => state.subtotal);
+    const order = useSelector((state) => state.order);
 
     const [compData, setCompData] = useState([]);
     const [menuData, setMenuData] = useState([]);
+    const [temp, setTemp] = useState(1);
 
     // Fetch component and menu data concurrently
     useEffect(() => {
@@ -58,6 +61,15 @@ function SelectItem(props) {
         return dict;
     }, {});
 
+    const dispatch = useDispatch();
+    const handleUpdate = (new_subtotal, new_order) => {
+        dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});
+    }
+
+    // Navigates user to the next stage of the order
+    const handleOrder = (index) => {
+        handleUpdate(subtotal, order + "\n\t" + compItemsDictionary[parseInt(index)].component_name);
+    }
 
     // Import all images from the images folder (you can adjust the path)
     // Sides
@@ -169,7 +181,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button">
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
                                     <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -191,7 +203,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button">
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
                                     <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -213,7 +225,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button">
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
                                     <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -235,7 +247,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button">
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
                                     <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -257,7 +269,7 @@ function SelectItem(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button">
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
                                     <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -279,7 +291,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button">
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
                                     <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>

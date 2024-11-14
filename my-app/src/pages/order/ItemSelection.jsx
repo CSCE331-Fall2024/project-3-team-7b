@@ -6,12 +6,15 @@ import theme from "../../createTheme"
 import Banner from '../../components/order/Banner';
 import OrderArea from '../../components/order/OrderArea';
 import SelectItem from '../../components/order/SelectItem';
+import { useDispatch, useSelector } from 'react-redux';
 
-function ItemSelection(props){
-    const location = useLocation();
-    const item = location.state?.item.slice(0, -4);
-    const view = props.view;
-    const setAuthentication = props.setAuthentication;
+function ItemSelection() {
+    const {state} = useLocation();
+    const item = state?.item.slice(0, -4);
+    const view = state.view;
+    const setAuthentication = state.setAuthentication;
+    const subtotal = useSelector((state) => state.subtotal);
+    const order = useSelector((state) => state.order);
     
     return (
         <ThemeProvider theme={theme}>
