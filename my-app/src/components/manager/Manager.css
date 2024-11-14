@@ -135,3 +135,11 @@
     position: sticky;
     top: 0; 
 }
+
+/* ******* Items Table ******* */
+.menuitem{
+    width: 70%;
+}
+.price{
+    width: 20%;
+}

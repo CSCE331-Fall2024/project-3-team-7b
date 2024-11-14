@@ -123,9 +123,9 @@ function Components(props){
     const deleteComponent = async(compName) => {
         try{
             const response = await axios.delete(`http://localhost:5001/api/components/delete/${compName}`);
-            // console.log("Inventory item deleted")
+            console.log("Component deleted")
         } catch(error){
-            console.log("Error deleting inventory item: ", error);
+            console.log("Error deleting component: ", error);
         }
     };
 
