@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // Purpose: Overall home page for the cashiers
 
 function CashierHome() {
+    // Fetch current values of subtotal and order from redux storage
     const navigate = useNavigate();
     const subtotal = useSelector((state) => state.subtotal);
     const order = useSelector((state) => state.order);
