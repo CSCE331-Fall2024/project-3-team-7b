@@ -43,7 +43,7 @@ function Banner(props){
 
             {/* only displays logout button for cashiers and managers */}
             { (view === "cashier" || view === "manager") && (
-                <div>
+                <div className="logout-button">
                     <Button variant="contained" onClick={logout}>Logout</Button>
                 </div>
             )}
