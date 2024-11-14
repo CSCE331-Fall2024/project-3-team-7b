@@ -1,6 +1,13 @@
 .employee-select {
-    width: 20vw;
+    width: 35vw;
     margin: 0 auto; 
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.employee-dropdown {
+    width: 20vw;
 }
 
 .employee-container {
@@ -35,4 +42,12 @@
     border-radius: 20px;
     padding: 2vw;
     margin-top: 5vh;
+}
+
+.add-employee {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    padding: 2vw;
+    margin-top: 3vh;
 }
