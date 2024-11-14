@@ -6,6 +6,7 @@ import ComponentsTable from '../../components/manager/ComponentsTable';
 import styles from "./components.module.css"
 import theme from "../../createTheme"
 import axios from "axios";
+import { Button } from '@mui/material';
 
 function Components(props){
     const view = props.view;
@@ -286,9 +287,9 @@ function Components(props){
                         </select>
                     </div>
                     <div className={styles['buttons']}>
-                        <button onClick={updateButton}>Update</button>
-                        <button onClick={addButton}>Add</button>
-                        <button onClick={deleteButton}>Delete</button>
+                        <Button variant="contained" color="secondary" onClick={updateButton}>Update</Button>
+                        <Button variant="contained" color="secondary" onClick={addButton}>Add</Button>
+                        <Button variant="contained" color="primary" onClick={deleteButton}>Delete</Button>
                     </div>
                 </div>
             </div>
