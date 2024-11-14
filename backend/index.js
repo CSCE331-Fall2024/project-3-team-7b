@@ -62,6 +62,7 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
+//retrieves the max itemid from the inventory table in the database
 app.get('/api/inventoryID', async (req, res) => {
   try {
     const result = await pool.query('SELECT MAX(itemid) AS id FROM inventory');
@@ -72,6 +73,18 @@ app.get('/api/inventoryID', async (req, res) => {
   }
 });
 
+//retrives the max componentID from the components table from the database
+app.get('/api/componentID', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(ComponentID) AS id FROM Components;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Call to database that returns if given inventory item exists within the inventory table
 app.get('/api/inventory/check/:itemName', async (req, res) =>{
   const {itemName} = req.params;
   try{
@@ -80,6 +93,19 @@ app.get('/api/inventory/check/:itemName', async (req, res) =>{
     return result.rows[0].exists;
   } catch (error){
     console.error("Error in API checking inventory: ", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Call to database that returns if given component exists within the components table
+app.get('/api/components/check/:compName', async (req, res) =>{
+  const {compName} = req.params;
+  try{
+    const result = await pool.query(`SELECT EXISTS (SELECT 1 FROM Components WHERE Component_Name ILIKE $1)`, [compName]);
+    res.json(result.rows[0].exists);
+    return result.rows[0].exists;
+  } catch (error){
+    console.error("Error in checking components: ", error);
     res.status(500).send('Server error');
   }
 });
@@ -106,6 +132,29 @@ app.put('/api/inventory/:initialName', async(req, res) => {
   }
 });
 
+// takes the component name and updates the data for that component in the database using the updated data
+app.put('/api/components/:origComponent', async(req, res) =>{
+  const origComponent = req.params.origComponent;
+  const {component_name, category, availability, premium, seasonal} = req.body;
+
+  try{
+    const result = await pool.query(
+      'UPDATE Components SET Component_Name = $1, Category = $2, Availability = $3, Premium = $4, Seasonal = $5 WHERE Component_Name ILIKE $6 RETURNING*;',
+      [component_name, category, availability, premium, seasonal, origComponent]
+    );
+    if(result.rowCount > 0){
+      res.json(result.rows[0]);
+    }
+    else{
+      console.log(result.rowCount);
+      res.status(404).send('Item not found');
+    }
+  } catch(error){
+    console.error(error);
+    res.status(500).send('Server Error');
+  }
+});
+
 app.delete('/api/inventory/delete/:itemName', async (req, res) => {
   const {itemName} = req.params;
   try{
@@ -123,9 +172,27 @@ app.delete('/api/inventory/delete/:itemName', async (req, res) => {
   }
 });
 
+//deletes the given component from the components table in the database
+app.delete('/api/components/delete/:compName', async (req, res) => {
+  const {compName} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM Components WHERE component_name ILIKE $1 RETURNING*`, [compName]
+    );
+    if(result.rowCount > 0){
+      res.json({message: 'Component item deleted', item: result.rows[0]});
+    } else{
+      res.status(404).send('Component item not found');
+    }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
+
 app.post('/api/inventory/add/:itemid', async(req, res) => {
   const {itemid} = req.params;
-  console.log(req.body);
   const {item_name, quantity, unit, supplier, needs_restock, threshold} = req.body;
 
   try{
@@ -134,6 +201,28 @@ app.post('/api/inventory/add/:itemid', async(req, res) => {
       [itemid, item_name, quantity, unit, supplier, needs_restock, threshold]
     );
 
+    if(result.rowCount > 0){
+      res.json(result.rows[0]);
+    }
+    else{
+      res.status(404).send('Item not found');
+    }
+  } catch (error){
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new component to the components table within the database
+app.post('/api/components/add/:componentID', async(req, res) => {
+  const {componentID} = req.params;
+  const {component_name, category, availability, premium, seasonal} = req.body;
+
+  try{
+    const result = await pool.query(
+      `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal) VALUES ($1, $2, $3, $4, $5, $6) RETURNING*;`,
+      [componentID, component_name, category, availability, premium, seasonal]
+    );
     if(result.rowCount > 0){
       res.json(result.rows[0]);
     }
