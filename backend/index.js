@@ -52,6 +52,7 @@ app.get('/api/components', async (req, res) => {
   }
 });
 
+//gets all necessary information from the inventory table in the database
 app.get('/api/inventory', async (req, res) => {
   try {
     const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold, needs_restock, itemID FROM inventory');
@@ -110,6 +111,7 @@ app.get('/api/components/check/:compName', async (req, res) =>{
   }
 });
 
+//Updates specified inventory with updated values
 app.put('/api/inventory/:initialName', async(req, res) => {
   const initialName = req.params.initialName;
   const {item_name, quantity, unit, supplier, threshold, needs_restock} = req.body;
@@ -155,6 +157,7 @@ app.put('/api/components/:origComponent', async(req, res) =>{
   }
 });
 
+//deletes specifient inventory item from the database
 app.delete('/api/inventory/delete/:itemName', async (req, res) => {
   const {itemName} = req.params;
   try{
@@ -190,7 +193,7 @@ app.delete('/api/components/delete/:compName', async (req, res) => {
   }
 });
 
-
+//generates a new inventory item within the inventory table
 app.post('/api/inventory/add/:itemid', async(req, res) => {
   const {itemid} = req.params;
   const {item_name, quantity, unit, supplier, needs_restock, threshold} = req.body;
