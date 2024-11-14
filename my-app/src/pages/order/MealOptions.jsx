@@ -4,21 +4,22 @@ import { useEffect, useState } from 'react';
 import "./order.css"
 import theme from "../../createTheme"
 import Banner from '../../components/order/Banner';
-import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
 import { useDispatch, useSelector } from 'react-redux';
+import ChooseMeal from '../../components/order/ChooseMeal';
 
-// Purpose: displays all menu options
+// Purpose: displays options for panda cub meals and panda bundles
 
-function MenuSelection(props) {
+function MealOptions(props) {
     // Fetch current values of subtotal and order from redux storage
     const {state} = useLocation();
     const view = state.view;
+    const item = state?.item.slice(0, -4);
+
     const setAuthentication = props.setAuthentication;
     const subtotal = useSelector((state) => state.subtotal);
     const order = useSelector((state) => state.order);
 
-    // console.log(useSelector((state) => state.order));
     
     return (
         <ThemeProvider theme={theme}>
@@ -28,7 +29,7 @@ function MenuSelection(props) {
                 </div>
                 <div className='order-menu-content'>
                     <div>
-                        <MenuDisplay view={view}/>
+                        <ChooseMeal item={item} view={view}/>
                     </div>
                     <div>
                         <OrderArea view={view}/>
@@ -39,4 +40,4 @@ function MenuSelection(props) {
     );
 }
 
-export default MenuSelection;
+export default MealOptions;

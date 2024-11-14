@@ -1,20 +1,48 @@
 import ManagerBanner from '../manager/managerBanner';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from "../../createTheme";
-import { Select, MenuItem, FormControl, InputLabel, Typography, Box, TextField, OutlinedInput, InputAdornment, Button } from '@mui/material';
+import { Select, MenuItem, FormControl, InputLabel, Typography, Box, TextField, Modal, Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import profileImage from '../../images/profile.png';
 import "./employees.css";
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '35vw',
+    bgcolor: 'background.paper',
+    border: '1px solid',
+    borderRadius: '25px',
+    boxShadow: 24,
+    p: 4,
+};
 
 function Employees(props) {
     const view = props.view;
     const setAuthentication = props.setAuthentication;
+
+    // Update employee form
     const [selectedEmployeeId, setSelectedEmployeeId] = useState("");
     const [selectedRole, setSelectedRole] = useState("");
     const [selectedShift, setSelectedShift] = useState("");
     const [selectedUser, setSelectedUser] = useState("");
     const [selectedPass, setSelectedPass] = useState("");
+
+    // All employee Data
     const [data, setData] = useState([]);
+
+    // Add Emlpoyee Modal
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const [newName, setNewName] = useState("");
+    const [newRole, setNewRole] = useState("");
+    const [newShift, setNewShift] = useState("");
+    const [newUser, setNewUser] = useState("");
+    const [newPass, setNewPass] = useState("");
 
     // Fetch all employee data on component load
     const fetchData = async () => {
@@ -65,6 +93,31 @@ function Employees(props) {
         setSelectedPass(event.target.value);
     };
 
+    // Update new name change
+    const handleNewNameChange = (event) => {
+        setNewName(event.target.value);
+    };
+
+    // Update new role change
+    const handleNewRoleChange = (event) => {
+        setNewRole(event.target.value);
+    };
+
+    // Update new shift change
+    const handleNewShiftChange = (event) => {
+        setNewShift(event.target.value);
+    };
+
+    // Update new username change
+    const handleNewUserChange = (event) => {
+        setNewUser(event.target.value);
+    };
+
+    // Update new password change
+    const handleNewPassChange = (event) => {
+        setNewPass(event.target.value);
+    };
+
     // Function to update the selected employee's data
     const handleSave = async () => {
         try {
@@ -96,26 +149,37 @@ function Employees(props) {
         }
     };
 
+    // Function to cancel employee addition
+    const handleCancel = () => {
+        setNewName("");
+        setNewRole("");
+        setNewShift("");
+        setNewUser("");
+        setNewPass("");
+        handleClose();
+    };
+
     // Function to add a new employee with a new employeeID
     const handleAddEmployee = async () => {
-        // // Find the maximum employeeID and add 1 for the new employeeID
-        // const newEmployeeId = data.length > 0 ? Math.max(...data.map(emp => emp.employeeid)) + 1 : 1;
+        // Find the maximum employeeID and add 1 for the new employeeID
+        const newEmployeeId = data.length > 0 ? Math.max(...data.map(emp => emp.employeeid)) + 1 : 1;
 
-        // try {
-        //     const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-        //     await axios.post(`${baseURL}/api/employees`, {
-        //         employeeid: newEmployeeId, // New employeeID based on max + 1
-        //         role: newEmployeeRole,     // TODO: Replace with actual new employee state variables
-        //         shift_schedule: newEmployeeShift,
-        //         username: newEmployeeUser,
-        //         password: newEmployeePass,
-        //         name: newEmployeeName
-        //     });
-        //     alert("New employee added successfully");
-        //     fetchData(); // Refresh data to include the new employee
-        // } catch (error) {
-        //     console.error("Error adding employee:", error);
-        // }
+        try {
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            await axios.post(`${baseURL}/api/employees`, {
+                employeeid: newEmployeeId, // New employeeID based on max + 1
+                role: newRole,     // TODO: Replace with actual new employee state variables
+                shift_schedule: newShift,
+                username: newUser,
+                password: newPass,
+                name: newName
+            });
+            alert("New employee added successfully");
+            handleCancel();
+            fetchData(); // Refresh data to include the new employee
+        } catch (error) {
+            console.error("Error adding employee:", error);
+        }
     };
 
     return (
@@ -125,20 +189,106 @@ function Employees(props) {
 
                 {/* Dropdown to select an employee */}
                 <div className="employee-select">
-                    <FormControl fullWidth>
-                        <InputLabel>Select An Employee</InputLabel>
-                        <Select
-                            label="Select An Employee"
-                            onChange={handleEmployeeChange}
-                            value={selectedEmployeeId}
-                        >
-                            {data.map((employee) => (
-                                <MenuItem key={employee.employeeid} value={employee.employeeid}>
-                                    {employee.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <div className="employee-dropdown">
+                        <FormControl fullWidth>
+                            <InputLabel>Select An Employee</InputLabel>
+                            <Select
+                                label="Select An Employee"
+                                onChange={handleEmployeeChange}
+                                value={selectedEmployeeId}
+                            >
+                                {data.map((employee) => (
+                                    <MenuItem key={employee.employeeid} value={employee.employeeid}>
+                                        {employee.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl></div>
+                    <Button variant="outlined" onClick={handleOpen}>+&nbsp;Add&nbsp;Employee</Button>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
+                                Add a New Employee
+                            </Typography>
+                            <div className="add-employee">
+                                {/* Name textbox */}
+                                <FormControl sx={{ mb: 2 }} fullWidth>
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Name"
+                                        onChange={handleNewNameChange}
+                                        value={newName}
+                                        helperText="Please enter the employee's name"
+                                    />
+                                </FormControl>
+                                {/* Role dropdown */}
+                                <FormControl sx={{ mb: 2 }} fullWidth>
+                                    <TextField
+                                        id="filled-select-role"
+                                        select
+                                        label="Role"
+                                        onChange={handleNewRoleChange}
+                                        value={newRole}
+                                        helperText="Please select the desired role"
+                                    >
+                                        <MenuItem key="Manager" value="Manager">Manager</MenuItem>
+                                        <MenuItem key="Cashier" value="Cashier">Cashier</MenuItem>
+                                        <MenuItem key="Chef" value="Chef">Chef</MenuItem>
+                                    </TextField>
+                                </FormControl>
+                                {/* Shift dropdown */}
+                                <FormControl sx={{ mb: 2 }} fullWidth>
+                                    <TextField
+                                        id="filled-select-shift"
+                                        select
+                                        label="Shift"
+                                        onChange={handleNewShiftChange}
+                                        value={newShift}
+                                        helperText="Please select the desired shift"
+                                    >
+                                        <MenuItem key="Weekend" value="Weekend">Weekend</MenuItem>
+                                        <MenuItem key="Weekdays" value="Weekdays">Weekdays</MenuItem>
+                                    </TextField>
+                                </FormControl>
+                                {/* Username textbox */}
+                                <FormControl sx={{ mb: 2 }} fullWidth>
+                                    <TextField
+                                        id="outlined-basic"
+                                        label="Username"
+                                        onChange={handleNewUserChange}
+                                        value={newUser}
+                                        helperText="Please enter the desired username"
+                                    />
+                                </FormControl>
+                                {/* Password textbox */}
+                                <FormControl sx={{ mb: 2 }} fullWidth>
+                                    <TextField id="outlined-basic"
+                                        label="Password"
+                                        onChange={handleNewPassChange}
+                                        value={newPass}
+                                        helperText="Please enter the desired password"
+                                    />
+                                </FormControl>
+                                {/* Buttons */}
+                                <Box
+                                    sx={{
+                                        width: '100%',
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        mt: 2
+                                    }}
+                                >
+                                    <Button variant="outlined" onClick={handleAddEmployee}>Submit</Button>
+                                    <Button variant="contained" onClick={handleCancel}>Cancel</Button>
+                                </Box>
+                            </div>
+                        </Box>
+                    </Modal>
                 </div>
 
                 {/* Display selected employee details */}
@@ -146,14 +296,16 @@ function Employees(props) {
                     <>
                         <div className="employee-container">
                             <div className="employee-data">
+                                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                                    <img src={profileImage} alt="Employee Profile" style={{ width: '250px', height: '250px', borderRadius: '50%' }} />
+                                </div>
                                 <Box className="employee-details" mt={4} p={2} bgcolor="background.paper" borderRadius={4}>
-                                    <Typography variant="h6">{selectedEmployee.name}</Typography>
-                                    <Typography>Role: {selectedEmployee.role}</Typography>
-                                    <Typography>Shift Schedule: {selectedEmployee.shift_schedule}</Typography>
-                                    <Typography>Username: {selectedEmployee.username}</Typography>
+                                    <Typography variant="h4">{selectedEmployee.name}</Typography>
+                                    <Typography variant="h6">Role: {selectedEmployee.role}</Typography>
+                                    <Typography variant="h6">Shift Schedule: {selectedEmployee.shift_schedule}</Typography>
+                                    <Typography variant="h6">Username: {selectedEmployee.username}</Typography>
                                 </Box>
                             </div>
-                            {/* TODO: <Button variant="outlined" onClick={handleAddEmployee}>+ Add Employee</Button> */}
                             <div className="modify-employee">
                                 {/* Role dropdown */}
                                 <FormControl sx={{ mb: 2 }} fullWidth>
