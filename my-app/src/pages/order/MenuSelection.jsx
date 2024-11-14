@@ -1,27 +1,21 @@
 import { ThemeProvider } from '@mui/material/styles';
 import { useLoaderData, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import "./order.css"
 import theme from "../../createTheme"
 import Banner from '../../components/order/Banner';
 import MenuDisplay from '../../components/order/MenuDisplay';
 import OrderArea from '../../components/order/OrderArea';
+import { useDispatch, useSelector } from 'react-redux';
 
 function MenuSelection(props) {
     const {state} = useLocation();
-    const [subtotal, setSubtotal] = useState(0.00);
-    const [tax, setTax] = useState(0.00);
-    const [total, setTotal] = useState(0.00);
-    const [order, setOrder] = useState("");
     const view = state.view;
     const setAuthentication = props.setAuthentication;
+    const subtotal = useSelector((state) => state.subtotal);
+    const order = useSelector((state) => state.order);
 
-    const handleUpdate = (_subtotal, _tax, _total, _order) => {
-        setSubtotal(_subtotal);
-        setTax(_tax);
-        setTotal(_total);
-        setOrder(_order);
-    }
+    console.log(useSelector((state) => state.order));
     
     return (
         <ThemeProvider theme={theme}>
@@ -31,10 +25,10 @@ function MenuSelection(props) {
                 </div>
                 <div className='order-menu-content'>
                     <div>
-                        <MenuDisplay subtotal={subtotal} tax={tax} total={total} order={order} update={handleUpdate}/>
+                        <MenuDisplay view={view}/>
                     </div>
                     <div>
-                        <OrderArea subtotal={subtotal} tax={tax} total={total} order={order} view={view} />
+                        <OrderArea view={view}/>
                     </div>
                 </div>
             </div>

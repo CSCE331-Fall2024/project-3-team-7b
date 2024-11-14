@@ -1,8 +1,9 @@
 // MenuDisplay.js
-import React from "react";
+import React, { useState } from "react";
 import "./orderComponents.css";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from 'react-redux';
 
 // Purpose: Displays everything the user has selected for the order
 
@@ -15,10 +16,10 @@ const importAll = (r) => {
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function OrderArea(props) {
-    const subtotal = props.subtotal;
-    const tax = props.tax;
-    const total = props.total;
-    const order = props.order;
+    const subtotal = useSelector((state) => state.subtotal);
+    const tax = subtotal * 0.0875;
+    const total = subtotal + tax;
+    const order = useSelector((state) => state.order);
     const view = props.view;
     const navigate = useNavigate();
 
@@ -28,22 +29,28 @@ function OrderArea(props) {
     }
 
     // Brings user back to "Start Order" page
+    const dispatch = useDispatch();
     const cancelOrder = () => {
+        dispatch({type: "write", data: {subtotal: 0.00, order: ""}});
         navigate("/" + view);
     }
-
+    
+    const formmatedSubtotal = subtotal.toFixed(2);
+    const formmatedTax = tax.toFixed(2);
+    const formattedTotal = total.toFixed(2);
+    const formattedOrder = order.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
     return (
         <div className="order-area">
             <div className="order-list">
                 {/* Lists contents of current order */}
                 <h3>Current Order:</h3>
-                <p>{order}</p>
+                <p dangerouslySetInnerHTML={{__html: formattedOrder}}></p>
                 
                 {/* Calulates and displays the price of the order */}
                 <div className="totals">
-                    <p>Subtotal: ${subtotal}</p>
-                    <p>Tax: ${tax}</p>
-                    <p>Total: ${total}</p>
+                    <p>Subtotal: ${formmatedSubtotal}</p>
+                    <p>Tax: ${formmatedTax}</p>
+                    <p>Total: ${formattedTotal}</p>
                 </div>
             </div>
             <div>
