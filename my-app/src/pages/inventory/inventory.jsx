@@ -8,10 +8,15 @@ import InventoryTable from '../../components/manager/InventoryTable';
 
 
 function Inventory(props){
+    //stores the inventory in inventory table and function used to set the inventory
     const[inventory, setInventory] = useState([]);
+    //contains the data for the row that is selected within the table, function used to fund the selected row
     const[whichRow, setRow] = useState(null);
+    //used to store the error message for invalid user input, function used to set this message
     const[error, setError] = useState('');
+    //boolean value used to rerender the table once a new inventory item has been added
     const[render, setRender] = useState(false);
+    //data variable storing all of the data in a given row, function used to set the data variable
     const[data, setData] = useState({
         name: '',
         quant: '',
@@ -21,6 +26,7 @@ function Inventory(props){
     });
 
     useEffect(() => {
+        //gets all of the inventory from the inventory table within the database
         const getInventory = async () => {
             try{
                 const response = await axios.get("http://localhost:5001/api/inventory");
@@ -35,6 +41,7 @@ function Inventory(props){
         getInventory();
     }, [render]);
 
+    //call to update specified inventory item to new data
     const updateInventory = async (itemID, newData) => {
         try{
             const response = await axios.put(`http://localhost:5001/api/inventory/${itemID}`, newData);
@@ -43,6 +50,7 @@ function Inventory(props){
         }
     };
 
+    //retrieves the maximum inventory ID from the inventory table within the database
     const getInventoryID = async () =>{
         try{
             const response = await axios.get("http://localhost:5001/api/inventoryID");
@@ -53,6 +61,7 @@ function Inventory(props){
         }
     };
 
+    //call to add new inventory item to inventory table within the databse
     const addInventory = async (newData) => {
         try{
             const response = await axios.post(`http://localhost:5001/api/inventory/add/${newData.itemID}`, newData);
@@ -62,6 +71,7 @@ function Inventory(props){
         }
     };
 
+    // deletes specified inventory item within the inventory table of the database
     const deleteInventory = async(itemName) => {
         try{
             const response = await axios.delete(`http://localhost:5001/api/inventory/delete/${itemName}`);
@@ -71,6 +81,7 @@ function Inventory(props){
         }
     };
 
+    //checks whether specified inventory item already exists given its name
     const doesInventoryExist = async(itemName) => {
         try{
             const response = await axios.get(`http://localhost:5001/api/inventory/check/${itemName}`)
@@ -80,7 +91,9 @@ function Inventory(props){
         }
     }
     
+    //function used to get all of the data associated with a given row
     const getRow = (row) =>{
+        //this conditional is used to give deselection functionality
         if(whichRow && whichRow.item_name == row.item_name){
             setRow(null);
         }
@@ -96,6 +109,7 @@ function Inventory(props){
         }
     };
 
+    //handles user input in the editor panel 
     const input = (e) => {
         const {name, value} = e.target;
         setData((original) => ({
@@ -104,6 +118,7 @@ function Inventory(props){
         }));
     };
 
+    //function that is called once the update button is clicked
     const updateButton = async () => {
         const newData = {
             item_name: data.name,
@@ -138,6 +153,7 @@ function Inventory(props){
         }
     };
 
+    //function that is called when add button is clicked
     const addButton = async () => {
         console.log("current data: ", data);
 
@@ -202,6 +218,7 @@ function Inventory(props){
           }
     };
 
+    //function that is called once the delete button is clicked
     const deleteButton = async () =>{
         const deleteName = data.name;
         try{
