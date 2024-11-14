@@ -9,6 +9,7 @@ import OrderArea from '../../components/order/OrderArea';
 import { useDispatch, useSelector } from 'react-redux';
 
 function MenuSelection(props) {
+    // Fetch current values of subtotal and order from redux storage
     const {state} = useLocation();
     const view = state.view;
     const setAuthentication = props.setAuthentication;

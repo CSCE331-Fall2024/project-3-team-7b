@@ -16,6 +16,7 @@ const importAll = (r) => {
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function OrderArea(props) {
+    // Fetch current values of subtotal and order from redux storage
     const subtotal = useSelector((state) => state.subtotal);
     const tax = subtotal * 0.0875;
     const total = subtotal + tax;
@@ -29,12 +30,14 @@ function OrderArea(props) {
     }
 
     // Brings user back to "Start Order" page
+    // Update values of subtotal and order in redux storage
     const dispatch = useDispatch();
     const cancelOrder = () => {
         dispatch({type: "write", data: {subtotal: 0.00, order: ""}});
         navigate("/" + view);
     }
     
+    // Format subtotal, tax, and order to be displayed in the HTML code
     const formmatedSubtotal = subtotal.toFixed(2);
     const formmatedTax = tax.toFixed(2);
     const formattedTotal = total.toFixed(2);

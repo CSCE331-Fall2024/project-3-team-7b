@@ -20,6 +20,7 @@ const importAll = (r) => {
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function MenuDisplay(props) {
+    // Fetch current values of subtotal and order from redux storage
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const view = props.view;
@@ -47,6 +48,7 @@ function MenuDisplay(props) {
         return dict;
     }, {});
     
+    // Update values of subtotal and order in redux storage
     const dispatch = useDispatch();
     const handleUpdate = (new_subtotal, new_order) => {
         dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});

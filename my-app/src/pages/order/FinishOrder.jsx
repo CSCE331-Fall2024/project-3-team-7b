@@ -19,6 +19,7 @@ function FinishOrder(props) {
         navigate("/" + view);
     }
 
+    // Format order to be displayed in the HTML code
     const formattedOrder = order.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
     return (
         <ThemeProvider theme={theme}>
