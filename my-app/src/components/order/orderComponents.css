@@ -60,6 +60,8 @@
 .order-area {
     height: 60vh;
     width: 20vw;
+    position: sticky;
+    top: 1vh;
 }
 
 .order-list {
