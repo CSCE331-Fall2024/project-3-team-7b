@@ -110,7 +110,7 @@ function Components(props){
 
     // call that takes in all of the required data and creates a new component within the database
     const addComponent = async (newData) => {
-        console.log("Date we sending: ", newData);
+        // console.log("Date we sending: ", newData);
         try{
             const response = await axios.post(`http://localhost:5001/api/components/add/${newData.compID}`, newData);
             return response.data;
@@ -123,7 +123,7 @@ function Components(props){
     const deleteComponent = async(compName) => {
         try{
             const response = await axios.delete(`http://localhost:5001/api/components/delete/${compName}`);
-            console.log("Inventory item deleted")
+            // console.log("Inventory item deleted")
         } catch(error){
             console.log("Error deleting inventory item: ", error);
         }
@@ -150,7 +150,7 @@ function Components(props){
             return;
         }
         setError('');
-        console.log(newData);
+        // console.log(newData);
 
         try{
             await updateComponent(whichRow.component_name, newData);
@@ -168,7 +168,7 @@ function Components(props){
 
     // function that is called when add button is pressed
     const addButton = async () => {
-        console.log("current data: ", data);
+        // console.log("current data: ", data);
         if(data.name == null || data.name == ""){
             setError('Please input a valid name');
             return;
@@ -202,7 +202,7 @@ function Components(props){
 
         const newID = await getComponentID();
         
-        console.log("returned id: ", newID);
+        // console.log("returned id: ", newID);
         if(newID == null){
             setError("Can't get the new ID");
             return;
@@ -218,7 +218,7 @@ function Components(props){
                 premium: data.prem == "True",
                 seasonal: data.seas == "True"
             };
-            console.log(newData);
+            // console.log(newData);
 
             const additional = await addComponent(newData);
             setComponents((prev) =>
@@ -234,7 +234,7 @@ function Components(props){
     const deleteButton = async () =>{
         try{
             const ex = await doesComponentExist(data.name);
-            console.log("Delete item exists? ", ex);
+            // console.log("Delete item exists? ", ex);
             if(!ex){
                 setError("Please select a component");
                 return;

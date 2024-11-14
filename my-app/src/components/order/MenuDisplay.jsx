@@ -57,7 +57,12 @@ function MenuDisplay(props) {
     // Navigates user to the next stage of the order
     const handleOrder = (index) => {
         handleUpdate(subtotal + parseFloat(itemsDictionary[parseInt(index)].price), order + "\n" + itemsDictionary[parseInt(index)].item_name);
-        navigate("/customer/order/select", {state: {item: index, view: view}});
+        if (index === "9.png" || index === "5.png"){
+            navigate("/customer/order/choose-meal", {state: {item: index, view: view}});
+        }
+        else {
+            navigate("/customer/order/select", {state: {item: index, view: view}});
+        }
     }
 
     // Sort images based on `itemid`

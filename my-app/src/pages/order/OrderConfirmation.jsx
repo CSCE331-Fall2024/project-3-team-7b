@@ -4,6 +4,7 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 
+// Purpose: page to display order confirmation information
 function OrderConfirmation(props) {
     const orderNumber = 123456;
     const view = props.view;
