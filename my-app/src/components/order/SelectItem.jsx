@@ -34,7 +34,7 @@ function SelectItem(props) {
     const [disableEntrees, setDisableEntrees] = useState(false);
 
     let maxSides = 1;
-    let maxEntrees = 0;
+    let maxEntrees = 1;
     if (item == 1) {
         maxEntrees = 1;
     }
@@ -43,6 +43,13 @@ function SelectItem(props) {
     }
     else if (item == 3 || item == 9 || item == 11) {
         maxEntrees = 3;
+    }
+    else if (item == 5 || item == 13 || item == 15 || item == 19) {
+        maxSides = 0;
+    }
+    else if (item == 23) {
+        maxSides = 0;
+        maxEntrees = 0;
     }
 
     const [compData, setCompData] = useState([]);
@@ -267,7 +274,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
                                     <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -289,7 +296,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
                                     <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -311,7 +318,7 @@ function SelectItem(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
                                     <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
@@ -333,7 +340,7 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
+                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
                                     <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className="menu-image" />
                                     {itemName}
                                 </button>
