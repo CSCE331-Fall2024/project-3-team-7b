@@ -4,7 +4,35 @@
 }
 
 .employee-container {
+    margin: 0 auto; 
+    gap: 5vw;
     display: flex;
+    flex-direction: row;
+    width: 90vw;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
+    gap: 5vw;
+    padding-bottom: 5vh;
+}
+
+.employee-data {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    border: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 2vw;
+    margin-top: 5vh;
+}
+
+.modify-employee {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    border: 1px;
+    border-style: solid;
+    border-radius: 20px;
+    padding: 2vw;
+    margin-top: 5vh;
 }

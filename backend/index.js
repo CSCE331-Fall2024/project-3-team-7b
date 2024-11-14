@@ -30,6 +30,66 @@ app.get('/api/employees', async (req, res) => {
   }
 });
 
+// Add a new employee
+app.post('/api/employees', async (req, res) => {
+  const { employeeid, name, role, shift_schedule, username, password } = req.body;
+
+  try {
+    const result = await pool.query(
+      'INSERT INTO employees (employeeid, name, role, shift_schedule, username, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [employeeid, name, role, shift_schedule, username, password]
+    );
+
+    res.json(result.rows[0]); // Send back the added employee data
+  } catch (error) {
+    console.error("Error adding employee:", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Update an existing employee by employeeid
+app.put('/api/employees/:employeeid', async (req, res) => {
+  const { employeeid } = req.params; // employeeid from URL parameters
+  const { name, role, shift_schedule, username, password } = req.body;
+
+  try {
+    const result = await pool.query(
+      'UPDATE employees SET name = $1, role = $2, shift_schedule = $3, username = $4, password = $5 WHERE employeeid = $6 RETURNING *',
+      [name, role, shift_schedule, username, password, employeeid]
+    );
+
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]); // Send back the updated employee data
+    } else {
+      res.status(404).send('Employee not found');
+    }
+  } catch (error) {
+    console.error("Error updating employee:", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// Delete an employee by employeeid
+app.delete('/api/employees/:employeeid', async (req, res) => {
+  const { employeeid } = req.params;
+
+  try {
+    const result = await pool.query(
+      'DELETE FROM employees WHERE employeeid = $1 RETURNING *',
+      [employeeid]
+    );
+
+    if (result.rowCount > 0) {
+      res.json({ message: 'Employee deleted successfully', employee: result.rows[0] });
+    } else {
+      res.status(404).send('Employee not found');
+    }
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    res.status(500).send('Server error');
+  }
+});
+
 // API route to fetch all menu items
 app.get('/api/menu_items', async (req, res) => {
   try {
