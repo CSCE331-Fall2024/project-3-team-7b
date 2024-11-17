@@ -1,10 +1,9 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./menu.css";
 
 const MenuBoard = () => {
-  const [menuItems, setMenuItems] = useState([]);
+  const [components, setComponents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,17 +11,10 @@ const MenuBoard = () => {
     const fetchData = async () => {
       try {
         const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-        const response = await axios.get(`${baseURL}/api/menu_items`);
+        const response = await axios.get(`${baseURL}/api/components`);
+
         if (response.data && response.data.length > 0) {
-          setMenuItems(response.data.map(item => ({
-            id: item.itemid,
-            name: item.item_name,
-            price: Number(item.price) || 0,
-            category: item.category || "Classic Entrees",
-            description: item.description || "",
-            calories: item.calories || "",
-            available: item.available ?? true
-          })));
+          setComponents(response.data);
         }
         setLoading(false);
       } catch (err) {
@@ -34,6 +26,16 @@ const MenuBoard = () => {
 
     fetchData();
   }, []);
+
+  const MenuItem = ({ name, calories, available, premium, seasonal }) => (
+    <div className={`menu-item ${!available ? 'unavailable' : ''}`}>
+      <span style={{ textDecoration: available ? 'none' : 'line-through' }}>
+        {name} {calories ? `${calories} cal.` : ''}
+        {seasonal && <span className="text-blue-500 text-sm ml-2">(Seasonal)</span>}
+      </span>
+      {!available && <span className="text-red-500 text-sm ml-2">(Currently Unavailable)</span>}
+    </div>
+  );
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -76,13 +78,29 @@ const MenuBoard = () => {
       <section className="sides">
         <div className="side-category">
           <h3>NOODLES & RICE (510-520 CAL.)</h3>
-          <div>Chow Mein</div>
-          <div>Fried Rice</div>
-          <div>White Rice</div>
+          {components
+            .filter(item => item.category === 'Noodles & Rice')
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
         </div>
         <div className="side-category">
           <h3>VEGETABLES (90 CAL.)</h3>
-          <div>Super Greens</div>
+          {components
+            .filter(item => item.category === 'Vegetables')
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
         </div>
       </section>
 
@@ -96,16 +114,91 @@ const MenuBoard = () => {
       <section className="entrees">
         <div>
           <h3>CLASSIC ENTREES</h3>
-          <div>Original Orange Chicken 490 cal.</div>
-          <div>Kung Pao Chicken 290 cal.</div>
-          <div>Grilled Chicken Teriyaki 300 cal.</div>
-          <div>Beijing Beef 470 cal.</div>
-          <div>Honey Sesame Chicken 490 cal.</div>
+          {components
+            .filter(item => 
+              item.category === 'Main Course' && 
+              !item.premium
+            )
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                calories={item.calories}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
         </div>
         <div>
           <h3>PREMIUM ENTREES</h3>
-          <div>Honey Walnut Shrimp 360 cal.</div>
-          <div>Black Pepper Angus Steak 180 cal.</div>
+          {components
+            .filter(item => 
+              item.category === 'Main Course' && 
+              item.premium
+            )
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                calories={item.calories}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
+        </div>
+      </section>
+      {/* Step 4 */}
+      <header className="header">
+        <h1>A LA CARTE ENTREE & SIDES</h1>
+      </header>
+      <section className="sides">
+        <div>
+          <h3>Sides</h3>
+          {components
+            .filter(item => 
+              item.category === 'Side' 
+            )
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                calories={item.calories}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
+        </div>
+        <div>
+          <h3>Appetizers</h3>
+          {components
+            .filter(item => 
+              item.category === 'Appetizer'
+            )
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                calories={item.calories}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
+        </div>
+        <div>
+          <h3>Beverages</h3>
+          {components
+            .filter(item => 
+              item.category === 'Beverage'
+            )
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                calories={item.calories}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
         </div>
       </section>
 
