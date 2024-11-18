@@ -9,12 +9,16 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function TodaysSalesBarGraph(){
+    // variables to set and store the numbers of sales
     const [sales, setSales] = useState([]);
     console.log("here 1");
+
+    //function to get the total sales per hour
     const getSales = async () =>{
         try{
             console.log("Here 2");
             const response = await axios.get("http://localhost:5001/api/todaySales");
+            // places 0 if nothing is returned
             const nums = response.data.map(hour => Number(hour.sum) || 0);
             setSales(nums);
             console.log("here 4");
@@ -42,6 +46,8 @@ function TodaysSalesBarGraph(){
             },
         ],
     };
+
+    // waits for the sales to be retrieved before displaying the data
     if(sales.length == 0){
         return <p>Loading sales</p>
     }

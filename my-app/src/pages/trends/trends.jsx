@@ -9,6 +9,7 @@ import "./trends.css"
 import ProductUsage from '../../components/manager/ProductUsage';
 import SalesReport from '../../components/manager/SalesReport';
 import TodaysSalesBarGraph from '../../components/manager/TodaysSalesBarGraph';
+import PaymentsBarGraph from '../../components/manager/PaymentsBarGraph';
 
 // Purpose: Displays the different trends a manager can view
 
@@ -64,6 +65,11 @@ function Trends(props){
                 { trend === "x-report" && (
                     <div className="graph-container">
                         <TodaysSalesBarGraph />
+                    </div>
+                )}
+                { trend === "y-report" && (
+                    <div className="graph-container">
+                        <PaymentsBarGraph />
                     </div>
                 )}
             </div>
