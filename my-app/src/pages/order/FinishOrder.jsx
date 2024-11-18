@@ -4,11 +4,16 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
+import { useEnlarge } from "../../EnlargeContext";
 
 function FinishOrder(props) {
     const view = props.view;
     const setAuthentication = props.setAuthentication;
     const order = useSelector((state) => state.order);
+
+    // context to know if text should be enlarged
+    const { isEnlarged } = useEnlarge();
+
     const navigate = useNavigate();
 
     const placeOrder = () => {
@@ -29,8 +34,8 @@ function FinishOrder(props) {
                 </div>
                 <div className="finish-content">
                     <div className="finish-order-content">
-                        <h2>Current Order:</h2>
-                        <p dangerouslySetInnerHTML={{__html: formattedOrder}}></p>
+                        <h2 className={`${isEnlarged ? 'h2-enlarged' : ''}`}>Current Order:</h2>
+                        <p className={`${isEnlarged ? 'p-enlarged' : ''}`} dangerouslySetInnerHTML={{__html: formattedOrder}}></p>
                     </div>
                     <div className="finish-buttons">
                         <Button variant="contained" color="secondary" onClick={cancelOrder}>Cancel Order</Button>
