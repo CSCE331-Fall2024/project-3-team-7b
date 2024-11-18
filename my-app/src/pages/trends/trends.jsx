@@ -8,6 +8,7 @@ import ItemPerfomance from '../../components/manager/ItemPerfomance';
 import "./trends.css"
 import ProductUsage from '../../components/manager/ProductUsage';
 import SalesReport from '../../components/manager/SalesReport';
+import TodaysSalesBarGraph from '../../components/manager/TodaysSalesBarGraph';
 
 // Purpose: Displays the different trends a manager can view
 
@@ -58,6 +59,11 @@ function Trends(props){
                 { trend === "sales-report" && (
                     <div className="performance-container">
                         <SalesReport />
+                    </div>
+                )}
+                { trend === "x-report" && (
+                    <div className="graph-container">
+                        <TodaysSalesBarGraph />
                     </div>
                 )}
             </div>
