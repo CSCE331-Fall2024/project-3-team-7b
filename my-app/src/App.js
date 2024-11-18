@@ -63,6 +63,7 @@ function App() {
             />
             <Route path="/cashier/order/" element={<MenuSelection view="cashier" setAuthentication={setIsAuthenticated}/>}/>
             <Route path="/cashier/order/select" element={<ItemSelection view="cashier" setAuthentication={setIsAuthenticated}/>}/>
+            <Route path="/cashier/order/choose-meal" element={<MealOptions view="cashier" setAuthentication={setIsAuthenticated}/>}/>
             <Route path="/cashier/order/finish" element={<FinishOrder view="cashier" setAuthentication={setIsAuthenticated}/>}/>
             <Route path="/cashier/order/confirmation" element={<OrderConfirmation view="cashier" setAuthentication={setIsAuthenticated}/>}/>
       

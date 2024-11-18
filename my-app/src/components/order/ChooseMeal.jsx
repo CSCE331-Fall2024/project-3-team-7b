@@ -66,7 +66,12 @@ function ChooseMeal(props) {
     const handleOrder = (index) => {
         handleUpdate(subtotal, order + "\n\t" + menuItemsDictionary[parseInt(index)].item_name);
 
-        navigate("/customer/order/select", {state: {item: index, view: view}});
+        if (view === "cashier") {
+            navigate("/cashier/order/select", {state: {item: index, view: view}});
+        }
+        else {
+            navigate("/customer/order/select", {state: {item: index, view: view}});
+        }
     }
 
     // Navigates user back to the main menu
