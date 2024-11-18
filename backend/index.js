@@ -134,6 +134,129 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
+//gets the count of the payment type based on the type of payment provided
+app.get('/api/todayPayments/:type', async (req, res) => {
+  const {type} = req.params;
+  try {
+    const HourlyCards = [];
+
+    const date = "2023-12-10";
+    var start = date + " 10:00:00";
+    var end = date + " 11:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 11:00:00";
+    var end = date + " 12:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 12:00:00";
+    var end = date + " 13:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 13:00:00";
+    var end = date + " 14:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 14:00:00";
+    var end = date + " 15:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 15:00:00";
+    var end = date + " 16:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 16:00:00";
+    var end = date + " 17:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 17:00:00";
+    var end = date + " 18:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 18:00:00";
+    var end = date + " 19:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 19:00:00";
+    var end = date + " 20:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 20:00:00";
+    var end = date + " 21:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+
+    var start = date + " 21:00:00";
+    var end = date + " 22:00:00";
+
+    var result = await pool.query('SELECT COUNT(*) FROM Transactions WHERE Timestamp >= $1 AND Timestamp < $2 AND Payment_Method ILIKE $3;',
+      [start, end, type]
+    );
+
+    HourlyCards.push(parseInt(result.rows[0].count, 10) || 0);
+  
+    res.json(HourlyCards);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+//gets the total sales per hour in an array
 app.get('/api/todaySales', async (req, res) => {
   try {
     const salesPerHour = [];
