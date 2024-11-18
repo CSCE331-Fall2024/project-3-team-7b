@@ -5,6 +5,7 @@ import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { flushSync } from 'react-dom';
+import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Displays individual items such as orange chicken, dr. pepper, cream cheese rangoons, etc
 
@@ -33,6 +34,9 @@ function SelectItem(props) {
     const [disableBack, setDisableBack] = useState(true);
     const [disableSides, setDisableSides] = useState(false);
     const [disableEntrees, setDisableEntrees] = useState(false);
+
+    // context to know if text should be enlarged
+    const { isEnlarged } = useEnlarge();
 
     let maxSides = 1;
     let maxEntrees = 1;
@@ -230,8 +234,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
-                                    <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
+                                    <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -252,8 +256,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -274,8 +278,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -296,8 +300,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -318,8 +322,8 @@ function SelectItem(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -340,8 +344,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );

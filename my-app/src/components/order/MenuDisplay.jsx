@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import "./orderComponents.css";
 import { useDispatch, useSelector } from 'react-redux';
+import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Displays the menu items such as bowls, plates, etc
 
@@ -26,6 +27,9 @@ function MenuDisplay(props) {
     const view = props.view;
     const subtotal = useSelector((state) => state.subtotal);
     const order = useSelector((state) => state.order);
+    
+    // context to know if text should be enlarged
+    const { isEnlarged } = useEnlarge();
 
     // Makes API call to retreive menu item information
     useEffect(() => {
@@ -90,8 +94,8 @@ function MenuDisplay(props) {
 
                 
                 return (
-                    <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
-                        <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className="menu-image" />
+                    <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
+                        <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                         {itemName}
                     </button>
                 );

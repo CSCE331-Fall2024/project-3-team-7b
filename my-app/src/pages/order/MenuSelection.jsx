@@ -17,8 +17,7 @@ function MenuSelection(props) {
     const setAuthentication = props.setAuthentication;
     const subtotal = useSelector((state) => state.subtotal);
     const order = useSelector((state) => state.order);
-
-    // console.log(useSelector((state) => state.order));
+    
     
     return (
         <ThemeProvider theme={theme}>

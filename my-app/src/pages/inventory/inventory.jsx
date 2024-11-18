@@ -5,6 +5,7 @@ import styles from "./inventory.module.css";
 import theme from "../../createTheme"
 import axios from "axios";
 import InventoryTable from '../../components/manager/InventoryTable';
+import { Button } from '@mui/material';
 
 
 function Inventory(props){
@@ -260,9 +261,9 @@ function Inventory(props){
                         <input type="text" name='thresh' onChange={input} placeholder='Threshold' value={data.thresh}/>
                     </div>
                     <div className={styles['buttons']}>
-                        <button onClick={updateButton}>Update</button>
-                        <button onClick={addButton}>Add</button>
-                        <button onClick={deleteButton}>Delete</button>
+                        <Button variant="contained" color="secondary" onClick={updateButton}>Update</Button>
+                        <Button variant="contained" color="secondary" onClick={addButton}>Add</Button>
+                        <Button variant="contained" color="primary"onClick={deleteButton}>Delete</Button>
                     </div>
                 </div>
             </div>
