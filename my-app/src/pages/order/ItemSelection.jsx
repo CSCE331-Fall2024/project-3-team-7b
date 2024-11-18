@@ -8,12 +8,12 @@ import OrderArea from '../../components/order/OrderArea';
 import SelectItem from '../../components/order/SelectItem';
 import { useDispatch, useSelector } from 'react-redux';
 
-function ItemSelection() {
+function ItemSelection(props) {
     // Fetch current values of subtotal and order from redux storage
     const {state} = useLocation();
     const item = state?.item.slice(0, -4);
-    const view = state.view;
-    const setAuthentication = state.setAuthentication;
+    const view = props.view;
+    const setAuthentication = props.setAuthentication;
     const subtotal = useSelector((state) => state.subtotal);
     const order = useSelector((state) => state.order);
     
