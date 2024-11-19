@@ -12,6 +12,8 @@
     overflow-y: scroll;
     align-items: center;
     justify-content: center;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 .editor-container{
     width: 30%;
