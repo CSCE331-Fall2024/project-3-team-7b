@@ -17,9 +17,6 @@ function MealOptions(props) {
     const item = state?.item.slice(0, -4);
 
     const setAuthentication = props.setAuthentication;
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
-
     
     return (
         <ThemeProvider theme={theme}>

@@ -20,12 +20,12 @@ const importAll = (r) => {
 
 function SelectItem(props) {
     // Fetch current values of subtotal and order from redux storage
+    const subtotals = useSelector((state) => state.orders.at(0));
+    const orders = useSelector((state) => state.orders.at(1));
     const item = parseInt(props.item, 10);
 
     const view = props.view;
     const navigate = useNavigate();
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
 
     const [numSides, setNumSides] = useState(0);
     const [numEntrees, setNumEntrees] = useState(0);
@@ -89,9 +89,10 @@ function SelectItem(props) {
         return dict;
     }, {});
 
+    // Update values of subtotal and order in redux storage
     const dispatch = useDispatch();
-    const handleUpdate = (new_subtotal, new_order) => {
-        dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});
+    const handleUpdate = (newSubtotals, newOrders) => {
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
     }
 
     // Navigates user to the next stage of the order
@@ -117,7 +118,8 @@ function SelectItem(props) {
             // console.log(tempNumEntrees, maxEntrees, tempNumSides, maxSides);
             setDisableBack(false); // Let user go back to add more food items
         }
-        handleUpdate(subtotal, order + "\n\t" + compItemsDictionary[parseInt(index)].component_name);
+        orders.at(-1).push(compItemsDictionary[parseInt(index)].component_name);
+        handleUpdate(subtotals, orders);
     }
 
     // Import all images from the images folder (you can adjust the path)

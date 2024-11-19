@@ -12,17 +12,29 @@ const importAll = (r) => {
     return r.keys().map(r);
 }
 
+// Sum up all elements of an array
+const sum = (array) => {
+    let current_sum = 0;
+    for (let i = 0; i < array.length; i++) {
+        current_sum += array.at(i);
+    }
+    return current_sum;
+}
+
 // Import all images from the images folder (you can adjust the path)
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function OrderArea(props) {
     // Fetch current values of subtotal and order from redux storage
-    const subtotal = useSelector((state) => state.subtotal);
-    const tax = subtotal * 0.0875;
-    const total = subtotal + tax;
-    const order = useSelector((state) => state.order);
+    const subtotals = useSelector((state) => state.orders.at(0));
+    let subtotal = sum(subtotals);
+    let tax = subtotal * 0.0875;
+    let total = subtotal + tax;
+    const orders = useSelector((state) => state.orders.at(1));
+
     const view = props.view;
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // Navigates user to complete the order
     const finishOrder = () => {
@@ -30,24 +42,50 @@ function OrderArea(props) {
     }
 
     // Brings user back to "Start Order" page
-    // Update values of subtotal and order in redux storage
-    const dispatch = useDispatch();
+    // Cancel the order and clear redux storage for new order
     const cancelOrder = () => {
-        dispatch({type: "write", data: {subtotal: 0.00, order: ""}});
+        dispatch({type: "write", data: {orders: [[], []]}});
         navigate("/" + view);
+    }
+
+    // Removes the last item
+    const removeItem = () => {
+        const newSubtotals = subtotals.slice(0, -1);
+        const newOrders = orders.slice(0, -1);
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
+    }
+
+    const duplicateItem = () => {
+        subtotals.push(subtotals.at(-1));
+        orders.push(orders.at(-1));
+        dispatch({type: "write", data: {orders: [[...subtotals], [...orders]]}});
+    }
+
+    // Overrides the toString() method of the order array so that the current order can be converted to a string for HTML code
+    orders.toString = function toString() {
+        let string = "";
+        for (let i = 0; i < this.length; i++) {
+            string += this.at(i).at(0);
+            for (let j = 1; j < this.at(i).length; j++) {
+                string += "\n\t" + this.at(i).at(j);
+            }
+            string += "\n";
+        }
+        return string;
     }
     
     // Format subtotal, tax, and order to be displayed in the HTML code
     const formmatedSubtotal = subtotal.toFixed(2);
     const formmatedTax = tax.toFixed(2);
     const formattedTotal = total.toFixed(2);
-    const formattedOrder = order.replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+    const formattedOrders = orders.toString().replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
+    console.log(orders);
     return (
         <div className="order-area">
             <div className="order-list">
                 {/* Lists contents of current order */}
                 <h3>Current Order:</h3>
-                <p dangerouslySetInnerHTML={{__html: formattedOrder}}></p>
+                <p dangerouslySetInnerHTML={{__html: formattedOrders}}></p>
                 
                 {/* Calulates and displays the price of the order */}
                 <div className="totals">
@@ -57,7 +95,9 @@ function OrderArea(props) {
                 </div>
             </div>
             <div>
+                <Button variant="contained" color="secondary" onClick={removeItem}>Remove Last Item</Button>
                 <Button variant="contained" color="secondary" onClick={cancelOrder}>Cancel Order</Button>
+                <Button variant="contained" onClick={duplicateItem}>Duplicate Last Item</Button>
                 <Button variant="contained" onClick={finishOrder}>Finish Order</Button>
             </div>
         </div>
