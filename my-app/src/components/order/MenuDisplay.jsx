@@ -22,12 +22,13 @@ const images = importAll(require.context("../../images/small_menu", false, /\.(p
 
 function MenuDisplay(props) {
     // Fetch current values of subtotal and order from redux storage
+    const subtotals = useSelector((state) => state.orders.at(0));
+    const orders = useSelector((state) => state.orders.at(1));
+
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const view = props.view;
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
-    
+
     // context to know if text should be enlarged
     const { isEnlarged } = useEnlarge();
 
@@ -54,14 +55,15 @@ function MenuDisplay(props) {
     
     // Update values of subtotal and order in redux storage
     const dispatch = useDispatch();
-    const handleUpdate = (new_subtotal, new_order) => {
-        dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});
+    const handleUpdate = (newSubtotals, newOrders) => {
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
     }
 
     // Navigates user to the next stage of the order
     const handleOrder = (index) => {
-        console.log(view);
-        handleUpdate(subtotal + parseFloat(itemsDictionary[parseInt(index)].price), order + "\n" + itemsDictionary[parseInt(index)].item_name);
+        subtotals.push(parseFloat(itemsDictionary[parseInt(index)].price));
+        orders.push([(itemsDictionary[parseInt(index)].item_name)]);
+        handleUpdate(subtotals, orders);
         if (view === "cashier") {
             if (index === "9.png" || index === "5.png"){
                 navigate("/cashier/order/choose-meal", {state: {item: index, view: view}});

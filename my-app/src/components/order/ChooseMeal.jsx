@@ -21,11 +21,13 @@ const importAll = (r) => {
 
 function ChooseMeal(props) {
     // Fetch current values of subtotal and order from redux storage
+    const subtotals = useSelector((state) => state.orders.at(0));
+    const orders = useSelector((state) => state.orders.at(1));
     const item = parseInt(props.item, 10);
+
+
     const view = props.view;
     const navigate = useNavigate();
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
 
     const [menuData, setMenuData] = useState([]);
 
@@ -58,13 +60,13 @@ function ChooseMeal(props) {
     }, {});
 
     const dispatch = useDispatch();
-    const handleUpdate = (new_subtotal, new_order) => {
-        dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});
+    const handleUpdate = (newSubtotals, newOrders) => {
+        dispatch({type: "write", data: {orders: [newSubtotals, newOrders]}});
     }
 
     // Navigates user to the next stage of the order
     const handleOrder = (index) => {
-        handleUpdate(subtotal, order + "\n\t" + menuItemsDictionary[parseInt(index)].item_name);
+        handleUpdate(subtotals, orders.at(-1).push(menuItemsDictionary[parseInt(index)].item_name));
 
         if (view === "cashier") {
             navigate("/cashier/order/select", {state: {item: index, view: view}});
