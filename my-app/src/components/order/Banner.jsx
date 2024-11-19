@@ -5,13 +5,20 @@ import { MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 import "./orderComponents.css"
+import { useEnlarge } from "../../EnlargeContext";
 
 // Purpose: banner to be displayed at the top of all ordering pages
 function Banner(props){
     const navigate = useNavigate();
+
     const [selectedLanguage, setSelectedLanguage] = useState("en");
+    const { isEnlarged, setIsEnlarged } = useEnlarge();
+
     const view = props.view;
     const setAuthentication = props.setAuthentication;
+
+    console.log("banner " + view);
+    console.log("banner " + setAuthentication);
 
     // console.log(view);
 
@@ -21,8 +28,12 @@ function Banner(props){
         setAuthentication(false);
     }
 
+    const toggleTextSize = () => {
+        setIsEnlarged((prev) => !prev);
+    };
+
     return (
-        <div className="banner">
+        <div className={`banner ${isEnlarged ? 'large-text' : ''}`}>
             <div className="accesible-buttons">
                 <Select
                     labelId="demo-simple-select-label"
@@ -35,7 +46,9 @@ function Banner(props){
                     <MenuItem value={'en'}>English</MenuItem>
                     <MenuItem value={'span'}>Spanish</MenuItem>
                 </Select>
-                <Button variant="contained">ENLARGE TEXT</Button>
+                <Button variant="contained" onClick={toggleTextSize}>
+                    {isEnlarged ? 'NORMAL TEXT' : 'ENLARGE TEXT'}
+                </Button>
             </div>
 
             {/* Overall banner content */}

@@ -5,6 +5,10 @@
     padding-bottom: 1vh;
 } 
 
+.banner.large-text {
+    font-size: 10rem !important; /* Larger text */
+}
+
 .banner-image{
     height: 10vh;
     position: absolute;
@@ -18,6 +22,7 @@
     display: flex;
     gap: 1vh;
     flex-direction: column;
+    font-size: inherit; /* Inherits from parent */
 }
 
 .logout-button {
@@ -52,6 +57,10 @@
     transition: transform 0.2s ease;
 }
 
+.menu-button.enlarged {
+    font-size: 1.25rem;
+}
+
 .menu-button:hover {
     transform: scale(1.05);
 }
@@ -59,6 +68,13 @@
 .menu-image {
     width: 100px;
     height: 75px;
+    object-fit: cover;
+    margin-bottom: 1vh;
+}
+
+.menu-image.enlarged {
+    width: 125px;
+    height: 100px;
     object-fit: cover;
     margin-bottom: 1vh;
 }
@@ -78,16 +94,21 @@
 .order-list {
     display: flex;
     flex-direction: column;
-    height: 80%;
+    height: 100%;
     background-color: #DBDBDB;
     margin-bottom: 2vh;
     padding: 2vh;
     border-radius: 10px;
+    overflow-y: auto;
 }
 
 .totals {
     margin-top: auto;
     text-align: right;
+}
+
+.totals-enlarged {
+    font-size: 1.25rem;
 }
 
 /* ****** SELECT ITEM ****** */

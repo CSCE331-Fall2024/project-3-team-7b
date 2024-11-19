@@ -4,6 +4,7 @@ import "./orderComponents.css";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
+import { useEnlarge } from "../../EnlargeContext";
 
 // Purpose: Displays everything the user has selected for the order
 
@@ -35,6 +36,9 @@ function OrderArea(props) {
     const view = props.view;
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
+    // context to know if text should be enlarged
+    const { isEnlarged } = useEnlarge();
 
     // Navigates user to complete the order
     const finishOrder = () => {
@@ -79,19 +83,18 @@ function OrderArea(props) {
     const formmatedTax = tax.toFixed(2);
     const formattedTotal = total.toFixed(2);
     const formattedOrders = orders.toString().replaceAll("\n", "<br />").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;");
-    console.log(orders);
     return (
         <div className="order-area">
             <div className="order-list">
                 {/* Lists contents of current order */}
                 <h3>Current Order:</h3>
-                <p dangerouslySetInnerHTML={{__html: formattedOrders}}></p>
+                <p className={`${isEnlarged ? 'totals-enlarged' : ''}`} dangerouslySetInnerHTML={{__html: formattedOrders}}></p>
                 
                 {/* Calulates and displays the price of the order */}
                 <div className="totals">
-                    <p>Subtotal: ${formmatedSubtotal}</p>
-                    <p>Tax: ${formmatedTax}</p>
-                    <p>Total: ${formattedTotal}</p>
+                    <p className={`${isEnlarged ? 'totals-enlarged' : ''}`}>Subtotal: ${formmatedSubtotal}</p>
+                    <p className={`${isEnlarged ? 'totals-enlarged' : ''}`}>Tax: ${formmatedTax}</p>
+                    <p className={`${isEnlarged ? 'totals-enlarged' : ''}`}>Total: ${formattedTotal}</p>
                 </div>
             </div>
             <div>

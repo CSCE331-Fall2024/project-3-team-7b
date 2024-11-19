@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import "./orderComponents.css";
 import { useDispatch, useSelector } from 'react-redux';
+import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Displays the menu items such as bowls, plates, etc
 
@@ -27,6 +28,9 @@ function MenuDisplay(props) {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const view = props.view;
+
+    // context to know if text should be enlarged
+    const { isEnlarged } = useEnlarge();
 
     // Makes API call to retreive menu item information
     useEffect(() => {
@@ -60,11 +64,21 @@ function MenuDisplay(props) {
         subtotals.push(parseFloat(itemsDictionary[parseInt(index)].price));
         orders.push([(itemsDictionary[parseInt(index)].item_name)]);
         handleUpdate(subtotals, orders);
-        if (index === "9.png" || index === "5.png"){
-            navigate("/customer/order/choose-meal", {state: {item: index, view: view}});
+        if (view === "cashier") {
+            if (index === "9.png" || index === "5.png"){
+                navigate("/cashier/order/choose-meal", {state: {item: index, view: view}});
+            }
+            else {
+                navigate("/cashier/order/select", {state: {item: index, view: view}});
+            }
         }
         else {
-            navigate("/customer/order/select", {state: {item: index, view: view}});
+            if (index === "9.png" || index === "5.png"){
+                navigate("/customer/order/choose-meal", {state: {item: index, view: view}});
+            }
+            else {
+                navigate("/customer/order/select", {state: {item: index, view: view}});
+            }
         }
     }
 
@@ -93,8 +107,8 @@ function MenuDisplay(props) {
 
                 
                 return (
-                    <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
-                        <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className="menu-image" />
+                    <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
+                        <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                         {itemName}
                     </button>
                 );
