@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from 'react';
 import "./orderComponents.css"
 import { useEnlarge } from "../../EnlargeContext";
+import Weather from "../customer/Weather";
 
 // Purpose: banner to be displayed at the top of all ordering pages
 function Banner(props){
@@ -58,6 +59,13 @@ function Banner(props){
             { (view === "cashier" || view === "manager") && (
                 <div className="logout-button">
                     <Button variant="contained" onClick={logout}>Logout</Button>
+                </div>
+            )}
+
+            {/* only displays weater for customers */}
+            { (view === "customer") && (
+                <div className="weather-card">
+                    <Weather isBanner={true}/>
                 </div>
             )}
             
