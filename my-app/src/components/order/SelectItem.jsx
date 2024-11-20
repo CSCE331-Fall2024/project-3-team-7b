@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button } from "@mui/material";
+import { Button, Typography, Box, Modal } from "@mui/material";
 import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,6 +18,19 @@ const importAll = (r) => {
         };
     });
 }
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '35vw',
+    bgcolor: 'background.paper',
+    border: '1px solid',
+    borderRadius: '25px',
+    boxShadow: 24,
+    p: 4,
+};
 
 function SelectItem(props) {
     // Fetch current values of subtotal and order from redux storage
@@ -37,6 +50,11 @@ function SelectItem(props) {
 
     // context to know if text should be enlarged
     const { isEnlarged } = useEnlarge();
+
+    // for popup to select size of a la carte, drinks, and appetizers
+    const [openItem, setOpenItem] = React.useState(null);
+    const handleOpen = (itemId) => setOpenItem(itemId); 
+    const handleClose = () => setOpenItem(null);
 
     let maxSides = 1;
     let maxEntrees = 1;
@@ -103,14 +121,16 @@ function SelectItem(props) {
     let tempNumSides = numSides;
     let tempNumEntrees = numEntrees;
     const handleOrder = (index) => {
-        if (parseInt(index) == 6 || parseInt(index) == 7 || parseInt(index) == 12 || parseInt(index) == 13) { // Side
+        index = parseInt(index);
+
+        if (index === 6 || index === 7 || index === 12 || index === 13) { // Side
             tempNumSides += 1;
             setNumSides(current => current + 1);
             if (tempNumSides >= maxSides) {
                 setDisableSides(true); // Disable choosing more sides
             }
         }
-        else { // Entree or other (drink, etc.)
+        else{ // Entree or other (drink, etc.)
             tempNumEntrees += 1;
             setNumEntrees(current => current + 1);
             if (tempNumEntrees >= maxEntrees) {
@@ -122,7 +142,27 @@ function SelectItem(props) {
             // console.log(tempNumEntrees, maxEntrees, tempNumSides, maxSides);
             setDisableBack(false); // Let user go back to add more food items
         }
+        
         orders.at(-1).push(compItemsDictionary[parseInt(index)].component_name);
+        handleUpdate(subtotals, orders);
+    }
+
+    const handleSize = (size, index) => {
+        setDisableBack(false); // Let user go back to add more food items
+        index = parseInt(index);
+
+        let sizeOfOrder = [];
+        if (size === "S") {
+            sizeOfOrder = ["Small " + compItemsDictionary[parseInt(index)].component_name]
+        }
+        else if (size === "M") {
+            sizeOfOrder = ["Medium " + compItemsDictionary[parseInt(index)].component_name]
+        }
+        else {
+            sizeOfOrder = ["Large " + compItemsDictionary[parseInt(index)].component_name]
+        }
+        
+        orders.at(-1).push(sizeOfOrder);
         handleUpdate(subtotals, orders);
     }
 
@@ -278,7 +318,39 @@ function SelectItem(props) {
                         {drinkImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
-                
+                            if (item === 19) {
+                                return (
+                                    <div key={index}>
+                                        <button 
+                                            className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} 
+                                            onClick={() => handleOpen(itemId)} // Pass the item's ID
+                                            disabled={disableEntrees}
+                                        >
+                                            <img 
+                                                src={imageObj.src} 
+                                                alt={`Drinks  ${index + 1}`} 
+                                                className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} 
+                                            />
+                                            {itemName}
+                                        </button>
+                                        <Modal
+                                            open={openItem === itemId} // Check if this item's modal should be open
+                                            onClose={handleClose}
+                                            aria-labelledby="modal-modal-title"
+                                            aria-describedby="modal-modal-description"
+                                        >
+                                            <Box sx={style}>
+                                                <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
+                                                    Select A Size:
+                                                </Typography>
+                                                <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
+                                                <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
+                                                <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                            </Box>
+                                        </Modal>
+                                    </div>
+                                );
+                            }
                             return (
                                 <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
                                     <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
@@ -300,12 +372,36 @@ function SelectItem(props) {
                         {appetizerImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
-                
+
                             return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
+                                <div key={index}>
+                                    <button 
+                                        className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} 
+                                        onClick={() => handleOpen(itemId)} // Pass the item's ID
+                                        disabled={disableEntrees}
+                                    >
+                                        <img 
+                                            src={imageObj.src} 
+                                            alt={`Appetizer Item ${index + 1}`} 
+                                            className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} 
+                                        />
+                                        {itemName}
+                                    </button>
+                                    <Modal
+                                        open={openItem === itemId} // Check if this item's modal should be open
+                                        onClose={handleClose}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
+                                                Select A Size:
+                                            </Typography>
+                                            <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
+                                            <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                        </Box>
+                                    </Modal>
+                                </div>
                             );
                         })}
                     </div>
@@ -346,10 +442,35 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
+                                <div key={index}>
+                                    <button 
+                                        className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} 
+                                        onClick={() => handleOpen(itemId)} // Pass the item's ID
+                                        disabled={disableEntrees}
+                                    >
+                                        <img 
+                                            src={imageObj.src} 
+                                            alt={`A La Carte Item  ${index + 1}`} 
+                                            className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} 
+                                        />
+                                        {itemName}
+                                    </button>
+                                    <Modal
+                                        open={openItem === itemId} // Check if this item's modal should be open
+                                        onClose={handleClose}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
+                                                Select A Size:
+                                            </Typography>
+                                            <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
+                                            <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
+                                            <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                        </Box>
+                                    </Modal>
+                                </div>
                             );
                         })}
                     </div>
