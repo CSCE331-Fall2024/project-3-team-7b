@@ -44,7 +44,7 @@ function CustomerHome() {
                         <h1>Today's Weather:</h1>
 
                         <div>
-                            <Weather />
+                            <Weather isBanner={false}/>
                         </div>
                         <div>
                             {/* <h3>Item of the Day:</h3> */}
