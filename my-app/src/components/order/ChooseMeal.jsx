@@ -5,6 +5,7 @@ import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { flushSync } from 'react-dom';
+import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Displays meal options such as bowl/plate/bigger plate bundle
 
@@ -20,13 +21,18 @@ const importAll = (r) => {
 
 function ChooseMeal(props) {
     // Fetch current values of subtotal and order from redux storage
+    const subtotals = useSelector((state) => state.orders.at(0));
+    const orders = useSelector((state) => state.orders.at(1));
     const item = parseInt(props.item, 10);
+
+
     const view = props.view;
     const navigate = useNavigate();
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
 
     const [menuData, setMenuData] = useState([]);
+
+    // context to know if text should be enlarged
+    const { isEnlarged } = useEnlarge();
 
     // Fetch menu item data
     useEffect(() => {
@@ -54,15 +60,20 @@ function ChooseMeal(props) {
     }, {});
 
     const dispatch = useDispatch();
-    const handleUpdate = (new_subtotal, new_order) => {
-        dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});
+    const handleUpdate = (newSubtotals, newOrders) => {
+        dispatch({type: "write", data: {orders: [newSubtotals, newOrders]}});
     }
 
     // Navigates user to the next stage of the order
     const handleOrder = (index) => {
-        handleUpdate(subtotal, order + "\n\t" + menuItemsDictionary[parseInt(index)].item_name);
+        handleUpdate(subtotals, orders.at(-1).push(menuItemsDictionary[parseInt(index)].item_name));
 
-        navigate("/customer/order/select", {state: {item: index, view: view}});
+        if (view === "cashier") {
+            navigate("/cashier/order/select", {state: {item: index, view: view}});
+        }
+        else {
+            navigate("/customer/order/select", {state: {item: index, view: view}});
+        }
     }
 
     // Navigates user back to the main menu
@@ -118,8 +129,8 @@ function ChooseMeal(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
-                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
+                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -140,8 +151,8 @@ function ChooseMeal(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)}>
-                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
+                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );

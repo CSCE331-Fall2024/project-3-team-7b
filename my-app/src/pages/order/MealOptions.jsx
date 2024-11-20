@@ -13,13 +13,10 @@ import ChooseMeal from '../../components/order/ChooseMeal';
 function MealOptions(props) {
     // Fetch current values of subtotal and order from redux storage
     const {state} = useLocation();
-    const view = state.view;
+    const view = props.view;
     const item = state?.item.slice(0, -4);
 
     const setAuthentication = props.setAuthentication;
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
-
     
     return (
         <ThemeProvider theme={theme}>

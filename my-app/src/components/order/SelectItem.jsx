@@ -5,6 +5,7 @@ import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { flushSync } from 'react-dom';
+import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Displays individual items such as orange chicken, dr. pepper, cream cheese rangoons, etc
 
@@ -20,12 +21,12 @@ const importAll = (r) => {
 
 function SelectItem(props) {
     // Fetch current values of subtotal and order from redux storage
+    const subtotals = useSelector((state) => state.orders.at(0));
+    const orders = useSelector((state) => state.orders.at(1));
     const item = parseInt(props.item, 10);
 
     const view = props.view;
     const navigate = useNavigate();
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
 
     const [numSides, setNumSides] = useState(0);
     const [numEntrees, setNumEntrees] = useState(0);
@@ -33,6 +34,9 @@ function SelectItem(props) {
     const [disableBack, setDisableBack] = useState(true);
     const [disableSides, setDisableSides] = useState(false);
     const [disableEntrees, setDisableEntrees] = useState(false);
+
+    // context to know if text should be enlarged
+    const { isEnlarged } = useEnlarge();
 
     let maxSides = 1;
     let maxEntrees = 1;
@@ -89,9 +93,10 @@ function SelectItem(props) {
         return dict;
     }, {});
 
+    // Update values of subtotal and order in redux storage
     const dispatch = useDispatch();
-    const handleUpdate = (new_subtotal, new_order) => {
-        dispatch({type: "write", data: {subtotal: new_subtotal, order: new_order}});
+    const handleUpdate = (newSubtotals, newOrders) => {
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
     }
 
     // Navigates user to the next stage of the order
@@ -117,7 +122,8 @@ function SelectItem(props) {
             // console.log(tempNumEntrees, maxEntrees, tempNumSides, maxSides);
             setDisableBack(false); // Let user go back to add more food items
         }
-        handleUpdate(subtotal, order + "\n\t" + compItemsDictionary[parseInt(index)].component_name);
+        orders.at(-1).push(compItemsDictionary[parseInt(index)].component_name);
+        handleUpdate(subtotals, orders);
     }
 
     // Import all images from the images folder (you can adjust the path)
@@ -230,8 +236,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
-                                    <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
+                                    <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -252,8 +258,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -274,8 +280,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -296,8 +302,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Appetizer Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -318,8 +324,8 @@ function SelectItem(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
@@ -340,8 +346,8 @@ function SelectItem(props) {
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className="menu-button" onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className="menu-image" />
+                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
+                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
                                     {itemName}
                                 </button>
                             );
