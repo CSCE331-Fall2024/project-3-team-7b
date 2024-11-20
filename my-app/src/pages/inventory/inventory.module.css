@@ -7,11 +7,12 @@
 }
 .table-container{
     width: 70%;
-    background-color: aliceblue;
     height: 580px;
     overflow-y: scroll;
     align-items: center;
     justify-content: center;
+    padding-left: 2%;
+    padding-right: 2%;
 }
 .editor-container{
     width: 30%;

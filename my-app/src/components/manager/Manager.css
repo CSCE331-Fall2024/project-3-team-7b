@@ -1,11 +1,26 @@
 /* ******* INVENTORY TABLE ******* */
 
 .total {
-    text-align: center;
+    justify-content: center;
     margin-bottom: 2%;
     width: 100%;
     border-color: black;
+    align-items: center;
 }
+.total th {
+    background-color: #D95451;
+    color: white;
+    font-weight: bold; 
+    padding: 1vh;
+    text-align: center;
+    position: sticky;
+    top: 0; 
+}
+
+.total td {
+    text-align: center;
+}
+
 .supplier {
     width: 35%;
 }
