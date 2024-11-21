@@ -27,6 +27,7 @@ const images = importAll(require.context("../../images/small_menu", false, /\.(p
 
 function OrderArea(props) {
     // Fetch current values of subtotal and order from redux storage
+    const state = useSelector((state) => state);
     const subtotals = useSelector((state) => state.orders.at(0));
     let subtotal = sum(subtotals);
     let tax = subtotal * 0.0875;
@@ -66,6 +67,7 @@ function OrderArea(props) {
     }
 
     // Overrides the toString() method of the order array so that the current order can be converted to a string for HTML code
+    console.log(orders);
     orders.toString = function toString() {
         let string = "";
         for (let i = 0; i < this.length; i++) {
