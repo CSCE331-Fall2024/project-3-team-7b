@@ -171,6 +171,13 @@ function SelectItem(props) {
             if (index >= 22 && index <= 26){
                 itemID = 17;
             }
+            // connects component w/ small appetizer
+            else if (index === 8 || index === 9 || index === 11 || index === 21){
+                itemID = 12;
+            }
+            else {
+                itemID = 14;
+            }
         }
         else if (size === "M") {
             sizeOfOrder = ["Medium " + component]
@@ -178,6 +185,9 @@ function SelectItem(props) {
             // connects component w/ medium drink menu item
             if (index >= 22 && index <= 26){
                 itemID = 18;
+            }
+            else {
+                itemID = 15;
             }
         }
         else {
@@ -187,12 +197,24 @@ function SelectItem(props) {
             if (index >= 22 && index <= 26){
                 itemID = 19;
             }
+            // connects component w/ large appetizer
+            else if (index === 8 || index === 9 || index === 11 || index === 21){
+                itemID = 12;
+            }
+            else {
+                itemID = 16;
+            }
         }
-        
-        if (orders.length === 0) {
-            orders.push([]); // Add an empty array if orders is empty or last element isn't an array
+
+        const isPremium = compItemsDictionary[index].premium;
+        if (isPremium === true) {
+            subtotals.push(1.25);
+            const premiumLabel = [sizeOfOrder + " +$1.25"];
+            orders.push(premiumLabel);
         }
-        orders.at(-1).push(sizeOfOrder);
+        else {
+            orders.at(-1).push(sizeOfOrder);
+        }
 
         subtotals.push(parseFloat(menuItemsDictionary[itemID].price));
         handleUpdate(subtotals, orders);
