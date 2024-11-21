@@ -28,7 +28,6 @@ const images = importAll(require.context("../../images/small_menu", false, /\.(p
 function OrderArea(props) {
     // Fetch current values of subtotal and order from redux storage
     const state = useSelector((state) => state);
-    console.log(state);
     const subtotals = useSelector((state) => state.orders.at(0));
     let subtotal = sum(subtotals);
     let tax = subtotal * 0.0875;

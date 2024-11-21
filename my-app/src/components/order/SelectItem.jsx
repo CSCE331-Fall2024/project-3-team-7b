@@ -100,8 +100,6 @@ function SelectItem(props) {
         fetchData();
     }, []);
 
-    console.log(compData);
-
     // Create a dictionary with `itemid` as keys for easy lookup
     const compItemsDictionary = compData.reduce((dict, item) => {
         dict[item.componentid] = item;
@@ -146,7 +144,6 @@ function SelectItem(props) {
         }
 
         const isPremium = compItemsDictionary[index].premium;
-        console.log("premium " + isPremium);
         if (isPremium === true) {
             subtotals.push(1.25);
             const premiumLabel = [compItemsDictionary[parseInt(index)].component_name + " +$1.25"];
@@ -162,19 +159,42 @@ function SelectItem(props) {
     const handleSize = (size, index) => {
         setDisableBack(false); // Let user go back to add more food items
         index = parseInt(index);
+        const component = compItemsDictionary[index].component_name;
+
+        let itemID = 0;
 
         let sizeOfOrder = [];
         if (size === "S") {
-            sizeOfOrder = ["Small " + compItemsDictionary[parseInt(index)].component_name]
+            sizeOfOrder = ["Small " + component]
+
+            // connects component w/ small drink menu item
+            if (index >= 22 && index <= 26){
+                itemID = 17;
+            }
         }
         else if (size === "M") {
-            sizeOfOrder = ["Medium " + compItemsDictionary[parseInt(index)].component_name]
+            sizeOfOrder = ["Medium " + component]
+
+            // connects component w/ medium drink menu item
+            if (index >= 22 && index <= 26){
+                itemID = 18;
+            }
         }
         else {
-            sizeOfOrder = ["Large " + compItemsDictionary[parseInt(index)].component_name]
+            sizeOfOrder = ["Large " + component]
+
+            // connects component w/ large drink menu item
+            if (index >= 22 && index <= 26){
+                itemID = 19;
+            }
         }
         
+        if (orders.length === 0) {
+            orders.push([]); // Add an empty array if orders is empty or last element isn't an array
+        }
         orders.at(-1).push(sizeOfOrder);
+
+        subtotals.push(parseFloat(menuItemsDictionary[itemID].price));
         handleUpdate(subtotals, orders);
     }
 
