@@ -76,12 +76,6 @@ function MenuDisplay(props) {
         if (!((itemId >= 12) || (itemId >= 5 && itemId <= 10))){
             subtotals.push(parseFloat(itemsDictionary[itemId].price));
         }
-
-        // only updates the order list if there are no further menu choices
-        // ex: won't update list if you need to choose bundle/cub meal options
-        // if (!(itemId >= 5 && itemId <= 10)){
-        //     orders.push(itemName);
-        // }
         
         orders.push(itemName);
         handleUpdate(subtotals, orders);

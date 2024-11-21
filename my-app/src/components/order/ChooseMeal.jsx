@@ -67,6 +67,9 @@ function ChooseMeal(props) {
     // Navigates user to the next stage of the order
     const handleOrder = (index) => {
         const itemId = parseInt(index);
+
+        subtotals.push(parseFloat(menuItemsDictionary[itemId].price));
+        
         if (orders.length === 0) {
             orders.push([]); // Add an empty array if orders is empty or last element isn't an array
         }

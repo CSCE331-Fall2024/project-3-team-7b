@@ -100,6 +100,8 @@ function SelectItem(props) {
         fetchData();
     }, []);
 
+    console.log(compData);
+
     // Create a dictionary with `itemid` as keys for easy lookup
     const compItemsDictionary = compData.reduce((dict, item) => {
         dict[item.componentid] = item;
@@ -142,8 +144,18 @@ function SelectItem(props) {
             // console.log(tempNumEntrees, maxEntrees, tempNumSides, maxSides);
             setDisableBack(false); // Let user go back to add more food items
         }
+
+        const isPremium = compItemsDictionary[index].premium;
+        console.log("premium " + isPremium);
+        if (isPremium === true) {
+            subtotals.push(1.25);
+            const premiumLabel = [compItemsDictionary[parseInt(index)].component_name + " +$1.25"];
+            orders.at(-1).push(premiumLabel);
+        }
+        else {
+            orders.at(-1).push(compItemsDictionary[parseInt(index)].component_name);
+        }
         
-        orders.at(-1).push(compItemsDictionary[parseInt(index)].component_name);
         handleUpdate(subtotals, orders);
     }
 
