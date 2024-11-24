@@ -6,10 +6,10 @@
 } 
 
 .banner.large-text {
-    font-size: 10rem !important; /* Larger text */
+    /* font-size: 10rem !important; Larger text */
 }
 
-.banner-image{
+.banner-image {
     height: 10vh;
     position: absolute;
     left: 50%;
@@ -25,7 +25,7 @@
     font-size: inherit; /* Inherits from parent */
 }
 
-.logout-button {
+.logout-button, .weather-card {
     margin-right: 1vw;
 }
 
