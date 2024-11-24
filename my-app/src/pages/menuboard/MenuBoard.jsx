@@ -2,10 +2,24 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./menu.css";
 
+// Dynamically load all images from a folder
+const importAll = (r) => {
+  const images = r.keys().map((fileName) => {
+      return {
+          src: r(fileName), // The image source
+          name: fileName.replace('./', '') // The file name without the leading './'
+      };
+  });
+  console.log('Loaded Entree Images:');
+  return images;
+}
+
 const MenuBoard = () => {
   const [components, setComponents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const entreeImages = importAll(require.context("../../images/components/entrees", false, /\.(png)$/));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,8 +41,9 @@ const MenuBoard = () => {
     fetchData();
   }, []);
 
-  const MenuItem = ({ name, calories, available, premium, seasonal }) => (
+  const MenuItem = ({ name, calories, available, premium, seasonal, image }) => (
     <div className={`menu-item ${!available ? 'unavailable' : ''}`}>
+      {image && <img src={image} alt={name} className="menu-item-image" />}
       <span style={{ textDecoration: available ? 'none' : 'line-through' }}>
         {name} {calories ? `${calories} cal.` : ''}
         {seasonal && <span className="text-blue-500 text-sm ml-2">(Seasonal)</span>}
@@ -36,6 +51,24 @@ const MenuBoard = () => {
       {!available && <span className="text-red-500 text-sm ml-2">(Currently Unavailable)</span>}
     </div>
   );
+
+  // Get images for menu items by matching names
+  const getItemImage = (componentId) => {
+    if (!componentId) return null;
+  
+    console.log('Searching for image for ComponentID:', componentId);
+    console.log('Available images:', entreeImages);
+  
+    const matchedImage = entreeImages.find(img => 
+      img.name.startsWith(`${componentId}.`)
+    );
+    
+    if (!matchedImage) {
+      console.warn(`No image found for ComponentID: ${componentId}`);
+    }
+    
+    return matchedImage ? matchedImage.src : null;
+  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -50,22 +83,21 @@ const MenuBoard = () => {
       {/* Header */}
       <header className="header">
         <h1 className="main-title">STEP 1: CREATE YOUR MEAL</h1>
-        <p className="subtitle">UPGRADE ANY ENTREE TO PREMIUM FOR 1.25 EA</p>
       </header>
 
       {/* Meal Types */}
       <section className="meal-types">
         <div className="meal-type">
-          <h2>CLASSIC BOWL</h2>
-          <p>Classic Entree + 1 Side</p>
+          <h2>CLASSIC BOWL - $8.30</h2>
+          <p class="center">Classic Entree + 1 Side</p>
         </div>
         <div className="meal-type">
-          <h2>CLASSIC PLATE</h2>
-          <p>2 Classic Entrees + 1 Side</p>
+          <h2>CLASSIC PLATE - $9.80</h2>
+          <p class="center">2 Classic Entrees + 1 Side</p>
         </div>
         <div className="meal-type">
-          <h2>BIG PANDA PLATE</h2>
-          <p>3 Classic Entrees + 1 Side</p>
+          <h2>BIGGER PLATE - $11.30</h2>
+          <p class="center">3 Classic Entrees + 1 Side</p>
         </div>
       </section>
 
@@ -73,41 +105,29 @@ const MenuBoard = () => {
       <header className="header">
         <h1>STEP 2: CHOOSE YOUR SIDE</h1>
       </header>
-
-      {/* Sides */}
       <section className="sides">
         <div className="side-category">
-          <h3>NOODLES & RICE (510-520 CAL.)</h3>
-          {components
-            .filter(item => item.category === 'Noodles & Rice')
+        {components
+            .filter(item => 
+              item.category === 'Side' 
+            )
             .map(item => (
               <MenuItem
                 key={item.component_name}
                 name={item.component_name}
+                calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
               />
             ))}
         </div>
-        <div className="side-category">
-          <h3>VEGETABLES (90 CAL.)</h3>
-          {components
-            .filter(item => item.category === 'Vegetables')
-            .map(item => (
-              <MenuItem
-                key={item.component_name}
-                name={item.component_name}
-                available={item.availability}
-                seasonal={item.seasonal}
-              />
-            ))}
-        </div>
+
       </section>
+
 
       {/* Step 3 */}
       <header className="header">
         <h1>STEP 3: SELECT YOUR ENTREE(S)</h1>
-        <p>UPGRADE ANY ENTREE TO PREMIUM</p>
       </header>
 
       {/* Entrees */}
@@ -126,11 +146,12 @@ const MenuBoard = () => {
                 calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
+                image={getItemImage(item.ComponentID)}
               />
             ))}
         </div>
         <div>
-          <h3>PREMIUM ENTREES</h3>
+          <h3>PREMIUM ENTREES (+$1.50)</h3>
           {components
             .filter(item => 
               item.category === 'Main Course' && 
@@ -143,6 +164,8 @@ const MenuBoard = () => {
                 calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
+                image={getItemImage(item.ComponentID)}
+                
               />
             ))}
         </div>
@@ -152,22 +175,6 @@ const MenuBoard = () => {
         <h1>A LA CARTE ENTREE & SIDES</h1>
       </header>
       <section className="sides">
-        <div>
-          <h3>Sides</h3>
-          {components
-            .filter(item => 
-              item.category === 'Side' 
-            )
-            .map(item => (
-              <MenuItem
-                key={item.component_name}
-                name={item.component_name}
-                calories={item.calories}
-                available={item.availability}
-                seasonal={item.seasonal}
-              />
-            ))}
-        </div>
         <div>
           <h3>Appetizers</h3>
           {components
@@ -200,13 +207,25 @@ const MenuBoard = () => {
               />
             ))}
         </div>
+        <div>
+          <h3>Desserts</h3>
+          {components
+            .filter(item => 
+              item.category === 'Dessert'
+            )
+            .map(item => (
+              <MenuItem
+                key={item.component_name}
+                name={item.component_name}
+                calories={item.calories}
+                available={item.availability}
+                seasonal={item.seasonal}
+              />
+            ))}
+        </div>
       </section>
 
-      {/* Footer */}
-      <footer className="footer">
-        <p>We Cater!</p>
-        <p>panthercatering.com</p>
-      </footer>
+    
     </div>
   );
 };
