@@ -2,31 +2,75 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./menu.css";
 
-// Dynamically load all images from a folder
-const importAll = (r) => {
-  const images = r.keys().map((fileName) => {
-      return {
-          src: r(fileName), // The image source
-          name: fileName.replace('./', '') // The file name without the leading './'
-      };
-  });
-  console.log('Loaded Entree Images:');
-  return images;
-}
-
 const MenuBoard = () => {
   const [components, setComponents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const entreeImages = importAll(require.context("../../images/components/entrees", false, /\.(png)$/));
+  // Import all images by category
+  const importCategoryImages = (category) => {
+    try {
+      const images = {};
+      const context = {
+        entrees: require.context('../../images/components/entrees', false, /\.(png|jpe?g)$/),
+        drinks: require.context('../../images/components/drinks', false, /\.(png|jpe?g)$/),
+        sides: require.context('../../images/components/sides', false, /\.(png|jpe?g)$/),
+        appetizers: require.context('../../images/components/appetizers', false, /\.(png|jpe?g)$/),
+        desserts: require.context('../../images/components/desserts', false, /\.(png|jpe?g)$/)
+      }[category];
+
+      context.keys().forEach((key) => {
+        // Extract the ComponentID from the filename (e.g., "1.png" -> "1")
+        const id = key.replace('./', '').replace(/\.(png|jpe?g)$/, '');
+        images[id] = context(key);
+      });
+      
+      return images;
+    } catch (error) {
+      console.error(`Error importing ${category} images:`, error);
+      return {};
+    }
+  };
+
+  // Import all image categories
+  const imagesByCategory = {
+    'Main Course': importCategoryImages('entrees'),
+    'Beverage': importCategoryImages('drinks'),
+    'Side': importCategoryImages('sides'),
+    'Appetizer': importCategoryImages('appetizers'),
+    'Dessert': importCategoryImages('desserts')
+  };
+
+  // Get images for menu items by matching names
+  const getItemImage = (componentId, category) => {
+    if (!componentId || !category) {
+      console.log('Missing componentId or category:', { componentId, category });
+      return null;
+    }
+  
+    const categoryImages = imagesByCategory[category];
+    if (!categoryImages) {
+      console.log(`No images found for category: ${category}`);
+      return null;
+    }
+  
+    const image = categoryImages[componentId];
+    if (!image) {
+      console.log(`No image found for componentId: ${componentId} in category: ${category}`);
+      return null;
+    }
+  
+    console.log('Resolved image:', image);
+    return image;
+  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
         const response = await axios.get(`${baseURL}/api/components`);
-
+        
         if (response.data && response.data.length > 0) {
           setComponents(response.data);
         }
@@ -41,34 +85,39 @@ const MenuBoard = () => {
     fetchData();
   }, []);
 
-  const MenuItem = ({ name, calories, available, premium, seasonal, image }) => (
-    <div className={`menu-item ${!available ? 'unavailable' : ''}`}>
-      {image && <img src={image} alt={name} className="menu-item-image" />}
-      <span style={{ textDecoration: available ? 'none' : 'line-through' }}>
-        {name} {calories ? `${calories} cal.` : ''}
-        {seasonal && <span className="text-blue-500 text-sm ml-2">(Seasonal)</span>}
-      </span>
-      {!available && <span className="text-red-500 text-sm ml-2">(Currently Unavailable)</span>}
+  const MenuItem = ({ name, calories, available, premium, seasonal, componentId, category }) => (
+    <div className={`menu-item-card ${!available ? 'unavailable' : ''}`}>
+      <div className="menu-item-image-container">
+        {getItemImage(componentId, category) ? (
+          <img 
+            src={getItemImage(componentId, category)} 
+            alt={name} 
+            className="menu-item-image"
+            onError={(e) => {
+              console.error(`Failed to load image for ${name} (${componentId})`);
+              e.target.src = '/api/placeholder/200/150';
+            }}
+          />
+        ) : (
+          <img 
+            src="/api/placeholder/200/150" 
+            alt={name} 
+            className="menu-item-image"
+          />
+        )}
+      </div>
+      <div className="menu-item-details">
+        <div className={`menu-item-name ${!available ? 'line-through' : ''}`}>
+          {name}
+        </div>
+        <div className="menu-item-info">
+          {calories && <span className="calories">{calories} cal.</span>}
+          {seasonal && <span className="seasonal">Seasonal</span>}
+          {!available && <span className="unavailable-text">Currently Unavailable</span>}
+        </div>
+      </div>
     </div>
   );
-
-  // Get images for menu items by matching names
-  const getItemImage = (componentId) => {
-    if (!componentId) return null;
-  
-    console.log('Searching for image for ComponentID:', componentId);
-    console.log('Available images:', entreeImages);
-  
-    const matchedImage = entreeImages.find(img => 
-      img.name.startsWith(`${componentId}.`)
-    );
-    
-    if (!matchedImage) {
-      console.warn(`No image found for ComponentID: ${componentId}`);
-    }
-    
-    return matchedImage ? matchedImage.src : null;
-  };
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -131,43 +180,49 @@ const MenuBoard = () => {
       </header>
 
       {/* Entrees */}
-      <section className="entrees">
-        <div>
-          <h3>CLASSIC ENTREES</h3>
-          {components
-            .filter(item => 
-              item.category === 'Main Course' && 
-              !item.premium
-            )
-            .map(item => (
-              <MenuItem
-                key={item.component_name}
-                name={item.component_name}
-                calories={item.calories}
-                available={item.availability}
-                seasonal={item.seasonal}
-                image={getItemImage(item.ComponentID)}
-              />
-            ))}
+      <section className="entrees-grid">
+        <div className="entree-category">
+          <h3 className="category-title">CLASSIC ENTREES</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => 
+                item.category === 'Main Course' && 
+                !item.premium
+              )
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  componentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
         </div>
-        <div>
-          <h3>PREMIUM ENTREES (+$1.50)</h3>
-          {components
-            .filter(item => 
-              item.category === 'Main Course' && 
-              item.premium
-            )
-            .map(item => (
-              <MenuItem
-                key={item.component_name}
-                name={item.component_name}
-                calories={item.calories}
-                available={item.availability}
-                seasonal={item.seasonal}
-                image={getItemImage(item.ComponentID)}
-                
-              />
-            ))}
+
+        <div className="entree-category">
+          <h3 className="category-title">PREMIUM ENTREES (+$1.50)</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => 
+                item.category === 'Main Course' && 
+                item.premium
+              )
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  componentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
         </div>
       </section>
       {/* Step 4 */}
