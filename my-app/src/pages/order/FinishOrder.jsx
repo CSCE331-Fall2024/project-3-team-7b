@@ -5,8 +5,10 @@ import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEnlarge } from "../../EnlargeContext";
+import axios from 'axios';
 
 function FinishOrder(props) {
+    const subtotals = useSelector((state) => state.orders.at(0));
     const orders = useSelector((state) => state.orders.at(1));
     const view = props.view;
     const setAuthentication = props.setAuthentication;
@@ -17,15 +19,118 @@ function FinishOrder(props) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    // Sum up all elements of an array
+    const sum = (array) => {
+        let current_sum = 0;
+        for (let i = 0; i < array.length; i++) {
+            current_sum += array.at(i);
+        }
+        return current_sum;
+    }
+
+    // const submitOrder = async() => {
+    //     const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+    //     try {
+    //         axios.put('${baseURL}/api/orders/submit', {
+    //             params: {
+    //                 orderID: orderID,
+    //                 employeeID: employeeID,
+    //                 numItems: numItems,
+    //                 orderTotal: orderTotal
+    //             }
+    //         });
+    //         axios.put('${baseURL}/api/orderxmenu_item/submit', {
+    //             params: {
+    //                 ID: menuItemTableID,
+    //                 orderID: orderID,
+    //                 itemID: itemID
+    //             }
+    //         })
+    //         axios.put('${baseURL}/api/orderxcomponent/submit', {
+    //             params: {
+    //                 ID: componentTableID,
+    //                 orderID: orderID,
+    //                 componentID: componentID
+    //             }
+    //         })
+
+    //         axios.put('${baseURL}/api/transactions/submit', {
+    //             params: {
+    //                 transactionID: transactionID,
+    //                 orderID: orderID,
+    //                 employeeID: employeeID,
+    //                 paymentMethod: paymentMethod,
+    //                 amount: orderTotal,
+    //                 timestamp: timestamp,
+    //                 status: "Complete"
+    //             }
+    //         });
+    //     }
+    // }
+
+
     // Place the order and clear redux storage for new order
-    const placeOrder = () => {
-        dispatch({type: "write", data: {orders: [[], []]}});
+    const placeOrder = async() => {
+        const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+        let orderID;
+        let transactionID;
+        let employeeID;
+        const numItems = subtotals.length;
+        const orderTotal = sum(subtotals) * 1.0875;
+        const paymentMethod = Math.random() < 0.5 ? "card" : "digital wallet";
+        const timestamp = "CURRENT_TIMESTAMP";
+        const status = "Complete";
+
+        // get last order id
+        try {
+            const response = await axios.get(`${baseURL}/api/orderID`);
+            orderID = parseInt(response.data) + 1;
+        } catch (error) {
+            console.error("Error fetching order ID");
+        }
+
+        // get last transaction id
+        try {
+            const response = await axios.get(`${baseURL}/api/transactionID`);
+            transactionID = parseInt(response.data) + 1;
+        } catch (error) {
+            console.error("Error fetching transaction ID");
+        }
+
+        // if cashier view, get id
+        // else, set id to 0
+        if (view == "cashier") {
+            try {
+                const response = await axios.get(`${baseURL}/bruh`);
+                employeeID = parseInt(response.data);
+            } catch (error) {
+                console.error("Error fetching employee ID");
+            }
+        }
+        else {
+            employeeID = 0;
+        }
+
+        console.log(baseURL, orderID, transactionID, employeeID, numItems, orderTotal, paymentMethod, timestamp, status);
+
+        // insert into order table
+        // insert into orderxmenu_item table
+        // insert into orderxcomponents table
+
+        // insert into transactions table
+
+        // decrement inventory
+
+        // decrement inventory plastics
+
+
+        dispatch({type: "write", data: {orders: [[], []], isComplete: false}});
         navigate("/" + view + "/order/confirmation");
     }
 
     // Cancel the order and clear redux storage for new order
     const cancelOrder = () => {
-        dispatch({type: "write", data: {orders: [[], []]}});
+        dispatch({type: "write", data: {orders: [[], []], isComplete: false}});
         navigate("/" + view);
     }
 

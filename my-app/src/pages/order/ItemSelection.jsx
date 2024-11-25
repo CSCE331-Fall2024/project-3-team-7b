@@ -11,7 +11,13 @@ import { useDispatch, useSelector } from 'react-redux';
 function ItemSelection(props) {
     // Fetch current values of subtotal and order from redux storage
     const {state} = useLocation();
-    const item = state?.item.slice(0, -4);
+    let item = "";
+    if (state.item.length > 2) {
+        item = state?.item.slice(0, -4);
+    }
+    else {
+        item = state?.item;
+    }
     const view = props.view;
     const setAuthentication = props.setAuthentication;
     

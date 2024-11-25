@@ -66,7 +66,16 @@ function ChooseMeal(props) {
 
     // Navigates user to the next stage of the order
     const handleOrder = (index) => {
-        handleUpdate(subtotals, orders.at(-1).push(menuItemsDictionary[parseInt(index)].item_name));
+        const itemId = parseInt(index);
+
+        subtotals.push(parseFloat(menuItemsDictionary[itemId].price));
+        
+        if (orders.length === 0) {
+            orders.push([]); // Add an empty array if orders is empty or last element isn't an array
+        }
+        orders.at(-1).push(menuItemsDictionary[parseInt(itemId)].item_name);
+        handleUpdate(subtotals, orders);
+
 
         if (view === "cashier") {
             navigate("/cashier/order/select", {state: {item: index, view: view}});
