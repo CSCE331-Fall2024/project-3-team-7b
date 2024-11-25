@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./customer.css"
 import theme from "../../createTheme"
 import { useDispatch, useSelector } from 'react-redux';
+import Weather from '../../components/customer/Weather';
 
 // Purpose: Overall home page for the customers
 
@@ -17,7 +18,7 @@ function CustomerHome() {
 
     // Navigates customer to start their order
     const startOrder = () => {
-        navigate("/customer/order", {state: {view: "customer"}});
+        navigate("/customer/order", { state: { view: "customer" } });
     }
 
     return (
@@ -41,17 +42,17 @@ function CustomerHome() {
                     {/* Content to display whether & item of day */}
                     <div className="weather-div">
                         <h1>Today's Weather:</h1>
-                        
+
                         <div>
-                            <p>Something that shows the current weather</p>
+                            <Weather isBanner={false}/>
                         </div>
                         <div>
-                            <h3>Item of the Day:</h3>
+                            {/* <h3>Item of the Day:</h3> */}
                         </div>
                     </div>
                 </div>
             </div>
-       </ThemeProvider>
+        </ThemeProvider>
     );
 }
 

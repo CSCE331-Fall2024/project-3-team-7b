@@ -63,8 +63,23 @@ function MenuDisplay(props) {
 
     // Navigates user to the next stage of the order
     const handleOrder = (index) => {
-        subtotals.push(parseFloat(itemsDictionary[parseInt(index)].price));
-        orders.push([(itemsDictionary[parseInt(index)].item_name)]);
+        const itemId = parseInt(index);
+        const itemName = 
+            itemId === 5 ? ["Panda Cub Meal"] :
+            itemId === 9 ? ["Panda Bundles"] :
+            itemId === 13 ? ["Appetizers and More"] :
+            itemId === 15 ? ["A La Carte"] :
+            itemId === 19 ? ["Drinks"] :
+            itemId === 23 ? ["Catering"] :
+            [itemsDictionary[itemId]?.item_name || "Unknown Item"];
+
+        // only updates the price if the there are no further menu choices
+        // ex: won't update price for items where you have to choose the size
+        if (!((itemId >= 12) || (itemId >= 5 && itemId <= 10))){
+            subtotals.push(parseFloat(itemsDictionary[itemId].price));
+        }
+        
+        orders.push(itemName);
         handleUpdate(subtotals, orders);
         if (view === "cashier") {
             if (index === "9.png" || index === "5.png"){
