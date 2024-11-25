@@ -438,7 +438,7 @@ app.get('/api/todaySales', async (req, res) => {
 });
 
 
-//retrieves the max itemid from the inventory table in the database
+// Retrieves the max itemid from the inventory table in the database
 app.get('/api/inventoryID', async (req, res) => {
   try {
     const result = await pool.query('SELECT MAX(itemid) AS id FROM inventory');
@@ -449,7 +449,7 @@ app.get('/api/inventoryID', async (req, res) => {
   }
 });
 
-//retrives the max componentID from the components table from the database
+// Retrieves the max componentID from the components table from the database
 app.get('/api/menuID', async (req, res) => {
   try {
     const result = await pool.query('SELECT MAX(ItemID) AS id FROM menu_items;');
@@ -460,7 +460,7 @@ app.get('/api/menuID', async (req, res) => {
   }
 });
 
-//retrives the max itemID from the menu_items table from the database
+// Retrieves the max itemID from the menu_items table from the database
 app.get('/api/componentID', async (req, res) => {
   try {
     const result = await pool.query('SELECT MAX(ComponentID) AS id FROM Components;');
@@ -470,6 +470,28 @@ app.get('/api/componentID', async (req, res) => {
     res.status(500).send('Server error');
   }
 });
+
+// Retrives the max orderID from the order table from the database
+app.get('/api/orderID', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(OrderID) AS id FROM Orders;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
+// Retrives the max transactionID from the transaction table from the database
+app.get('/api/transactionID', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(TransactionID) AS id FROM Transactions;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
 
 // Call to database that returns if given inventory item exists within the inventory table
 app.get('/api/inventory/check/:itemName', async (req, res) =>{
@@ -510,7 +532,7 @@ app.get('/api/components/check/:compName', async (req, res) =>{
   }
 });
 
-//Updates specified inventory with updated values
+// Updates specified inventory with updated values
 app.put('/api/menu/:initialName', async(req, res) => {
   const initialName = req.params.initialName;
   const {item_name, price, availability} = req.body;
@@ -533,7 +555,7 @@ app.put('/api/menu/:initialName', async(req, res) => {
   }
 });
 
-//Updates specified inventory with updated values
+// Updates specified inventory with updated values
 app.put('/api/inventory/:initialName', async(req, res) => {
   const initialName = req.params.initialName;
   const {item_name, quantity, unit, supplier, threshold, needs_restock} = req.body;
