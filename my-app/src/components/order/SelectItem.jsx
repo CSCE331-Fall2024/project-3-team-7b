@@ -210,7 +210,6 @@ function SelectItem(props) {
 
         const isPremium = compItemsDictionary[index].premium;
         if (isPremium === true) {
-            subtotals[subtotals.length - 1] += (1.25);
             const premiumLabel = [sizeOfOrder + " +$1.25"];
             orders.at(-1).push(premiumLabel);
         }
@@ -219,6 +218,11 @@ function SelectItem(props) {
         }
 
         subtotals.push(parseFloat(menuItemsDictionary[itemID].price));
+        if (isPremium === true) {
+            subtotals[subtotals.length - 1] += 1.25;
+        }
+        tempNumSides = maxSides;
+        tempNumEntrees = maxEntrees;
         handleUpdate(subtotals, orders, tempNumSides, maxSides, tempNumEntrees, maxEntrees);
     }
 
