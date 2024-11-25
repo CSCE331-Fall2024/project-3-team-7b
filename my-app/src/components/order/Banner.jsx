@@ -18,8 +18,8 @@ function Banner(props){
     const view = props.view;
     const setAuthentication = props.setAuthentication;
 
-    console.log("banner " + view);
-    console.log("banner " + setAuthentication);
+    // console.log("banner " + view);
+    // console.log("banner " + setAuthentication);
 
     // console.log(view);
 

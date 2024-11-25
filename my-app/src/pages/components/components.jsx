@@ -6,7 +6,8 @@ import ComponentsTable from '../../components/manager/ComponentsTable';
 import styles from "./components.module.css"
 import theme from "../../createTheme"
 import axios from "axios";
-import { Button } from '@mui/material';
+import { Button, MenuItem } from '@mui/material';
+import { FormControl, Box, TextField } from '@mui/material';
 
 function Components(props){
     const view = props.view;
@@ -234,15 +235,25 @@ function Components(props){
     //function that is called when delete button is clicked
     const deleteButton = async () =>{
         try{
+            console.log("this has been clicked");
+            console.log(data.name);
             const ex = await doesComponentExist(data.name);
-            // console.log("Delete item exists? ", ex);
+            console.log("Delete item exists? ", ex);
             if(!ex){
                 setError("Please select a component");
                 return;
             }
+            console.log("passed");
             setError('');
             await deleteComponent(data.name);
             setRender((prev) => !prev);
+            setData({
+                name: '',
+                cat: '',
+                avail: '',
+                prem: '',
+                seas: ''
+            });
 
         } catch (error){
             console.log(error);
@@ -259,42 +270,96 @@ function Components(props){
                     <ComponentsTable data={components} rowSelect={getRow}/>
                 </div>
                 <div className={styles['editor-container']}>
-                    <div className={styles['text-boxes']}>
-                        {error && <p className={styles['error']}>{error}</p>}
-                        <input type="text" name='name' onChange={input} placeholder='Component' value={data.name}/>
-                        <select name ="cat" onChange={input} value={data.cat}>
-                            <option value="" disabled>Select Category</option>
-                            <option value="Appetizer">Appetizer</option>
-                            <option value="Main Course">Main Course</option>
-                            <option value="Side">Side</option>
-                            <option value="Beverage">Beverage</option>
-                            <option value="Dessert">Dessert</option>
-                        </select>
-                        <select name="avail" onChange={input} placeholder={""} value={data.avail}>
-                            <option value="" disabled>Is this available?</option>
-                            <option value="True">Yes</option>
-                            <option value="False">No</option>
-                        </select>
-                        <select name="prem" onChange={input} placeholder={""} value={data.prem}>
-                            <option value="" disabled>Is this premium?</option>
-                            <option value="True">Yes</option>
-                            <option value="False">No</option>
-                        </select>
-                        <select name="seas" onChange={input} placeholder={""} value={data.seas}>
-                            <option value="" disabled>Is this seasonal?</option>
-                            <option value="True">Yes</option>
-                            <option value="False">No</option>
-                        </select>
+                    <div className={styles["modify-components"]}>
+                        {/* Component textbox */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="name"
+                                label="Component"
+                                onChange={input}
+                                value={data.name}
+                                helperText="Please enter the desired component name"
+                            />
+
+                        </FormControl>
+                        {/* Category dropdown */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="cat"
+                                select
+                                label="Category"
+                                onChange={input}
+                                value={data.cat}
+                                helperText="Please select the desired category"
+                            >
+                                <MenuItem key="Appetizer" value="Appetizer">Appetizer</MenuItem>
+                                <MenuItem key="Main Course" value="Main Course">Main Course</MenuItem>
+                                <MenuItem key="Side" value="Side">Side</MenuItem>
+                                <MenuItem key="Beverage" value="Beverage">Beverage</MenuItem>
+                                <MenuItem key="Dessert" value="Dessert">Dessert</MenuItem>
+                            </TextField>
+                        </FormControl>
+                        {/* Availiable dropdown */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="avail"
+                                select
+                                label="Availability"
+                                onChange={input}
+                                value={data.avail}
+                                helperText="Please select the availability"
+                            >
+                                <MenuItem key="True" value="True">Yes</MenuItem>
+                                <MenuItem key="False" value="False">No</MenuItem>
+                            </TextField>
+                        </FormControl>
+                        {/* Premium dropdown */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="prem"
+                                select
+                                label="Premium"
+                                onChange={input}
+                                value={data.prem}
+                                helperText="Is this item premium?"
+                            >
+                                <MenuItem key="True" value="True">Yes</MenuItem>
+                                <MenuItem key="False" value="False">No</MenuItem>
+                            </TextField>
+                        </FormControl>
+                        {/* Seasonal dropdown */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="seas"
+                                select
+                                label="Seasonal"
+                                onChange={input}
+                                value={data.seas}
+                                helperText="Is this item seasonal?"
+                            >
+                                <MenuItem key="True" value="True">Yes</MenuItem>
+                                <MenuItem key="False" value="False">No</MenuItem>
+                            </TextField>
+                        </FormControl>
+                        
+                        {/* Buttons */}
+                        <Box
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                mt: 2
+                            }}
+                        >
+                            <Button variant="outlined" onClick={updateButton}>Update</Button>
+                            <Button variant="contained" onClick={addButton}>Add</Button>
+                            <Button variant="contained" onClick={deleteButton}>Delete</Button>
+                        </Box>
                     </div>
-                    <div className={styles['buttons']}>
-                        <Button variant="contained" color="secondary" onClick={updateButton}>Update</Button>
-                        <Button variant="contained" color="secondary" onClick={addButton}>Add</Button>
-                        <Button variant="contained" color="primary" onClick={deleteButton}>Delete</Button>
                     </div>
                 </div>
-            </div>
-       </ThemeProvider>
-    );
-}
+        </ThemeProvider>
+        );
+    }
 
-export default Components;
+    export default Components;
