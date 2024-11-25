@@ -5,6 +5,8 @@ import styles from "./items.module.css"
 import theme from "../../createTheme"
 import axios from "axios";
 import ItemsTable from '../../components/manager/ItemsTable';
+import { Button, MenuItem } from '@mui/material';
+import { FormControl, Box, TextField } from '@mui/material';
 
 function Items(props){
     const view = props.view;
@@ -223,6 +225,11 @@ function Items(props){
             setError('');
             await deleteItem(data.name);
             setRender((prev) => !prev);
+            setData({
+                name: '',
+                price: '',
+                avail: ''
+            });
 
         } catch (error){
             console.log(error);
@@ -239,20 +246,61 @@ function Items(props){
                     <ItemsTable data={menu} rowSelect={getRow}/>
                 </div>
                 <div className={styles['editor-container']}>
-                    <div className={styles['text-boxes']}>
-                        {error && <p className={styles['error']}>{error}</p>}
-                        <input type="text" name='name' onChange={input} placeholder='Menu Item' value={data.name}/>
-                        <input type="number" name='price' onChange={input} placeholder='Price' value={data.price}/>
-                        <select name="avail" onChange={input} placeholder={""} value={data.avail}>
-                            <option value="" disabled>Is this available?</option>
-                            <option value="True">Yes</option>
-                            <option value="False">No</option>
-                        </select>
-                    </div>
-                    <div className={styles['buttons']}>
-                        <button onClick={updateButton}>Update</button>
-                        <button onClick={addButton}>Add</button>
-                        <button onClick={deleteButton}>Delete</button>
+                     <div className={styles["modify-items"]}>
+                        {/* Item textbox */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="name"
+                                label="Item"
+                                onChange={input}
+                                value={data.name}
+                                helperText="Please enter the desired component name"
+                            />
+
+                        </FormControl>
+                        {/* Price dropdown */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="price"
+                                label="Price"
+                                type="number"
+                                onChange={input}
+                                value={data.price}
+                                helperText="Please enter the desired price"
+                                inputProps={{
+                                    step: "0.01",
+                                    min: "0",
+                                }}
+                            />
+
+                        </FormControl>
+                        {/* Availiable dropdown */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="avail"
+                                select
+                                label="Availability"
+                                onChange={input}
+                                value={data.avail}
+                                helperText="Please select the availability"
+                            >
+                                <MenuItem key="True" value="True">Yes</MenuItem>
+                                <MenuItem key="False" value="False">No</MenuItem>
+                            </TextField>
+                        </FormControl>
+                        {/* Buttons */}
+                        <Box
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                mt: 2
+                            }}
+                        >
+                            <Button variant="outlined" onClick={updateButton}>Update</Button>
+                            <Button variant="contained" onClick={addButton}>Add</Button>
+                            <Button variant="contained" onClick={deleteButton}>Delete</Button>
+                        </Box>
                     </div>
                 </div>
             </div>

@@ -16,7 +16,17 @@
 }
 .editor-container{
     width: 30%;
-    background-color: antiquewhite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modify-components {
+    display: flex;
+    flex-direction: column;
+    border: 1px;
+    border-radius: 20px;
+    background-color: #eeeeee;
+    padding: 2vw;
 }
 .text-boxes{
     height: 80%;

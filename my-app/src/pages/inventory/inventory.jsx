@@ -6,6 +6,7 @@ import theme from "../../createTheme"
 import axios from "axios";
 import InventoryTable from '../../components/manager/InventoryTable';
 import { Button } from '@mui/material';
+import { FormControl, Box, TextField } from '@mui/material';
 
 
 function Inventory(props){
@@ -97,6 +98,13 @@ function Inventory(props){
         //this conditional is used to give deselection functionality
         if(whichRow && whichRow.item_name == row.item_name){
             setRow(null);
+            setData({
+                name: '',
+                quant: '',
+                unit: '',
+                sup: '',
+                thresh: ''
+            });
         }
         else{
             setRow(row);
@@ -233,6 +241,13 @@ function Inventory(props){
             setError('');
             await deleteInventory(deleteName);
             setRender((prev) => !prev);
+            setData({
+                name: '',
+                quant: '',
+                unit: '',
+                sup: '',
+                thresh: ''
+            });
 
         } catch (error){
             console.log(error);
@@ -252,18 +267,84 @@ function Inventory(props){
                     <InventoryTable data={inventory} rowSelect={getRow}/>
                 </div>
                 <div className={styles['editor-container']}>
-                    <div className={styles['text-boxes']}>
-                        {error && <p className={styles['error']}>{error}</p>}
-                        <input type="text" name='name' onChange={input} placeholder='Item' value={data.name}/>
-                        <input type="text" name='quant' onChange={input} placeholder='Quantity' value={data.quant}/>
-                        <input type="text" name='unit' onChange={input} placeholder='Unit' value={data.unit}/>
-                        <input type="text" name='sup' onChange={input} placeholder='Supplier' value={data.sup}/>
-                        <input type="text" name='thresh' onChange={input} placeholder='Threshold' value={data.thresh}/>
-                    </div>
-                    <div className={styles['buttons']}>
-                        <Button variant="contained" color="secondary" onClick={updateButton}>Update</Button>
-                        <Button variant="contained" color="secondary" onClick={addButton}>Add</Button>
-                        <Button variant="contained" color="primary"onClick={deleteButton}>Delete</Button>
+                    <div className={styles['modify-inventory']}>
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="name"
+                                label="Inventory Item"
+                                onChange={input}
+                                value={data.name}
+                                helperText="Please enter the desired item name"
+                            />
+
+                        </FormControl>
+                        {/* Quantity Textbox */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="quant"
+                                label="Quantity"
+                                type="number"
+                                onChange={input}
+                                value={data.quant}
+                                helperText="Please enter the desired quantity"
+                                inputProps={{
+                                    step: "0.01",
+                                    min: "0",
+                                }}
+                            />
+
+                        </FormControl>
+                        {/* Unit textbox */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="unit"
+                                label="Unit"
+                                onChange={input}
+                                value={data.unit}
+                                helperText="Please enter the desired unit"
+                            />
+
+                        </FormControl>
+                        {/* Supplier textbox */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="sup"
+                                label="Supplier"
+                                onChange={input}
+                                value={data.sup}
+                                helperText="Please enter the desired supplier"
+                            />
+
+                        </FormControl>
+                        {/* Threshold textbox */}
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="thresh"
+                                label="Threshold"
+                                type="number"
+                                onChange={input}
+                                value={data.thresh}
+                                helperText="Please enter the desired threshold"
+                                inputProps={{
+                                    step: "0.01",
+                                    min: "0",
+                                }}
+                            />
+                        </FormControl>
+                        
+                        {/* Buttons */}
+                        <Box
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                mt: 2
+                            }}
+                        >
+                            <Button variant="outlined" onClick={updateButton}>Update</Button>
+                            <Button variant="contained" onClick={addButton}>Add</Button>
+                            <Button variant="contained" onClick={deleteButton}>Delete</Button>
+                        </Box>
                     </div>
                 </div>
             </div>
