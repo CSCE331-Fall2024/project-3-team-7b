@@ -19,13 +19,13 @@ function FinishOrder(props) {
 
     // Place the order and clear redux storage for new order
     const placeOrder = () => {
-        dispatch({type: "write", data: {orders: [[], []]}});
+        dispatch({type: "write", data: {orders: [[], []], isComplete: false}});
         navigate("/" + view + "/order/confirmation");
     }
 
     // Cancel the order and clear redux storage for new order
     const cancelOrder = () => {
-        dispatch({type: "write", data: {orders: [[], []]}});
+        dispatch({type: "write", data: {orders: [[], []], isComplete: false}});
         navigate("/" + view);
     }
 

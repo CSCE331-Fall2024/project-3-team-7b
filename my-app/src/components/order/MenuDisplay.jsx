@@ -24,6 +24,8 @@ function MenuDisplay(props) {
     // Fetch current values of subtotal and order from redux storage
     const subtotals = useSelector((state) => state.orders.at(0));
     const orders = useSelector((state) => state.orders.at(1));
+    const isComplete = useSelector((state) => state.isComplete);
+    console.log(isComplete);
 
     const navigate = useNavigate();
     const [data, setData] = useState([]);
@@ -53,10 +55,10 @@ function MenuDisplay(props) {
         return dict;
     }, {});
     
-    // Update values of subtotal and order in redux storage
+    // Update values of subtotal, order, and isComplete in redux storage
     const dispatch = useDispatch();
     const handleUpdate = (newSubtotals, newOrders) => {
-        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]], isComplete: false}});
     }
 
     // Navigates user to the next stage of the order

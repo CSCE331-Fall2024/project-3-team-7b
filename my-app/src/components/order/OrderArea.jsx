@@ -26,12 +26,14 @@ const sum = (array) => {
 const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function OrderArea(props) {
-    // Fetch current values of subtotal and order from redux storage
+    // Fetch current values of subtotal, order, and if order is complete (valid) from redux storage
     const subtotals = useSelector((state) => state.orders.at(0));
     let subtotal = sum(subtotals);
     let tax = subtotal * 0.0875;
     let total = subtotal + tax;
     const orders = useSelector((state) => state.orders.at(1));
+    const isComplete = useSelector((state) => state.isComplete);
+    console.log(isComplete);
 
     const view = props.view;
     const navigate = useNavigate();
@@ -48,7 +50,7 @@ function OrderArea(props) {
     // Brings user back to "Start Order" page
     // Cancel the order and clear redux storage for new order
     const cancelOrder = () => {
-        dispatch({type: "write", data: {orders: [[], []]}});
+        dispatch({type: "write", data: {orders: [[], []], isComplete: false}});
         navigate("/" + view);
     }
 
@@ -56,13 +58,15 @@ function OrderArea(props) {
     const removeItem = () => {
         const newSubtotals = subtotals.slice(0, -1);
         const newOrders = orders.slice(0, -1);
-        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
+        const isComplete = newSubtotals.length != 0;
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]], isComplete: isComplete}});
     }
 
     const duplicateItem = () => {
         subtotals.push(subtotals.at(-1));
         orders.push(orders.at(-1));
-        dispatch({type: "write", data: {orders: [[...subtotals], [...orders]]}});
+        const isComplete = subtotals.length != 0;
+        dispatch({type: "write", data: {orders: [[...subtotals], [...orders]], isComplete: isComplete}});
     }
 
     // Overrides the toString() method of the order array so that the current order can be converted to a string for HTML code
@@ -98,10 +102,10 @@ function OrderArea(props) {
                 </div>
             </div>
             <div>
-                <Button variant="contained" color="secondary" onClick={removeItem}>Remove Last Item</Button>
+                <Button variant="contained" color="secondary" onClick={removeItem} disabled={!isComplete}>Remove Last Item</Button>
                 <Button variant="contained" color="secondary" onClick={cancelOrder}>Cancel Order</Button>
-                <Button variant="contained" onClick={duplicateItem}>Duplicate Last Item</Button>
-                <Button variant="contained" onClick={finishOrder}>Finish Order</Button>
+                <Button variant="contained" onClick={duplicateItem} disabled={!isComplete}>Duplicate Last Item</Button>
+                <Button variant="contained" onClick={finishOrder} disabled={!isComplete}>Finish Order</Button>
             </div>
         </div>
     );

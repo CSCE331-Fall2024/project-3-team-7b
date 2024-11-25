@@ -20,9 +20,10 @@ const importAll = (r) => {
 }
 
 function SelectItem(props) {
-    // Fetch current values of subtotal and order from redux storage
+    // Fetch current values of subtotal, order, and if order is complete (valid) from redux storage
     const subtotals = useSelector((state) => state.orders.at(0));
     const orders = useSelector((state) => state.orders.at(1));
+    const isComplete = useSelector((state) => state.isComplete);
     const item = parseInt(props.item, 10);
 
     const view = props.view;
@@ -93,10 +94,11 @@ function SelectItem(props) {
         return dict;
     }, {});
 
-    // Update values of subtotal and order in redux storage
+    // Update values of subtotal, order, and isComplete in redux storage
     const dispatch = useDispatch();
-    const handleUpdate = (newSubtotals, newOrders) => {
-        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
+    const handleUpdate = (newSubtotals, newOrders, tempNumSides, maxSides, tempNumEntrees, maxEntrees) => {
+        const isComplete = tempNumSides >= maxSides && tempNumEntrees >= maxEntrees;
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]], isComplete: isComplete}});
     }
 
     // Navigates user to the next stage of the order
@@ -123,7 +125,7 @@ function SelectItem(props) {
             setDisableBack(false); // Let user go back to add more food items
         }
         orders.at(-1).push(compItemsDictionary[parseInt(index)].component_name);
-        handleUpdate(subtotals, orders);
+        handleUpdate(subtotals, orders, tempNumSides, maxSides, tempNumEntrees, maxEntrees);
     }
 
     // Import all images from the images folder (you can adjust the path)
@@ -221,7 +223,7 @@ function SelectItem(props) {
         <div className="menu-display">
             {/* BACK BUTTON */}
             <div>
-                <Button variant="contained" color="secondary" onClick={backToMenu} disabled={disableBack}>BACK TO MENU / ADD TO ORDER</Button>
+                <Button variant="contained" color="secondary" onClick={backToMenu} disabled={disableBack}>ADD TO ORDER</Button>
             </div>
 
             {/* SIDES */}
