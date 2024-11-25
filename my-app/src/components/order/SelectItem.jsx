@@ -33,9 +33,10 @@ const style = {
 };
 
 function SelectItem(props) {
-    // Fetch current values of subtotal and order from redux storage
+    // Fetch current values of subtotal, order, and if order is complete (valid) from redux storage
     const subtotals = useSelector((state) => state.orders.at(0));
     const orders = useSelector((state) => state.orders.at(1));
+    const isComplete = useSelector((state) => state.isComplete);
     const item = parseInt(props.item, 10);
 
     const view = props.view;
@@ -111,10 +112,11 @@ function SelectItem(props) {
         return dict;
     }, {});
 
-    // Update values of subtotal and order in redux storage
+    // Update values of subtotal, order, and isComplete in redux storage
     const dispatch = useDispatch();
-    const handleUpdate = (newSubtotals, newOrders) => {
-        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]]}});
+    const handleUpdate = (newSubtotals, newOrders, tempNumSides, maxSides, tempNumEntrees, maxEntrees) => {
+        const isComplete = tempNumSides >= maxSides && tempNumEntrees >= maxEntrees;
+        dispatch({type: "write", data: {orders: [[...newSubtotals], [...newOrders]], isComplete: isComplete}});
     }
 
     // Navigates user to the next stage of the order
@@ -130,7 +132,7 @@ function SelectItem(props) {
                 setDisableSides(true); // Disable choosing more sides
             }
         }
-        else{ // Entree or other (drink, etc.)
+        else { // Entree or other (drink, etc.)
             tempNumEntrees += 1;
             setNumEntrees(current => current + 1);
             if (tempNumEntrees >= maxEntrees) {
@@ -145,7 +147,7 @@ function SelectItem(props) {
 
         const isPremium = compItemsDictionary[index].premium;
         if (isPremium === true) {
-            subtotals.push(1.25);
+            subtotals[subtotals.length - 1] += 1.25;
             const premiumLabel = [compItemsDictionary[parseInt(index)].component_name + " +$1.25"];
             orders.at(-1).push(premiumLabel);
         }
@@ -153,7 +155,7 @@ function SelectItem(props) {
             orders.at(-1).push(compItemsDictionary[parseInt(index)].component_name);
         }
         
-        handleUpdate(subtotals, orders);
+        handleUpdate(subtotals, orders, tempNumSides, maxSides, tempNumEntrees, maxEntrees);
     }
 
     const handleSize = (size, index) => {
@@ -208,16 +210,20 @@ function SelectItem(props) {
 
         const isPremium = compItemsDictionary[index].premium;
         if (isPremium === true) {
-            subtotals.push(1.25);
             const premiumLabel = [sizeOfOrder + " +$1.25"];
-            orders.push(premiumLabel);
+            orders.at(-1).push(premiumLabel);
         }
         else {
             orders.at(-1).push(sizeOfOrder);
         }
 
         subtotals.push(parseFloat(menuItemsDictionary[itemID].price));
-        handleUpdate(subtotals, orders);
+        if (isPremium === true) {
+            subtotals[subtotals.length - 1] += 1.25;
+        }
+        tempNumSides = maxSides;
+        tempNumEntrees = maxEntrees;
+        handleUpdate(subtotals, orders, tempNumSides, maxSides, tempNumEntrees, maxEntrees);
     }
 
     // Import all images from the images folder (you can adjust the path)
@@ -315,7 +321,7 @@ function SelectItem(props) {
         <div className="menu-display">
             {/* BACK BUTTON */}
             <div>
-                <Button variant="contained" color="secondary" onClick={backToMenu} disabled={disableBack}>BACK TO MENU / ADD TO ORDER</Button>
+                <Button variant="contained" color="secondary" onClick={backToMenu} disabled={disableBack}>ADD TO ORDER</Button>
             </div>
 
             {/* SIDES */}
