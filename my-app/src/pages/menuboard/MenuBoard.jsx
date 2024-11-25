@@ -16,11 +16,10 @@ const MenuBoard = () => {
         drinks: require.context('../../images/components/drinks', false, /\.(png|jpe?g)$/),
         sides: require.context('../../images/components/sides', false, /\.(png|jpe?g)$/),
         appetizers: require.context('../../images/components/appetizers', false, /\.(png|jpe?g)$/),
-        desserts: require.context('../../images/components/desserts', false, /\.(png|jpe?g)$/)
+        desserts: require.context('../../images/components/dessert', false, /\.(png|jpe?g)$/)
       }[category];
 
       context.keys().forEach((key) => {
-        // Extract the ComponentID from the filename (e.g., "1.png" -> "1")
         const id = key.replace('./', '').replace(/\.(png|jpe?g)$/, '');
         images[id] = context(key);
       });
@@ -32,7 +31,6 @@ const MenuBoard = () => {
     }
   };
 
-  // Import all image categories
   const imagesByCategory = {
     'Main Course': importCategoryImages('entrees'),
     'Beverage': importCategoryImages('drinks'),
@@ -41,7 +39,6 @@ const MenuBoard = () => {
     'Dessert': importCategoryImages('desserts')
   };
 
-  // Get images for menu items by matching names
   const getItemImage = (componentId, category) => {
     if (!componentId || !category) {
       console.log('Missing componentId or category:', { componentId, category });
@@ -54,16 +51,14 @@ const MenuBoard = () => {
       return null;
     }
   
-    const image = categoryImages[componentId];
+    const image = categoryImages[componentId.toString()];
     if (!image) {
       console.log(`No image found for componentId: ${componentId} in category: ${category}`);
       return null;
     }
   
-    console.log('Resolved image:', image);
     return image;
   };
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,9 +66,28 @@ const MenuBoard = () => {
         const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
         const response = await axios.get(`${baseURL}/api/components`);
         
-        if (response.data && response.data.length > 0) {
-          setComponents(response.data);
+        if (!response.data) {
+          throw new Error('No data received from API');
         }
+
+        // Transform the data
+        const transformedData = response.data.map((item, index) => {
+          // Get the ComponentID from the actual data or use the array index + 1
+          const componentId = item.ComponentID || (index+1).toString();
+          
+          return {
+            ComponentID: componentId,
+            component_name: item.Component_Name || item.component_name || '',
+            category: item.Category || item.category || '',
+            availability: item.Availability === 1 || item.availability === true,
+            premium: item.Premium === 1 || item.premium === true,
+            seasonal: item.Seasonal === 1 || item.seasonal === true,
+            calories: item.calories || null
+          };
+        });
+
+        console.log('Transformed Data:', transformedData);
+        setComponents(transformedData);
         setLoading(false);
       } catch (err) {
         console.error('Fetch error:', err);
@@ -138,15 +152,15 @@ const MenuBoard = () => {
       <section className="meal-types">
         <div className="meal-type">
           <h2>CLASSIC BOWL - $8.30</h2>
-          <p class="center">Classic Entree + 1 Side</p>
+          <p className="center">Classic Entree + 1 Side</p>
         </div>
         <div className="meal-type">
           <h2>CLASSIC PLATE - $9.80</h2>
-          <p class="center">2 Classic Entrees + 1 Side</p>
+          <p className="center">2 Classic Entrees + 1 Side</p>
         </div>
         <div className="meal-type">
           <h2>BIGGER PLATE - $11.30</h2>
-          <p class="center">3 Classic Entrees + 1 Side</p>
+          <p className="center">3 Classic Entrees + 1 Side</p>
         </div>
       </section>
 
@@ -156,10 +170,8 @@ const MenuBoard = () => {
       </header>
       <section className="sides">
         <div className="side-category">
-        {components
-            .filter(item => 
-              item.category === 'Side' 
-            )
+          {components
+            .filter(item => item.category === 'Side')
             .map(item => (
               <MenuItem
                 key={item.component_name}
@@ -167,12 +179,12 @@ const MenuBoard = () => {
                 calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
+                componentId={item.ComponentID}
+                category={item.category}
               />
             ))}
         </div>
-
       </section>
-
 
       {/* Step 3 */}
       <header className="header">
@@ -225,6 +237,7 @@ const MenuBoard = () => {
           </div>
         </div>
       </section>
+
       {/* Step 4 */}
       <header className="header">
         <h1>A LA CARTE ENTREE & SIDES</h1>
@@ -233,9 +246,7 @@ const MenuBoard = () => {
         <div>
           <h3>Appetizers</h3>
           {components
-            .filter(item => 
-              item.category === 'Appetizer'
-            )
+            .filter(item => item.category === 'Appetizer')
             .map(item => (
               <MenuItem
                 key={item.component_name}
@@ -243,15 +254,15 @@ const MenuBoard = () => {
                 calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
+                componentId={item.ComponentID}
+                category={item.category}
               />
             ))}
         </div>
         <div>
           <h3>Beverages</h3>
           {components
-            .filter(item => 
-              item.category === 'Beverage'
-            )
+            .filter(item => item.category === 'Beverage')
             .map(item => (
               <MenuItem
                 key={item.component_name}
@@ -259,15 +270,15 @@ const MenuBoard = () => {
                 calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
+                componentId={item.ComponentID}
+                category={item.category}
               />
             ))}
         </div>
         <div>
           <h3>Desserts</h3>
           {components
-            .filter(item => 
-              item.category === 'Dessert'
-            )
+            .filter(item => item.category === 'Dessert')
             .map(item => (
               <MenuItem
                 key={item.component_name}
@@ -275,12 +286,12 @@ const MenuBoard = () => {
                 calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
+                componentId={item.ComponentID}
+                category={item.category}
               />
             ))}
         </div>
       </section>
-
-    
     </div>
   );
 };
