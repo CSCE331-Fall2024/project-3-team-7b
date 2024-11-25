@@ -90,6 +90,15 @@
     text-align: center;
 }
 
+.label-enlarged {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.MuiTableCell-root.table-enlarged {
+    font-size: 1rem;
+}
+
 /* ******* Components Table ******* */
 .component {
     width: 40%

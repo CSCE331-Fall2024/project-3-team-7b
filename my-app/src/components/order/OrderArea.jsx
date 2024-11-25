@@ -93,7 +93,7 @@ function OrderArea(props) {
         <div className="order-area">
             <div className="order-list">
                 {/* Lists contents of current order */}
-                <h3>Current Order:</h3>
+                <h3 className={`${isEnlarged ? 'label-h3-enlarged' : ''}`}>Current Order:</h3>
                 <p className={`${isEnlarged ? 'totals-enlarged' : ''}`} dangerouslySetInnerHTML={{__html: formattedOrders}}></p>
                 
                 {/* Calulates and displays the price of the order */}
