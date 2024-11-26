@@ -15,7 +15,13 @@ function Inventory(props){
     //contains the data for the row that is selected within the table, function used to fund the selected row
     const[whichRow, setRow] = useState(null);
     //used to store the error message for invalid user input, function used to set this message
-    const[error, setError] = useState('');
+    const[error, setError] = useState(false);
+    const[nameError, setNameError] = useState(false);
+    const[addError, setAddError] = useState(false);
+    const[quantError, setQuantError] = useState(false);
+    const[unitError, setUnitError] = useState(false);
+    const[supError, setSupError] = useState(false);
+    const[threshError, setThreshError] = useState(false);
     //boolean value used to rerender the table once a new inventory item has been added
     const[render, setRender] = useState(false);
     //data variable storing all of the data in a given row, function used to set the data variable
@@ -116,6 +122,13 @@ function Inventory(props){
                 thresh: row.threshold
             });
         }
+        setError(false);
+        setAddError(false);
+        setNameError(false);
+        setQuantError(false);
+        setUnitError(false);
+        setSupError(false);
+        setThreshError(false);
     };
 
     //handles user input in the editor panel 
@@ -129,6 +142,47 @@ function Inventory(props){
 
     //function that is called once the update button is clicked
     const updateButton = async () => {
+        setError(false);
+        setAddError(false);
+        setNameError(false);
+        setQuantError(false);
+        setUnitError(false);
+        setSupError(false);
+        setThreshError(false);
+
+        if(whichRow == null){
+            setError(true);
+            return;
+        }
+        setError(false);
+
+        if(data.name == ""){
+            setNameError(true);
+        }
+        setNameError(false);
+        
+        if(data.quant == ""){
+            setQuantError(true);
+            return;
+        }
+
+        if(data.unit == ""){
+            setUnitError(true);
+            return;
+        }
+
+        if(data.sup == ""){
+            setSupError(true);
+            return;
+        }
+        setSupError(false);
+
+        if(data.thresh == ""){
+            setThreshError(true);
+            return;
+        }
+        setThreshError(false);
+
         const newData = {
             item_name: data.name,
             quantity: data.quant,
@@ -139,15 +193,16 @@ function Inventory(props){
         };
 
         if(isNaN(parseFloat(data.quant))){
-            setError('Please input a valid quantity');
+            setQuantError(true);
             return;
         }
+        setQuantError(false);
 
         if(isNaN(parseFloat(data.thresh))){
-            setError('Please input a valid threshold');
+            setThreshError(true);
             return;
         }
-        setError('');
+        setThreshError(false);
 
         try{
             await updateInventory(whichRow.item_name, newData);
@@ -157,6 +212,7 @@ function Inventory(props){
                    item.item_name == whichRow.item_name ? {...item, ...newData} : item 
                 )
             );
+            alert(data.name + " Successfully Updated!");
         } catch (error){
         console.error("Can't update item: ", error);
         }
@@ -164,23 +220,61 @@ function Inventory(props){
 
     //function that is called when add button is clicked
     const addButton = async () => {
+        setError(false);
+        setAddError(false);
+        setNameError(false);
+        setQuantError(false);
+        setUnitError(false);
+        setSupError(false);
+        setThreshError(false);
+
         // console.log("current data: ", data);
+
+        if(data.name == ""){
+            setNameError(true);
+        }
+        setNameError(false);
+        
+        if(data.quant == ""){
+            setQuantError(true);
+            return;
+        }
+
+        if(data.unit == ""){
+            setUnitError(true);
+            return;
+        }
+
+        if(data.sup == ""){
+            setSupError(true);
+            return;
+        }
+        setSupError(false);
+
+        if(data.thresh == ""){
+            setThreshError(true);
+            return;
+        }
+        setThreshError(false);
 
         const newID = await getInventoryID();
         
         // console.log("returned id: ", newID);
         if(newID == null){
-            setError("Can't get the new ID");
+            alert("Unable to retrieve new id");
             return;
         }
         setError('');
         
         const ex = await doesInventoryExist(data.name);
+        // console.log("Does ", data.name, " exist? ", ex);
         if(ex){
-            setError("Please create a new item");
+            setAddError(true);
+            // console.log("exists");
             return;
         }
-        setError('');
+        setAddError(false);
+        // console.log("finished");
 
         // console.log("after data: ", data);
         try {
@@ -193,34 +287,26 @@ function Inventory(props){
                 needs_restock: parseFloat(data.quant) < parseFloat(data.thresh),
                 threshold: parseInt(data.thresh),
             };
-    
-            if(data.name == ''){
-                setError('Please input a valid name');
-                return;
-            }
+
             if(isNaN(parseFloat(data.quant))){
-                setError('Please input a valid quantity');
+                setQuantError(true);
                 return;
             }
-            if(data.unit == ''){
-                setError('Please input a valid unit');
-                return;
-            }
-            if(data.sup == ''){
-                setError('Please input a valid supplier');
-                return;
-            }
+            setQuantError(false);
+            
             if(isNaN(parseFloat(data.thresh))){
-                setError('Please input a valid threshold');
+                setThreshError(true);
                 return;
             }
-            setError('');
+            setThreshError(false);
             // console.log("up to here", newData);
 
             const additional = await addInventory(newData);
             setInventory((prev) =>
                 [...prev, additional]
             );
+
+            alert(data.name + " Successfully Added!");
           } catch (error) {
             // Handle errors
             console.error('Error adding item:', error);
@@ -229,16 +315,29 @@ function Inventory(props){
 
     //function that is called once the delete button is clicked
     const deleteButton = async () =>{
+        setError(false);
+        setAddError(false);
+        setNameError(false);
+        setQuantError(false);
+        setUnitError(false);
+        setSupError(false);
+        setThreshError(false);
+
+        if(data.name == null || data.name == ""){
+            setError(true);
+            return;
+        }
+
         const deleteName = data.name;
         try{
             const ex = await doesInventoryExist(deleteName);
             // console.log("exists: ", ex);
 
             if(!ex){
-                setError("Please select an iventory item");
+                setError(true);
                 return;
             }
-            setError('');
+            setError(false);
             await deleteInventory(deleteName);
             setRender((prev) => !prev);
             setData({
@@ -248,6 +347,8 @@ function Inventory(props){
                 sup: '',
                 thresh: ''
             });
+
+            alert(data.name + "Successfully Removed!")
 
         } catch (error){
             console.log(error);
@@ -274,7 +375,8 @@ function Inventory(props){
                                 label="Inventory Item"
                                 onChange={input}
                                 value={data.name}
-                                helperText="Please enter the desired item name"
+                                error={error || addError || nameError}
+                                helperText={error ? "Please select an item" : addError ? "Please create a new item" : nameError ? "Please input a valid name" : ""}
                             />
 
                         </FormControl>
@@ -286,7 +388,8 @@ function Inventory(props){
                                 type="number"
                                 onChange={input}
                                 value={data.quant}
-                                helperText="Please enter the desired quantity"
+                                error={quantError}
+                                helperText={quantError ? "Please enter a valid quantity" : ""}
                                 inputProps={{
                                     step: "0.01",
                                     min: "0",
@@ -301,7 +404,8 @@ function Inventory(props){
                                 label="Unit"
                                 onChange={input}
                                 value={data.unit}
-                                helperText="Please enter the desired unit"
+                                error={unitError}
+                                helperText={unitError ? "Please enter valid units" : ""}
                             />
 
                         </FormControl>
@@ -312,7 +416,8 @@ function Inventory(props){
                                 label="Supplier"
                                 onChange={input}
                                 value={data.sup}
-                                helperText="Please enter the desired supplier"
+                                error={supError}
+                                helperText={supError ? "Please enter a valid supplier" : ""}
                             />
 
                         </FormControl>
@@ -324,7 +429,8 @@ function Inventory(props){
                                 type="number"
                                 onChange={input}
                                 value={data.thresh}
-                                helperText="Please enter the desired threshold"
+                                error={threshError}
+                                helperText={threshError ? "Please enter a valid threshold" : ""}
                                 inputProps={{
                                     step: "0.01",
                                     min: "0",

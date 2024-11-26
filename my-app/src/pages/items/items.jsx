@@ -17,7 +17,11 @@ function Items(props){
     //contains the data for the row that is selected within the table, function used to find the selected row
     const[whichRow, setRow] = useState(null);
     //stores error message output for invalid requests, function used to set the error message
-    const[error, setError] = useState('');
+    const[error, setError] = useState(false);
+    const[nameError, setNameError] = useState(false);
+    const[addError, setAddError] = useState(false);
+    const[priceError, setPriceError] = useState(false);
+    const[availError, setAvailError] = useState(false);
     //boolean value used to rerender the table once new menu items have been added
     const[render, setRender] = useState(false);
     //data variable storing all of the data in any given row, function used to set that data variable
@@ -62,6 +66,11 @@ function Items(props){
                 avail: row.availability ? "True" : "False"
             });
         }
+        setError(false);
+        setAddError(false);
+        setPriceError(false);
+        setNameError(false);
+        setAvailError(false);
     };
 
     //handles user input in the editor panel 
@@ -126,25 +135,43 @@ function Items(props){
 
     //function to call when update button is pressed
     const updateButton = async () => {
-        const exist = await doesItemExist(whichRow.item_name);
-        if(whichRow == null || !exist){
-            setError("Please select a item to update");
+        setError(false);
+        setAddError(false);
+        setPriceError(false);
+        setNameError(false);
+        setAvailError(false);
+        if(whichRow == null){
+            setError(true);
             return;
         }
+        const exist = await doesItemExist(whichRow.item_name);
+        if(!exist){
+            setError(true);
+            return;
+        }
+        setError(false);
+        if(data.avail == ""){
+            setAvailError(true);
+            return;
+        }
+        setAvailError(false);
+
         const newData = {
             item_name: data.name,
             price: data.price,
             availability: data.avail == "True"
         };
+
         if(newData.item_name == ''){
-            setError('Please input a valid item name')
+            setNameError(true);
             return;
         }
+        setNameError(false);
         if(isNaN(parseFloat(data.price))){
-            setError('Please input a valid price');
+            setPriceError(true);
             return;
         }
-        setError('');
+        setPriceError(false);
         console.log(newData);
 
         try{
@@ -155,6 +182,7 @@ function Items(props){
                    it.item_name == whichRow.item_name ? {...it, ...newData} : it 
                 )
             );
+            alert(data.name + " Successfully Updated!");
         } catch (error){
         console.error("Can't update item: ", error);
         }
@@ -163,36 +191,44 @@ function Items(props){
 
     // function that is called when add button is pressed
     const addButton = async () => {
+        setError(false);
+        setAddError(false);
+        setPriceError(false);
+        setNameError(false);
+        setAvailError(false);
         console.log("current data: ", data);
         if(data.name == null || data.name == ""){
-            setError('Please input a valid name');
+            setNameError(true);
             return;
         }
+        setNameError(false);
 
         const ex = await doesItemExist(data.name);
         if(ex){
-            setError("Please create a new item");
+            setAddError(true);
             return;
         }
+        setAddError(false);
 
         if(isNaN(parseFloat(data.price))){
-            setError('Please input a valid price');
+            setPriceError(true);
             return;
         }
+        setPriceError(false);
 
         if(data.avail == null || data.avail == ""){
-            setError('Please select if this component is available');
+            setAvailError(true);
             return;
         }
+        setAvailError(false);
 
         const newID = await getItemID();
         
         console.log("returned id: ", newID);
         if(newID == null){
-            setError("Can't get the new ID");
+            alert("Unable to return new id");
             return;
         }
-        setError('');
 
         try {
             const newData = {
@@ -207,6 +243,7 @@ function Items(props){
             setItems((prev) =>
                 [...prev, additional]
             );
+            alert(data.name + " Successfully Added!");
           } catch (error) {
             // Handle errors
             console.error('Error adding item:', error);
@@ -215,14 +252,19 @@ function Items(props){
 
     //function that is called when delete button is clicked
     const deleteButton = async () =>{
+        setError(false);
+        setAddError(false);
+        setPriceError(false);
+        setNameError(false);
+        setAvailError(false);
         try{
             const ex = await doesItemExist(data.name);
             console.log("Delete item exists? ", ex);
             if(!ex){
-                setError("Please select an item");
+                setError(true);
                 return;
             }
-            setError('');
+            setError(false);
             await deleteItem(data.name);
             setRender((prev) => !prev);
             setData({
@@ -230,6 +272,7 @@ function Items(props){
                 price: '',
                 avail: ''
             });
+            alert(data.name + " Successfully Removed!");
 
         } catch (error){
             console.log(error);
@@ -254,7 +297,8 @@ function Items(props){
                                 label="Item"
                                 onChange={input}
                                 value={data.name}
-                                helperText="Please enter the desired component name"
+                                error={error || nameError || addError}
+                                helperText={error ? "Please select an item" : nameError ? "Please input a valid name" : addError ? "Please create a new item" :""}
                             />
 
                         </FormControl>
@@ -266,7 +310,8 @@ function Items(props){
                                 type="number"
                                 onChange={input}
                                 value={data.price}
-                                helperText="Please enter the desired price"
+                                error={priceError}
+                                helperText={priceError ? "Please enter a valid price" : ""}
                                 inputProps={{
                                     step: "0.01",
                                     min: "0",
@@ -282,7 +327,8 @@ function Items(props){
                                 label="Availability"
                                 onChange={input}
                                 value={data.avail}
-                                helperText="Please select the availability"
+                                error={availError}
+                                helperText={availError ? "Please select the availability" : ""}
                             >
                                 <MenuItem key="True" value="True">Yes</MenuItem>
                                 <MenuItem key="False" value="False">No</MenuItem>
