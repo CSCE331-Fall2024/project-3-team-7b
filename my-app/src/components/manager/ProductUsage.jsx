@@ -13,6 +13,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from '@mui/material/Paper';
+import { useEnlarge } from "../../EnlargeContext";
 
 // Purpose: Displays the highest and lowest performing items
 
@@ -22,6 +23,8 @@ function ProductUsage() {
     const [productUsageData, setProductUsageData] = useState([]);
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('itemid');
+
+    const { isEnlarged } = useEnlarge();
 
     // changes the start date
     const handleStartChange = (startDate) => {
@@ -84,7 +87,7 @@ function ProductUsage() {
             <div className="data-select-container">
                 {/* Allows user to select start date with date picker */}
                 <div className="date-select">
-                    <h3>Select a Start Date: </h3>
+                    <h3 className={`${isEnlarged ? 'label-enlarged' : 'item-label'}`}>Select a Start Date: </h3>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker 
                             value={selectedStart}
@@ -100,7 +103,7 @@ function ProductUsage() {
 
                 {/* Allows user to select end date with date picker */}
                 <div className="date-select">
-                    <h3>Select an End Date: </h3>
+                    <h3 className={`${isEnlarged ? 'label-enlarged' : 'item-label'}`}>Select an End Date: </h3>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker 
                             value={selectedEnd}
@@ -127,7 +130,7 @@ function ProductUsage() {
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow component="th">
-                                <TableCell>
+                                <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>
                                 <TableSortLabel
                                             active={orderBy === 'itemid'}
                                             direction={orderBy === 'itemid' ? order : 'asc'}
@@ -137,7 +140,7 @@ function ProductUsage() {
                                             Item ID
                                         </TableSortLabel>
                                 </TableCell>
-                                <TableCell align="right">
+                                <TableCell align="right" sx={isEnlarged ? { fontSize: '1rem'} : {}}>
                                     <TableSortLabel
                                         active={orderBy === 'item_name'}
                                         direction={orderBy === 'item_name' ? order : 'asc'}
@@ -147,7 +150,7 @@ function ProductUsage() {
                                         Item Name
                                     </TableSortLabel>
                                 </TableCell>
-                                <TableCell align="right">
+                                <TableCell align="right" sx={isEnlarged ? { fontSize: '1rem'} : {}}>
                                     <TableSortLabel
                                         active={orderBy === 'total_used'}
                                         direction={orderBy === 'total_used' ? order : 'asc'}
@@ -167,12 +170,12 @@ function ProductUsage() {
                                 key={index}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
-                                <TableCell scope="row"> {item.itemid} </TableCell>
-                                <TableCell align="right">{item.item_name}</TableCell>
-                                <TableCell align="right">{item.total_used}</TableCell>
-                                <TableCell align="right">{item.unit}</TableCell>
+                                <TableCell scope="row" sx={isEnlarged ? { fontSize: '1rem'} : {}}> {item.itemid} </TableCell>
+                                <TableCell align="right" sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.item_name}</TableCell>
+                                <TableCell align="right" sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.total_used.toFixed(2)}</TableCell>
+                                <TableCell align="right" sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.unit}</TableCell>
                             </TableRow>
-                            ))}
+                            ))} 
                         </TableBody>
                         </Table>
                     </TableContainer>

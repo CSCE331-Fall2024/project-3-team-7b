@@ -5,10 +5,6 @@
     padding-bottom: 1vh;
 } 
 
-.banner.large-text {
-    /* font-size: 10rem !important; Larger text */
-}
-
 .banner-image {
     height: 10vh;
     position: sticky;
@@ -22,7 +18,7 @@
     display: flex;
     gap: 1vh;
     flex-direction: column;
-    font-size: inherit; /* Inherits from parent */
+    font-size: inherit;
 }
 
 .logout-button, .weather-card {
@@ -109,6 +105,10 @@
 
 .totals-enlarged {
     font-size: 1.25rem;
+}
+
+.label-h3-enlarged {
+    font-size: 1.5rem;
 }
 
 /* ****** SELECT ITEM ****** */

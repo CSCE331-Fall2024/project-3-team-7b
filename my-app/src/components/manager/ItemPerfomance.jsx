@@ -10,6 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from "@mui/material/TableSortLabel";
 import Paper from '@mui/material/Paper';
+import { useEnlarge } from "../../EnlargeContext";
 
 // Purpose: Displays the highest and lowest performing items
 
@@ -17,6 +18,8 @@ function ItemPerfomance() {
     const [highestData, setHighestData] = useState([]);
     const [lowestData, setLowestData] = useState([]);
     const [components, setComponents] = useState([]);
+
+    const { isEnlarged } = useEnlarge();
 
     // retreives all necessary data (highest/lowest performing items & component names)
     const fetchData = async () => {
@@ -49,7 +52,7 @@ function ItemPerfomance() {
         <div className="item-performance">
             {/* Fetch highest performing items from database */}
             <div className="highest-perf">
-                <h3 className="item-label">HIGHEST PERFORMING ITEMS</h3>
+                <h3 className={`${isEnlarged ? 'label-enlarged' : 'item-label'}`}>HIGHEST PERFORMING ITEMS</h3>
                 
                 {/* displays highest performing items in a table */}
                 <div className="item-table">
@@ -57,17 +60,17 @@ function ItemPerfomance() {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell> Component Name </TableCell>
-                                    <TableCell> Component ID </TableCell>
-                                    <TableCell> Component Count </TableCell>
+                                    <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Component Name </TableCell>
+                                    <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Component ID </TableCell>
+                                    <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Component Count </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {highestData.map((item, index) => (
                                     <TableRow key={index}>
-                                        <TableCell>{componentNameMap[item.componentid] || "N/A"}</TableCell>
-                                        <TableCell>{item.componentid}</TableCell>
-                                        <TableCell>{item.count}</TableCell>
+                                        <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{componentNameMap[item.componentid] || "N/A"}</TableCell>
+                                        <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.componentid}</TableCell>
+                                        <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.count}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -79,7 +82,7 @@ function ItemPerfomance() {
 
 
             <div className="lowest-perf">
-                <h3 className="item-label">LOWEST PERFORMING ITEMS</h3>
+                <h3 className={`${isEnlarged ? 'label-enlarged' : 'item-label'}`}>LOWEST PERFORMING ITEMS</h3>
 
                 {/* displays lowest performing items in a table */}
                 <div className="item-table">
@@ -87,17 +90,17 @@ function ItemPerfomance() {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell> Component Name </TableCell>
-                                    <TableCell> Component ID </TableCell>
-                                    <TableCell> Component Count </TableCell>
+                                    <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Component Name </TableCell>
+                                    <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Component ID </TableCell>
+                                    <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Component Count </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {lowestData.map((item, index) => (
                                     <TableRow key={index}>
-                                        <TableCell>{componentNameMap[item.componentid] || "N/A"}</TableCell>
-                                        <TableCell>{item.componentid}</TableCell>
-                                        <TableCell>{item.count}</TableCell>
+                                        <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{componentNameMap[item.componentid] || "N/A"}</TableCell>
+                                        <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.componentid}</TableCell>
+                                        <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.count}</TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

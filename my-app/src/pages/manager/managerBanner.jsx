@@ -4,11 +4,14 @@ import { ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import styles from "./managerBanner.module.css";
 import theme from '../../createTheme';
+import { useEnlarge } from "../../EnlargeContext";
 
 function ManagerBanner(props){
     const navigate = useNavigate();
     const view = props.view;
     const setAuthentication = props.setAuthentication;
+
+    const { isEnlarged } = useEnlarge();
     
     const handleTrends = () => {
         navigate("/manager/trends");
@@ -34,19 +37,19 @@ function ManagerBanner(props){
                 </div>
 
                 <div className={styles["button-div"]}>
-                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleTrends}>
+                    <Button sx={isEnlarged ? { fontSize: '1rem'} : {}} className={styles["man-home-buttons"]} variant="contained" onClick={handleTrends}>
                         Trends
                     </Button>
-                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleItems}>
+                    <Button  sx={isEnlarged ? { fontSize: '1rem'} : {}} className={styles["man-home-buttons"]} variant="contained" onClick={handleItems}>
                         Items
                     </Button>
-                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleComponents}>
+                    <Button sx={isEnlarged ? { fontSize: '1rem'} : {}} className={styles["man-home-buttons"]} variant="contained" onClick={handleComponents}>
                         Components
                     </Button>
-                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleInventory}>
+                    <Button sx={isEnlarged ? { fontSize: '1rem'} : {}} className={styles["man-home-buttons"]} variant="contained" onClick={handleInventory}>
                         Inventory
                     </Button>
-                    <Button className={styles["man-home-buttons"]} variant="contained" onClick={handleEmployees}>
+                    <Button sx={isEnlarged ? { fontSize: '1rem'} : {}} className={styles["man-home-buttons"]} variant="contained" onClick={handleEmployees}>
                         Employees
                     </Button>
                 </div>

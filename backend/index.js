@@ -134,6 +134,32 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
+app.get('/api/todayTopItem', async (req, res) => {
+  try {
+    const { todayDate } = req.query;
+
+    const query = `
+      SELECT c."component_name", COUNT(c."component_name") AS "Frequency"
+      FROM "transactions" t
+      JOIN "orderxcomponents" oc ON t."orderid" = oc."orderid"
+      JOIN "components" c ON oc."componentid" = c."componentid"
+      WHERE t."timestamp"::date = $1 AND c."category" != 'Side'
+      GROUP BY c."component_name"
+      ORDER BY "Frequency" DESC;
+    `;
+
+    var result = await pool.query(query, [todayDate]);
+
+    res.json(result.rows[0].component_name);
+
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
+
 //gets the count of the payment type based on the type of payment provided
 app.get('/api/todayPayments/:type', async (req, res) => {
   const {type} = req.params;

@@ -93,7 +93,7 @@ function OrderArea(props) {
         <div className="order-area">
             <div className="order-list">
                 {/* Lists contents of current order */}
-                <h3>Current Order:</h3>
+                <h3 className={`${isEnlarged ? 'label-h3-enlarged' : ''}`}>Current Order:</h3>
                 <p className={`${isEnlarged ? 'totals-enlarged' : ''}`} dangerouslySetInnerHTML={{__html: formattedOrders}}></p>
                 
                 {/* Calulates and displays the price of the order */}
@@ -104,10 +104,35 @@ function OrderArea(props) {
                 </div>
             </div>
             <div>
-                <Button variant="contained" color="secondary" onClick={removeItem} disabled={!isComplete}>Remove Last Item</Button>
-                <Button variant="contained" color="secondary" onClick={cancelOrder}>Cancel Order</Button>
-                <Button variant="contained" onClick={duplicateItem} disabled={!isComplete}>Duplicate Last Item</Button>
-                <Button variant="contained" onClick={finishOrder} disabled={!isComplete}>Finish Order</Button>
+                <Button sx={isEnlarged ? { fontSize: '1rem'} : {}}
+                        variant="contained"
+                        color="secondary"
+                        onClick={removeItem}
+                        disabled={!isComplete}
+                >
+                    Remove Last Item
+                </Button>
+                <Button sx={isEnlarged ? { fontSize: '1rem'} : {}} 
+                        variant="contained" 
+                        color="secondary" 
+                        onClick={cancelOrder}
+                >
+                    Cancel Order
+                </Button>
+                <Button sx={isEnlarged ? { fontSize: '1rem'} : {}}
+                        variant="contained" 
+                        onClick={duplicateItem} 
+                        disabled={!isComplete}
+                >
+                    Duplicate Last Item
+                </Button>
+                <Button sx={isEnlarged ? { fontSize: '1rem'} : {}}
+                        variant="contained" 
+                        onClick={finishOrder} 
+                        disabled={!isComplete}
+                >
+                    Finish Order
+                </Button>
             </div>
         </div>
     );

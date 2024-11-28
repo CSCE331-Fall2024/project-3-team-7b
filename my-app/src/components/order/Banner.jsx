@@ -18,10 +18,6 @@ function Banner(props){
     const view = props.view;
     const setAuthentication = props.setAuthentication;
 
-    // console.log("banner " + view);
-    // console.log("banner " + setAuthentication);
-
-    // console.log(view);
 
     // handles logout function for cashiers & managers
     const logout = () => {
@@ -58,7 +54,7 @@ function Banner(props){
             {/* only displays logout button for cashiers and managers */}
             { (view === "cashier" || view === "manager") && (
                 <div className="logout-button">
-                    <Button variant="contained" onClick={logout}>Logout</Button>
+                    <Button  sx={isEnlarged ? { fontSize: '1rem'} : {}} variant="contained" onClick={logout}>Logout</Button>
                 </div>
             )}
 

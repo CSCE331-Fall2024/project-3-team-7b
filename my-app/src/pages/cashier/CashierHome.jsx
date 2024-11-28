@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./cashier.css";
 import theme from "../../createTheme";
 import { useDispatch, useSelector } from 'react-redux';
+import TodayTopItem from "../../components/order/TodayTopItem";
 
 // Purpose: Overall home page for the cashiers
 
@@ -52,6 +53,7 @@ function CashierHome() {
                         </div>
                         <div>
                             <h3>Top-Selling Item of the Day:</h3>
+                            <TodayTopItem />
                         </div>
                     </div>
                 </div>
