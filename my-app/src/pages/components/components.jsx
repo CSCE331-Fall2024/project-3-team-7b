@@ -18,7 +18,13 @@ function Components(props){
     //contains the data for the row that is selected within the table, function used to find the selected row
     const[whichRow, setRow] = useState(null);
     //stores error message output for invalid requests, function used to set the error message
-    const[error, setError] = useState('');
+    const[error, setError] = useState(false);
+    const[nameError, setNameError] = useState(false);
+    const[catError, setCatError] = useState(false);
+    const[availError, setAvailError] = useState(false);
+    const[premError, setPremError] = useState(false);
+    const[seasError, setSeasError] = useState(false);
+    const[addError, setAddError] = useState(false);
     //boolean value used to rerender the table once new components have been added
     const[render, setRender] = useState(false);
     //data variable storing all of the data in any given row, function used to set that data variable
@@ -69,6 +75,13 @@ function Components(props){
                 seas: row.seasonal ? "True" : "False"
             });
         }
+        setError(false);
+        setNameError(false);
+        setCatError(false);
+        setAvailError(false);
+        setPremError(false);
+        setSeasError(false);
+        setAddError(false);
     }; 
 
     //handles user input in the editor panel 
@@ -134,12 +147,47 @@ function Components(props){
 
     //function to call when update button is pressed
     const updateButton = async () => {
+        setError(false);
+        setNameError(false);
+        setCatError(false);
+        setAvailError(false);
+        setPremError(false);
+        setSeasError(false);
+        setAddError(false);
+
         if(whichRow == null){
-            setError("Please select a component to update");
+            setError(true);
             return;
         }
         const exist = await doesComponentExist(whichRow.component_name);
-        setError('');
+        if(!exist){
+            setError(true);
+            return;
+        }
+        setError(false);
+        if(data.name == ""){
+            setNameError(true);
+            return;
+        }
+        setNameError(false);
+        if(data.cat == ""){
+            setCatError(true);
+        }
+        setCatError(false);
+        if(data.avail == ""){
+            setAvailError(true);
+        }
+        setAvailError(false);
+        if(data.prem == ""){
+            setPremError(true);
+            return;
+        }
+        setPremError(false);
+        if(data.seas == ""){
+            setSeasError(true);
+        }
+        setSeasError(false);
+
         const newData = {
             component_name: data.name,
             category: data.cat,
@@ -148,10 +196,9 @@ function Components(props){
             seasonal: data.seas == "True"
         };
         if(newData.component_name == ''){
-            setError('Please input a valid component name')
+            setNameError(true);
             return;
         }
-        setError('');
         // console.log(newData);
 
         try{
@@ -162,6 +209,7 @@ function Components(props){
                    comp.component_name == whichRow.component_name ? {...comp, ...newData} : comp 
                 )
             );
+            alert(data.name + " Successfully Updated!")
         } catch (error){
         console.error("Can't update item: ", error);
         }
@@ -170,46 +218,59 @@ function Components(props){
 
     // function that is called when add button is pressed
     const addButton = async () => {
+        setError(false);
+        setNameError(false);
+        setCatError(false);
+        setAvailError(false);
+        setPremError(false);
+        setSeasError(false);
+        setAddError(false);
+
         // console.log("current data: ", data);
         if(data.name == null || data.name == ""){
-            setError('Please input a valid name');
+            setNameError(true);
             return;
         }
+        setNameError(false);
 
         const ex = await doesComponentExist(data.name);
         if(ex){
-            setError("Please create a new item");
+            setAddError(true);
             return;
         }
+        setAddError(false);
 
         if(data.cat == ""){
-            setError('Please select a category');
+            setCatError(true);
             return
         }
+        setCatError(false);
 
         if(data.avail == null || data.avail == ""){
-            setError('Please select if this component is available');
+            setAvailError(true);
             return;
         }
+        setAvailError(false);
 
         if(data.prem == null || data.prem == ""){
-            setError('Please select if this component is premium');
+            setPremError(true);
             return;
         }
+        setPremError(false);
 
         if(data.seas == null || data.seas == ""){
-            setError('Please select if this component is seasonal');
+            setSeasError(true);
             return;
         }
+        setSeasError(false);
 
         const newID = await getComponentID();
         
         // console.log("returned id: ", newID);
         if(newID == null){
-            setError("Can't get the new ID");
+            alert("Unable to retrieve new id")
             return;
         }
-        setError('');
 
         try {
             const newData = {
@@ -226,6 +287,7 @@ function Components(props){
             setComponents((prev) =>
                 [...prev, additional]
             );
+            alert(data.name + " Successfully Added!");
           } catch (error) {
             // Handle errors
             console.error('Error adding item:', error);
@@ -234,17 +296,25 @@ function Components(props){
 
     //function that is called when delete button is clicked
     const deleteButton = async () =>{
+        setError(false);
+        setNameError(false);
+        setCatError(false);
+        setAvailError(false);
+        setPremError(false);
+        setSeasError(false);
+        setAddError(false);
+
         try{
             console.log("this has been clicked");
             console.log(data.name);
             const ex = await doesComponentExist(data.name);
             console.log("Delete item exists? ", ex);
             if(!ex){
-                setError("Please select a component");
+                setError(true);
                 return;
             }
             console.log("passed");
-            setError('');
+            setError(false);
             await deleteComponent(data.name);
             setRender((prev) => !prev);
             setData({
@@ -254,7 +324,7 @@ function Components(props){
                 prem: '',
                 seas: ''
             });
-
+            alert(data.name + " Successfully Deleted!")
         } catch (error){
             console.log(error);
         }
@@ -278,7 +348,8 @@ function Components(props){
                                 label="Component"
                                 onChange={input}
                                 value={data.name}
-                                helperText="Please enter the desired component name"
+                                error={error || addError || nameError}
+                                helperText={error ? "Please select an item" : nameError ? "Please input a valid name" : addError ? "Please create a new item" : ""}
                             />
 
                         </FormControl>
@@ -290,7 +361,8 @@ function Components(props){
                                 label="Category"
                                 onChange={input}
                                 value={data.cat}
-                                helperText="Please select the desired category"
+                                error={catError}
+                                helperText={catError ? "Please select a category" : ""}
                             >
                                 <MenuItem key="Appetizer" value="Appetizer">Appetizer</MenuItem>
                                 <MenuItem key="Main Course" value="Main Course">Main Course</MenuItem>
@@ -307,7 +379,8 @@ function Components(props){
                                 label="Availability"
                                 onChange={input}
                                 value={data.avail}
-                                helperText="Please select the availability"
+                                error={availError}
+                                helperText={availError ? "Please select the availability" : ""}
                             >
                                 <MenuItem key="True" value="True">Yes</MenuItem>
                                 <MenuItem key="False" value="False">No</MenuItem>
@@ -321,7 +394,8 @@ function Components(props){
                                 label="Premium"
                                 onChange={input}
                                 value={data.prem}
-                                helperText="Is this item premium?"
+                                error={premError}
+                                helperText={premError ? "Please select if this item is premium" : ""}
                             >
                                 <MenuItem key="True" value="True">Yes</MenuItem>
                                 <MenuItem key="False" value="False">No</MenuItem>
@@ -335,7 +409,8 @@ function Components(props){
                                 label="Seasonal"
                                 onChange={input}
                                 value={data.seas}
-                                helperText="Is this item seasonal?"
+                                error={seasError}
+                                helperText={seasError ? "Please select if this item is seasonal" : ""}
                             >
                                 <MenuItem key="True" value="True">Yes</MenuItem>
                                 <MenuItem key="False" value="False">No</MenuItem>

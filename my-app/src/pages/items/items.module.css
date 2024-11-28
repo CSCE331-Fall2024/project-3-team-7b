@@ -22,7 +22,7 @@
 .modify-items {
     display: flex;
     flex-direction: column;
-    /* width: 70%; */
+    width: 65%;
     justify-content: space-evenly;
     border: 1px;
     border-radius: 20px;

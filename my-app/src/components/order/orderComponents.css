@@ -7,7 +7,7 @@
 
 .banner-image {
     height: 10vh;
-    position: absolute;
+    position: sticky;
     left: 50%;
     transform: translateX(-50%);
     margin: auto;
