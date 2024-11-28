@@ -232,6 +232,7 @@ function Inventory(props){
 
         if(data.name == ""){
             setNameError(true);
+            return;
         }
         setNameError(false);
         
