@@ -41,11 +41,11 @@ function App() {
             {/* 2 different login pages for manager & cashier */}
             <Route 
               path="/login/manager" 
-              element={<Login onLogin={handleLogin} userType="Manager" />} 
+              element={ <Login onLogin={handleLogin} userType="Manager" /> } 
             />
             <Route 
               path="/login/cashier" 
-              element={<Login onLogin={handleLogin} userType="Cashier" />} 
+              element={ <Login onLogin={handleLogin} userType="Cashier" /> } 
             />
 
             {/* Pages related to the customer view */}
