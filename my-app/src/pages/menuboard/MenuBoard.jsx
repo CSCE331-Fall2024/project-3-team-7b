@@ -39,9 +39,9 @@ const MenuBoard = () => {
     'Dessert': importCategoryImages('desserts')
   };
 
-  const getItemImage = (componentId, category) => {
-    if (!componentId || !category) {
-      console.log('Missing componentId or category:', { componentId, category });
+  const getItemImage = (ComponentId, category) => {
+    if (!ComponentId || !category) {
+      console.log('Missing ComponentId or category:', { ComponentId, category });
       return null;
     }
   
@@ -51,9 +51,9 @@ const MenuBoard = () => {
       return null;
     }
   
-    const image = categoryImages[componentId.toString()];
+    const image = categoryImages[ComponentId.toString()];
     if (!image) {
-      console.log(`No image found for componentId: ${componentId} in category: ${category}`);
+      console.log(`No image found for componentId: ${ComponentId} in category: ${category}`);
       return null;
     }
   
@@ -73,10 +73,10 @@ const MenuBoard = () => {
         // Transform the data
         const transformedData = response.data.map((item, index) => {
           // Get the ComponentID from the actual data or use the array index + 1
-          const componentId = item.ComponentID || (index+1).toString();
+          const ComponentId = item.componentid
           
           return {
-            ComponentID: componentId,
+            ComponentID: item.componentid,
             component_name: item.Component_Name || item.component_name || '',
             category: item.Category || item.category || '',
             availability: item.Availability === 1 || item.availability === true,
@@ -99,16 +99,16 @@ const MenuBoard = () => {
     fetchData();
   }, []);
 
-  const MenuItem = ({ name, calories, available, premium, seasonal, componentId, category }) => (
+  const MenuItem = ({ name, calories, available, premium, seasonal, ComponentId, category }) => (
     <div className={`menu-item-card ${!available ? 'unavailable' : ''}`}>
       <div className="menu-item-image-container">
-        {getItemImage(componentId, category) ? (
+        {getItemImage(ComponentId, category) ? (
           <img 
-            src={getItemImage(componentId, category)} 
+            src={getItemImage(ComponentId, category)} 
             alt={name} 
             className="menu-item-image"
             onError={(e) => {
-              console.error(`Failed to load image for ${name} (${componentId})`);
+              console.error(`Failed to load image for ${name} (${ComponentId})`);
               e.target.src = '/api/placeholder/200/150';
             }}
           />
@@ -179,7 +179,7 @@ const MenuBoard = () => {
                 calories={item.calories}
                 available={item.availability}
                 seasonal={item.seasonal}
-                componentId={item.ComponentID}
+                ComponentId={item.ComponentID}
                 category={item.category}
               />
             ))}
@@ -208,7 +208,7 @@ const MenuBoard = () => {
                   calories={item.calories}
                   available={item.availability}
                   seasonal={item.seasonal}
-                  componentId={item.ComponentID}
+                  ComponentId={item.ComponentID}
                   category={item.category}
                 />
               ))}
@@ -230,7 +230,7 @@ const MenuBoard = () => {
                   calories={item.calories}
                   available={item.availability}
                   seasonal={item.seasonal}
-                  componentId={item.ComponentID}
+                  ComponentId={item.ComponentID}
                   category={item.category}
                 />
               ))}
@@ -242,54 +242,62 @@ const MenuBoard = () => {
       <header className="header">
         <h1>A LA CARTE ENTREE & SIDES</h1>
       </header>
-      <section className="sides">
-        <div>
-          <h3>Appetizers</h3>
-          {components
-            .filter(item => item.category === 'Appetizer')
-            .map(item => (
-              <MenuItem
-                key={item.component_name}
-                name={item.component_name}
-                calories={item.calories}
-                available={item.availability}
-                seasonal={item.seasonal}
-                componentId={item.ComponentID}
-                category={item.category}
-              />
-            ))}
+      <section className="ala-carte-grid"> {/* New class for 3-column layout */}
+        <div className="ala-carte-category">
+          <h3 className="category-title">APPETIZERS</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => item.category === 'Appetizer')
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
         </div>
-        <div>
-          <h3>Beverages</h3>
-          {components
-            .filter(item => item.category === 'Beverage')
-            .map(item => (
-              <MenuItem
-                key={item.component_name}
-                name={item.component_name}
-                calories={item.calories}
-                available={item.availability}
-                seasonal={item.seasonal}
-                componentId={item.ComponentID}
-                category={item.category}
-              />
-            ))}
+
+        <div className="ala-carte-category">
+          <h3 className="category-title">BEVERAGES</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => item.category === 'Beverage')
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
         </div>
-        <div>
-          <h3>Desserts</h3>
-          {components
-            .filter(item => item.category === 'Dessert')
-            .map(item => (
-              <MenuItem
-                key={item.component_name}
-                name={item.component_name}
-                calories={item.calories}
-                available={item.availability}
-                seasonal={item.seasonal}
-                componentId={item.ComponentID}
-                category={item.category}
-              />
-            ))}
+
+        <div className="ala-carte-category">
+          <h3 className="category-title">DESSERTS</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => item.category === 'Dessert')
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
         </div>
       </section>
     </div>
