@@ -1,5 +1,4 @@
 import logo from "../images/logo.png"
-// import { Form } from '@mui/material';
 import { Button } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import './Login.css';
 import theme from "../createTheme"
 import axios from 'axios';
+import GoogleAuth from "../components/GoogleAuth";
 
 // Purpose: Provides login logic for managers and cashiers
 
@@ -85,6 +85,8 @@ function Login({ onLogin, userType }) {
                             Login
                         </Button>
                     </form>
+
+                    <GoogleAuth  onLogin={onLogin} userType={userType}/>
                 </div>
             </div>
         </ThemeProvider>
