@@ -134,6 +134,28 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
+app.get('/api/transactionSummary', async (req, res) => {
+  try {
+    const { todayDate } = req.query;
+    console.log("date: ", todayDate);
+
+    const query = `
+      SELECT SUM(t."amount") AS "TotalSales"
+      FROM "transactions" t
+      WHERE t."timestamp"::date = $1
+        AND t."status" = 'Complete';
+    `
+
+    var result = await pool.query(query, [todayDate]);
+
+    console.log("total: ", result.rows[0].TotalSales)
+    res.json(result.rows[0].TotalSales);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
 app.get('/api/todayTopItem', async (req, res) => {
   try {
     const { todayDate } = req.query;

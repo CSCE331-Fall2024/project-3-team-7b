@@ -19,7 +19,7 @@ function GoogleAuth({ onLogin, userType }) {
             const employees = response.data;
 
             const email = decodedCredentialResponse.email;
-            // console.log(email);
+            console.log(email);
 
             // Check if the email exists in the data array
             const user = employees.find((user) => user.username === email);
