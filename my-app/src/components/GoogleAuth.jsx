@@ -1,40 +1,57 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
 
-function GoogleAuth() {
-  const navigate = useNavigate();
+// Purpose: Allows users to login with their Google accounts
 
-  const handleLogin = (credentialResponse) => {
-    try {
-      const decodedCredentialResponse = jwtDecode(credentialResponse.credential);
-      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+function GoogleAuth({ onLogin, userType }) {
+    const navigate = useNavigate();
 
-      // Check if the token is expired
-      if (decodedCredentialResponse.exp < currentTime) {
-        console.log("Token has expired");
-        return;
-      }
+    const handleLogin = useCallback (async (credentialResponse) => {
+        try {
+            const decodedCredentialResponse = jwtDecode(credentialResponse.credential);
 
-      // Token is valid, navigate to the cashier page
-      console.log("User logged in", decodedCredentialResponse);
-      navigate('/cashier');
-    } catch (error) {
-      console.log('Error decoding the token:', error);
-      alert("Login failed. Please try again.");
-    }
-  };
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.get(`${baseURL}/api/employees`);
+            const employees = response.data;
 
-  return (
-    <GoogleLogin
-      onSuccess={handleLogin}
-      onError={() => {
-        console.log('Login Failed');
-        alert("Login failed. Please try again.");
-      }}
-    />
-  );
+            const email = decodedCredentialResponse.email;
+            // console.log(email);
+
+            // Check if the email exists in the data array
+            const user = employees.find((user) => user.username === email);
+
+            if (user) {
+                // Check the user's role
+                if (userType === "Cashier" ? (user.role === userType || user.role === "Manager") : user.role === userType) {
+                    // console.log('User authenticated:', user);
+                    // console.log("user type: " + userType.toLowerCase())
+                    onLogin(userType);
+                    navigate(`/${userType.toLowerCase()}`); // Redirect based on role
+                } else {
+                    alert("User role mismatch.");
+                }
+            } else {
+                alert("Email not found in the system.");
+            }
+        } catch (error) {
+            console.error('Google Login failed:', error);
+            alert('Login failed. Please try again.');
+        }
+    }, [userType, navigate]);
+
+    return (
+        <GoogleLogin
+            onSuccess={handleLogin}
+            onError={() => {
+                console.log('Google Login failed.');
+                alert('Google Login failed. Please try again.');
+            }}
+        />
+    );
 }
 
 export default GoogleAuth;

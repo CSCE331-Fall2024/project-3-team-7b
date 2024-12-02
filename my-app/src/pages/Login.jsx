@@ -84,9 +84,9 @@ function Login({ onLogin, userType }) {
                         <Button type="submit" variant="contained" color="primary" className="login-button">
                             Login
                         </Button>
-
-                        <GoogleAuth />
                     </form>
+
+                    <GoogleAuth  onLogin={onLogin} userType={userType}/>
                 </div>
             </div>
         </ThemeProvider>
