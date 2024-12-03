@@ -27,7 +27,6 @@ function App() {
 
   // Function to set user as authenticated after login
   const handleLogin = (role) => {
-    console.log("in app.js handleLogin")
     setIsAuthenticated(true);
     setUserRole(role);
   };
