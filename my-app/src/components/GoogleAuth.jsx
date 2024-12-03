@@ -19,7 +19,7 @@ function GoogleAuth({ onLogin, userType }) {
             const employees = response.data;
 
             const email = decodedCredentialResponse.email;
-            // console.log(email);
+            console.log(email);
 
             // Check if the email exists in the data array
             const user = employees.find((user) => user.username === email);
@@ -27,8 +27,6 @@ function GoogleAuth({ onLogin, userType }) {
             if (user) {
                 // Check the user's role
                 if (userType === "Cashier" ? (user.role === userType || user.role === "Manager") : user.role === userType) {
-                    // console.log('User authenticated:', user);
-                    // console.log("user type: " + userType.toLowerCase())
                     onLogin(userType);
                     navigate(`/${userType.toLowerCase()}`); // Redirect based on role
                 } else {

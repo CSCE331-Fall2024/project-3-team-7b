@@ -6,11 +6,11 @@ import { useEnlarge } from "../../EnlargeContext";
 import axios from 'axios';
 
 // Purpose: banner to be displayed at the top of all ordering pages
-function TodayTopItem(props){
+function TransactionSummary(props){
     const navigate = useNavigate();
 
     const { isEnlarged, setIsEnlarged } = useEnlarge();
-    const [topItem, setTopItem] = useState("");
+    const [sales, setSales] = useState(0);
 
     //function to get the total sales per hour
     const getTopItem = async () =>{
@@ -26,12 +26,13 @@ function TodayTopItem(props){
 
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
             // makes the API call with the correct parameters
-            const response = await axios.get(`${baseURL}/api/todayTopItem`, {
+            const response = await axios.get(`${baseURL}/api/transactionSummary`, {
                 params: { todayDate: date },
             });
+            console.log(response.data);
             
-            setTopItem(response.data);
-            console.log(topItem);
+            setSales(response.data);
+            // console.log(sales);
 
               
         } catch (error){
@@ -46,9 +47,9 @@ function TodayTopItem(props){
 
     return (
         <div>
-            {topItem}
+            <p>${sales}</p>
         </div>
     );
 }
 
-export default TodayTopItem;
+export default TransactionSummary;

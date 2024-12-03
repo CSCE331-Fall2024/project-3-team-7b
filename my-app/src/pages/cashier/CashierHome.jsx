@@ -6,6 +6,8 @@ import "./cashier.css";
 import theme from "../../createTheme";
 import { useDispatch, useSelector } from 'react-redux';
 import TodayTopItem from "../../components/order/TodayTopItem";
+import TransactionSummary from "../../components/order/TransactionSummary";
+// import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Overall home page for the cashiers
 
@@ -14,6 +16,9 @@ function CashierHome() {
     const navigate = useNavigate();
     const subtotal = useSelector((state) => state.subtotal);
     const order = useSelector((state) => state.order);
+
+    // context to know if text should be enlarged
+    // const { isEnlarged, setIsEnlarged } = useEnlarge();
     
     // Navigates cashier to start an order
     const startTransaction = () => {
@@ -24,6 +29,10 @@ function CashierHome() {
     const goBack = () => {
         navigate("/"); 
     }
+
+    // const toggleTextSize = () => {
+    //     setIsEnlarged((prev) => !prev);
+    // };
 
     return (
         <ThemeProvider theme={theme}>
@@ -50,7 +59,8 @@ function CashierHome() {
                     <div className="summary-div">
                         <h1>Transaction Summary:</h1>
                         <div>
-                            <p>Details for the current or last transaction</p>
+                            <h3>Total Sales Made Today:</h3>
+                            <TransactionSummary />
                         </div>
                         <div>
                             <h3>Top-Selling Item of the Day:</h3>

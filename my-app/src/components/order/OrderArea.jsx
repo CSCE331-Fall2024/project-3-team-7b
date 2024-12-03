@@ -22,8 +22,6 @@ const sum = (array) => {
     return current_sum;
 }
 
-// Import all images from the images folder (you can adjust the path)
-const images = importAll(require.context("../../images/small_menu", false, /\.(png)$/));
 
 function OrderArea(props) {
     // Fetch current values of subtotal, order, and if order is complete (valid) from redux storage
@@ -34,7 +32,6 @@ function OrderArea(props) {
     let total = subtotal + tax;
     const orders = useSelector((state) => state.orders.at(1));
     const isComplete = useSelector((state) => state.isComplete);
-    console.log(isComplete);
 
     const view = props.view;
     const navigate = useNavigate();
@@ -71,7 +68,6 @@ function OrderArea(props) {
     }
 
     // Overrides the toString() method of the order array so that the current order can be converted to a string for HTML code
-    console.log(orders);
     orders.toString = function toString() {
         let string = "";
         for (let i = 0; i < this.length; i++) {

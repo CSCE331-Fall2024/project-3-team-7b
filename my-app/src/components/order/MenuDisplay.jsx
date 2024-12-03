@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./orderComponents.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEnlarge } from '../../EnlargeContext';
+import { Card, CardActionArea, CardMedia, Typography } from "@mui/material";
 
 // Purpose: Displays the menu items such as bowls, plates, etc
 
@@ -25,8 +26,6 @@ function MenuDisplay(props) {
     const subtotals = useSelector((state) => state.orders.at(0));
     const orders = useSelector((state) => state.orders.at(1));
     const isComplete = useSelector((state) => state.isComplete);
-    console.log(isComplete);
-
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const view = props.view;
@@ -70,7 +69,6 @@ function MenuDisplay(props) {
             itemId === 13 ? ["Appetizers and More"] :
             itemId === 15 ? ["A La Carte"] :
             itemId === 19 ? ["Drinks"] :
-            itemId === 23 ? ["Catering"] :
             [itemsDictionary[itemId]?.item_name || "Unknown Item"];
 
         // only updates the price if the there are no further menu choices
@@ -119,15 +117,33 @@ function MenuDisplay(props) {
                     itemId === 13 ? "Appetizers and More" :
                     itemId === 15 ? "A La Carte" :
                     itemId === 19 ? "Drinks" :
-                    itemId === 23 ? "Catering" :
                     itemsDictionary[itemId]?.item_name || "Unknown Item";
 
                 
                 return (
-                    <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
-                        <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                        {itemName}
-                    </button>
+                    <div>
+                    <Card
+                        key={index}
+                        className= "item-card"
+                        onClick={() => {handleOrder(imageObj.name); }}
+                    >
+                        <CardActionArea>
+                            <div className="image-container">
+                                <CardMedia
+                                    component="img"
+                                    image={imageObj.src}
+                                    alt={`Menu Item ${index + 1}`}
+                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                />
+                            </div>
+                            <div className="item-card-content">
+                                <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                    {itemName}
+                                </Typography>
+                            </div>
+                        </CardActionArea>
+                    </Card>
+                    </div>
                 );
             })}
         </div>

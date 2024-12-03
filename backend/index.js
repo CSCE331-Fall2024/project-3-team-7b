@@ -134,6 +134,27 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
+
+app.get('/api/transactionSummary', async (req, res) => {
+  try {
+    const { todayDate } = req.query;
+
+    const query = `
+      SELECT SUM(t."amount") AS "TotalSales"
+      FROM "transactions" t
+      WHERE t."timestamp"::date = $1
+        AND t."status" = 'Complete';
+    `
+
+    var result = await pool.query(query, [todayDate]);
+
+    res.json(result.rows[0].TotalSales);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
 app.get('/api/todayTopItem', async (req, res) => {
   try {
     const { todayDate } = req.query;
@@ -143,7 +164,7 @@ app.get('/api/todayTopItem', async (req, res) => {
       FROM "transactions" t
       JOIN "orderxcomponents" oc ON t."orderid" = oc."orderid"
       JOIN "components" c ON oc."componentid" = c."componentid"
-      WHERE t."timestamp"::date = $1 AND c."category" != 'Side'
+      WHERE t."timestamp"::date = $1 AND c."category" != 'Side' AND c."category" != 'Beverage'
       GROUP BY c."component_name"
       ORDER BY "Frequency" DESC;
     `;
@@ -162,11 +183,11 @@ app.get('/api/todayTopItem', async (req, res) => {
 
 //gets the count of the payment type based on the type of payment provided
 app.get('/api/todayPayments/:type', async (req, res) => {
-  const {type} = req.params;
+  const { type } = req.params;
+  const { date } = req.query;
   try {
     const HourlyCards = [];
 
-    const date = "2023-12-10";
     var start = date + " 10:00:00";
     var end = date + " 11:00:00";
 
@@ -285,9 +306,9 @@ app.get('/api/todayPayments/:type', async (req, res) => {
 //gets the total sales per hour in an array
 app.get('/api/todaySales', async (req, res) => {
   try {
+    const { date } = req.query;
     const salesPerHour = [];
 
-    const date = "2023-12-10";
     var start = date + " 10:00:00";
     var end = date + " 11:00:00";
 
