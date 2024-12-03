@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "./orderComponents.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEnlarge } from '../../EnlargeContext';
+import { Card, CardActionArea, CardMedia, Typography } from "@mui/material";
 
 // Purpose: Displays the menu items such as bowls, plates, etc
 
@@ -124,10 +125,29 @@ function MenuDisplay(props) {
 
                 
                 return (
-                    <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
-                        <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                        {itemName}
-                    </button>
+                    <div>
+                    <Card
+                        key={index}
+                        className= "item-card"
+                        onClick={() => {handleOrder(imageObj.name); }}
+                    >
+                        <CardActionArea>
+                            <div className="image-container">
+                                <CardMedia
+                                    component="img"
+                                    image={imageObj.src}
+                                    alt={`Menu Item ${index + 1}`}
+                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                />
+                            </div>
+                            <div className="item-card-content">
+                                <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                    {itemName}
+                                </Typography>
+                            </div>
+                        </CardActionArea>
+                    </Card>
+                    </div>
                 );
             })}
         </div>

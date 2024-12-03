@@ -134,6 +134,7 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
+
 app.get('/api/transactionSummary', async (req, res) => {
   try {
     const { todayDate } = req.query;
@@ -154,7 +155,7 @@ app.get('/api/transactionSummary', async (req, res) => {
     console.error(error);
     res.status(500).send('Server error');
   }
-})
+});
 
 app.get('/api/todayTopItem', async (req, res) => {
   try {

@@ -39,46 +39,6 @@
     padding: 2vh;
 }
 
-.menu-button {
-    flex: 0 1 calc(25% - 20px); /* 4 buttons per row with spacing */
-    height: 20vh;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.menu-button.enlarged {
-    font-size: 1.25rem;
-}
-
-.menu-button:hover {
-    transform: scale(1.05);
-}
-
-.menu-image {
-    width: 100px;
-    height: 75px;
-    object-fit: cover;
-    margin-bottom: 1vh;
-}
-
-.menu-image.enlarged {
-    width: 125px;
-    height: 100px;
-    object-fit: cover;
-    margin-bottom: 1vh;
-}
-
-.labels {
-    padding-left: 2vh;
-}
-
 /* ****** ORDER AREAS ****** */
 .order-area {
     height: 60vh;
@@ -115,4 +75,71 @@
 .item-type {
     display: flex;
     flex-direction: column;
+}
+
+.item-card {
+    width: 15vw;
+    height: 23vh;
+    margin: .5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.item-card.disabled {
+    cursor: not-allowed;
+    opacity: 0.5; 
+}
+
+.item-card:hover {
+    transform: scale(1.05);
+}
+
+.card-image {
+    width: 100px !important;
+    height: 75px;
+    object-fit: cover;
+}
+
+.card-image.enlarged {
+    width: auto !important;
+    height: 100px;
+    object-fit: cover;
+}
+
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 70%; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+}
+
+.item-card-content {
+    margin-top: auto;
+    text-align: center;
+    padding: 8px;
+}
+
+.item-name {
+    font-size: .9rem !important;
+}
+
+.item-name.enlarged {
+    font-size: 1.15rem !important;
+    line-height: 1;
+}
+
+.priority-icon {
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    background-color: rgba(255, 255, 255, 0.8); 
+    z-index: 10; 
 }

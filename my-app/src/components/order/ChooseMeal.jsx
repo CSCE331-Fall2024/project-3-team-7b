@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button } from "@mui/material";
+import { Card, CardActionArea, CardMedia, Button, Typography } from "@mui/material";
 import "./orderComponents.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
@@ -138,10 +138,27 @@ function ChooseMeal(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
-                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
+                                <Card
+                                    key={index}
+                                    className={`item-card ${isEnlarged ? 'enlarged' : ''}`}
+                                    onClick={() => handleOrder(imageObj.name)} 
+                                >
+                                    <CardActionArea>
+                                        <div className="image-container">
+                                            <CardMedia
+                                                component="img"
+                                                image={imageObj.src}
+                                                alt={`Panda Cub Meal ${index + 1}`}
+                                                className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                            />
+                                        </div>
+                                    <div className="menu-card-content">
+                                        <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                        {itemName}
+                                        </Typography>
+                                    </div>
+                                    </CardActionArea>
+                                </Card>
                             );
                         })}
                     </div>
@@ -160,10 +177,27 @@ function ChooseMeal(props) {
                             const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
                 
                             return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)}>
-                                    <img src={imageObj.src} alt={`A La Carte Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
+                                <Card
+                                    key={index}
+                                    className={`item-card ${isEnlarged ? 'enlarged' : ''}`}
+                                    onClick={() => handleOrder(imageObj.name)} 
+                                >
+                                    <CardActionArea>
+                                        <div className="image-container">
+                                            <CardMedia
+                                                component="img"
+                                                image={imageObj.src}
+                                                alt={`Panda Bundle ${index + 1}`}
+                                                className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                            />
+                                        </div>
+                                    <div className="menu-card-content">
+                                        <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                        {itemName}
+                                        </Typography>
+                                    </div>
+                                    </CardActionArea>
+                                </Card>
                             );
                         })}
                     </div>
