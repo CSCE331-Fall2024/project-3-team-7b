@@ -13,20 +13,17 @@ function PaymentsBarGraph(){
     // variables to store and set the number of transactions using digital wallet
     const [digitalWallet, setDigitalWallet] = useState([]);
 
-    console.log("here 1");
     const c = "card";
 
     //call to api to get number of transactions using card
     const getCardSales = async () =>{
         try{
-            console.log("Here 2");
             // UNCOMMENT THIS IF WE ACTUALLY WANT TO USE THE CURRENT DATE
             const today = new Date();
             const year = today.getFullYear();
             const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
             const todayDate = `${year}-${month}-${day}`;
-            console.log("date: ", todayDate);
 
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
             // makes the API call with the correct parameters
@@ -36,7 +33,6 @@ function PaymentsBarGraph(){
 
             const cards = response.data.map(cardNum => Number(cardNum) || 0);
             setCard(cards);
-            console.log(cards);
         } catch (error){
             console.error("Unable to get today's card payments", error);
             return null;
@@ -54,7 +50,6 @@ function PaymentsBarGraph(){
             const month = String(today.getMonth() + 1).padStart(2, '0');
             const day = String(today.getDate()).padStart(2, '0');
             const todayDate = `${year}-${month}-${day}`;
-            console.log("date: ", todayDate);
 
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
             // makes the API call with the correct parameters
@@ -76,7 +71,6 @@ function PaymentsBarGraph(){
         getDigitalSales();
     }, []);
     
-    console.log(cardSales);
     //labels for hours
     const labels = ["10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM"];
     const data = {

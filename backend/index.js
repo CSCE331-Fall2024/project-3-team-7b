@@ -138,7 +138,6 @@ app.get('/api/inventory', async (req, res) => {
 app.get('/api/transactionSummary', async (req, res) => {
   try {
     const { todayDate } = req.query;
-    console.log("date: ", todayDate);
 
     const query = `
       SELECT SUM(t."amount") AS "TotalSales"
@@ -149,7 +148,6 @@ app.get('/api/transactionSummary', async (req, res) => {
 
     var result = await pool.query(query, [todayDate]);
 
-    console.log("total: ", result.rows[0].TotalSales)
     res.json(result.rows[0].TotalSales);
   } catch (error) {
     console.error(error);
@@ -188,8 +186,6 @@ app.get('/api/todayPayments/:type', async (req, res) => {
   const { type } = req.params;
   const { date } = req.query;
   try {
-    console.log('Type:', type); // Logs the value of 'c'
-    console.log('Date:', date);
     const HourlyCards = [];
 
     var start = date + " 10:00:00";
