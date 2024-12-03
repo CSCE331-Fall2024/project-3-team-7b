@@ -29,8 +29,9 @@ function CashierHome() {
         <ThemeProvider theme={theme}>
             <div>
                 {/* Accessibility features */}
-                <div>
-                    <Button className="translate-button" variant="contained">Select A Language</Button>
+                <div className="translate-button">
+                    {/* <GoogleTranslate /> */}
+                    {/* <Button className="translate-button" variant="contained">Select A Language</Button> */}
                 </div>
 
                 {/* Main content of page */}

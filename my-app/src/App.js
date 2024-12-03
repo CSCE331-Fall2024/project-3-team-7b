@@ -18,6 +18,7 @@ import Components from "./pages/components/components";
 import { useState} from "react";
 import MealOptions from "./pages/order/MealOptions";
 import { EnlargeProvider} from './EnlargeContext';
+import GoogleTranslate from "./GoogleTranslate";
 
 
 // Purpose: directs the webpage to a specific route and renders the proper page
@@ -34,6 +35,16 @@ function App() {
 
   return (
     <div>
+      <div
+        style={{
+          width: '20vw',
+          marginLeft: '4.75vw',
+          marginTop: '3vh',
+          borderRadius: '10px',
+        }}
+      >
+        <GoogleTranslate />
+      </div>
       <EnlargeProvider>
         <BrowserRouter>
           <Routes>

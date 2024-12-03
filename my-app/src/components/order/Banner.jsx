@@ -7,6 +7,8 @@ import React, { useState } from 'react';
 import "./orderComponents.css"
 import { useEnlarge } from "../../EnlargeContext";
 import Weather from "../customer/Weather";
+// import GoogleTranslate from "../../GoogleTranslate";
+import { Link } from "react-router-dom";
 
 // Purpose: banner to be displayed at the top of all ordering pages
 function Banner(props){
@@ -32,7 +34,7 @@ function Banner(props){
     return (
         <div className={`banner ${isEnlarged ? 'large-text' : ''}`}>
             <div className="accesible-buttons">
-                <Select
+                {/* <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={selectedLanguage}
@@ -42,7 +44,8 @@ function Banner(props){
                 >
                     <MenuItem value={'en'}>English</MenuItem>
                     <MenuItem value={'span'}>Spanish</MenuItem>
-                </Select>
+                </Select> */}
+                {/* <GoogleTranslate /> */}
                 <Button variant="contained" onClick={toggleTextSize}>
                     {isEnlarged ? 'NORMAL TEXT' : 'ENLARGE TEXT'}
                 </Button>
