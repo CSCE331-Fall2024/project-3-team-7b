@@ -6,6 +6,7 @@ import "./cashier.css";
 import theme from "../../createTheme";
 import { useDispatch, useSelector } from 'react-redux';
 import TodayTopItem from "../../components/order/TodayTopItem";
+import TransactionSummary from "../../components/order/TransactionSummary";
 
 // Purpose: Overall home page for the cashiers
 
@@ -49,7 +50,8 @@ function CashierHome() {
                     <div className="summary-div">
                         <h1>Transaction Summary:</h1>
                         <div>
-                            <p>Details for the current or last transaction</p>
+                            <h3>Total Sales Made Today:</h3>
+                            <TransactionSummary />
                         </div>
                         <div>
                             <h3>Top-Selling Item of the Day:</h3>

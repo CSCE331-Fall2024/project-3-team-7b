@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Typography, Box, Modal } from "@mui/material";
+import { Card, CardActionArea, CardMedia, Button, IconButton, Typography, Box, Modal } from "@mui/material";
 import "./orderComponents.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { flushSync } from 'react-dom';
 import { useEnlarge } from '../../EnlargeContext';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 // Purpose: Displays individual items such as orange chicken, dr. pepper, cream cheese rangoons, etc
 
@@ -18,6 +19,12 @@ const importAll = (r) => {
         };
     });
 }
+
+// TODO::::: 
+//           PUSH + MERGE
+//           REMOVE CATERING OPTION
+//           PUSH + MERGE
+//           ENSURE ALL ENLARGES WORK
 
 const style = {
     position: 'absolute',
@@ -57,6 +64,11 @@ function SelectItem(props) {
     const handleOpen = (itemId) => setOpenItem(itemId); 
     const handleClose = () => setOpenItem(null);
 
+    // for nutrition popup
+    const [openNutrition, setNutritionOpen] = React.useState(null);
+    const handleNutrition = (itemId) => setNutritionOpen(itemId);
+    const closeNutrition = () => setNutritionOpen(null);
+
     let maxSides = 1;
     let maxEntrees = 1;
     if (item === 1 || item === 7 || item === 8) {
@@ -78,6 +90,7 @@ function SelectItem(props) {
 
     const [compData, setCompData] = useState([]);
     const [menuData, setMenuData] = useState([]);
+    const [allergens, setAllergens] = useState([]);
 
     // Fetch component and menu data concurrently
     useEffect(() => {
@@ -88,11 +101,13 @@ function SelectItem(props) {
                 // Use Promise.all to fetch both data sources at the same time
                 const [compResponse, menuResponse] = await Promise.all([
                     axios.get(`${baseURL}/api/components`),
-                    axios.get(`${baseURL}/api/menu_items`)
+                    axios.get(`${baseURL}/api/menu_items`),
                 ]);
 
                 setCompData(compResponse.data);
                 setMenuData(menuResponse.data);
+                setAllergens(compResponse.data);
+
             } catch (error) {
                 console.error(error);
             }
@@ -334,12 +349,57 @@ function SelectItem(props) {
                         {sideImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const allergenList = compItemsDictionary[itemId]?.allergens;
                 
                             return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableSides}>
-                                    <img src={imageObj.src} alt={`Menu Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
+                                <div key={index}>
+                                    <Card
+                                        key={index}
+                                        className={`item-card ${disableSides ? 'disabled' : ''}`}
+                                        onClick={() => {
+                                            if (!disableSides) {
+                                                handleOrder(imageObj.name);
+                                            }
+                                        }}
+                                    >
+                                        <CardActionArea>
+                                            <div className="image-container">
+                                                <CardMedia
+                                                    component="img"
+                                                    image={imageObj.src}
+                                                    alt={`Menu Item ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                />
+                                                <IconButton
+                                                    className="priority-icon"
+                                                    aria-label="priority"
+                                                    onClick={(event) => {
+                                                        event.stopPropagation(); // Prevent click event from propagating to the card
+                                                        handleNutrition(itemId);
+                                                    }}
+                                                >
+                                                    <PriorityHighIcon />
+                                                </IconButton>
+                                            </div>
+                                            <div className="item-card-content">
+                                                <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                                    {itemName}
+                                                </Typography>
+                                            </div>
+                                        </CardActionArea>
+                                    </Card>
+                                    <Modal
+                                        open={openNutrition === itemId} // Check if this item's modal should be open
+                                        onClose={closeNutrition}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <h3>Allergens: </h3>
+                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                        </Box>
+                                    </Modal>
+                                </div>
                             );
                         })}
                     </div>
@@ -356,12 +416,57 @@ function SelectItem(props) {
                         {entreeImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const allergenList = compItemsDictionary[itemId]?.allergens;
                 
                             return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Entree Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
+                                <div>
+                                    <Card
+                                        key={index}
+                                        className={`item-card ${disableEntrees ? 'disabled' : ''} ${isEnlarged ? 'enlarged' : ''}`}
+                                        onClick={() => {
+                                            if (!disableEntrees) {
+                                                handleOrder(imageObj.name);
+                                            }
+                                        }}
+                                    >
+                                        <CardActionArea>
+                                            <div className="image-container">
+                                                <CardMedia
+                                                    component="img"
+                                                    image={imageObj.src}
+                                                    alt={`Menu Item ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                />
+                                                <IconButton
+                                                    className="priority-icon"
+                                                    aria-label="priority"
+                                                    onClick={(event) => {
+                                                        event.stopPropagation(); // Prevent click event from propagating to the card
+                                                        handleNutrition(itemId);
+                                                    }}
+                                                >
+                                                    <PriorityHighIcon />
+                                                </IconButton>
+                                            </div>
+                                            <div className="item-card-content">
+                                                <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                                    {itemName}
+                                                </Typography>
+                                            </div>
+                                        </CardActionArea>
+                                    </Card>
+                                    <Modal
+                                        open={openNutrition === itemId} // Check if this item's modal should be open
+                                        onClose={closeNutrition}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <h3>Allergens: </h3>
+                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                        </Box>
+                                    </Modal>
+                                </div>
                             );
                         })}
                     </div>
@@ -378,44 +483,47 @@ function SelectItem(props) {
                         {drinkImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
-                            if (item === 19) {
-                                return (
-                                    <div key={index}>
-                                        <button 
-                                            className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} 
-                                            onClick={() => handleOpen(itemId)} // Pass the item's ID
-                                            disabled={disableEntrees}
-                                        >
-                                            <img 
-                                                src={imageObj.src} 
-                                                alt={`Drinks  ${index + 1}`} 
-                                                className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} 
-                                            />
-                                            {itemName}
-                                        </button>
-                                        <Modal
-                                            open={openItem === itemId} // Check if this item's modal should be open
-                                            onClose={handleClose}
-                                            aria-labelledby="modal-modal-title"
-                                            aria-describedby="modal-modal-description"
-                                        >
-                                            <Box sx={style}>
-                                                <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
-                                                    Select A Size:
-                                                </Typography>
-                                                <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
-                                                <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
-                                                <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
-                                            </Box>
-                                        </Modal>
-                                    </div>
-                                );
-                            }
                             return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Drink Item ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
+                                <div key={index}>
+                                    <Card
+                                        key={index}
+                                        className={`item-card ${isEnlarged ? 'enlarged' : ''}`}
+                                        onClick={() => {
+                                            handleOpen(itemId);
+                                        }}
+                                    >
+                                        <CardActionArea>
+                                            <div className="image-container">
+                                                <CardMedia
+                                                    component="img"
+                                                    image={imageObj.src}
+                                                    alt={`Drink ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                />
+                                            </div>
+                                        </CardActionArea>
+                                        <div className="menu-card-content">
+                                            <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                            {itemName}
+                                            </Typography>
+                                        </div>
+                                    </Card>
+                                    <Modal
+                                        open={openItem === itemId} // Check if this item's modal should be open
+                                        onClose={handleClose}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
+                                                Select A Size:
+                                            </Typography>
+                                            <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
+                                            <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
+                                            <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                        </Box>
+                                    </Modal>
+                                </div>
                             );
                         })}
                     </div>
@@ -432,21 +540,54 @@ function SelectItem(props) {
                         {appetizerImages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const allergenList = compItemsDictionary[itemId]?.allergens;
 
                             return (
                                 <div key={index}>
-                                    <button 
-                                        className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} 
-                                        onClick={() => handleOpen(itemId)} // Pass the item's ID
-                                        disabled={disableEntrees}
+                                    <Card
+                                        key={index}
+                                        className={`item-card ${isEnlarged ? 'enlarged' : ''}`}
+                                        onClick={() => {
+                                            handleOpen(itemId);
+                                        }}
                                     >
-                                        <img 
-                                            src={imageObj.src} 
-                                            alt={`Appetizer Item ${index + 1}`} 
-                                            className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} 
-                                        />
-                                        {itemName}
-                                    </button>
+                                        <CardActionArea>
+                                            <div className="image-container">
+                                                <CardMedia
+                                                    component="img"
+                                                    image={imageObj.src}
+                                                    alt={`Appetizer Item ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                />
+                                                <IconButton
+                                                    className="priority-icon"
+                                                    aria-label="priority"
+                                                    onClick={(event) => {
+                                                        event.stopPropagation(); // Prevent click event from propagating to the card
+                                                        handleNutrition(itemId);
+                                                    }}
+                                                >
+                                                    <PriorityHighIcon />
+                                                </IconButton>
+                                            </div>
+                                        <div className="menu-card-content">
+                                            <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                                {itemName}
+                                            </Typography>
+                                        </div>
+                                        </CardActionArea>
+                                    </Card>
+                                    <Modal
+                                        open={openNutrition === itemId} // Check if this item's modal should be open
+                                        onClose={closeNutrition}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <h3>Allergens: </h3>
+                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                        </Box>
+                                    </Modal>
                                     <Modal
                                         open={openItem === itemId} // Check if this item's modal should be open
                                         onClose={handleClose}
@@ -468,28 +609,6 @@ function SelectItem(props) {
                 </div>
             )}
 
-            {/* PANDA CUB MEALS */}
-            { (item === 5) && ( 
-                <div className="item-type"> 
-                    <div className="labels">   
-                        <h2>Select Your Meal:</h2>
-                    </div>
-                    <div className="menu-display">
-                        {cubImages.map((imageObj, index) => {
-                            const itemId = parseInt(imageObj.name.split(".")[0], 10);
-                            const itemName = menuItemsDictionary[itemId]?.item_name || "Unknown Item";
-                
-                            return (
-                                <button key={index} className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} onClick={() => handleOrder(imageObj.name)} disabled={disableEntrees}>
-                                    <img src={imageObj.src} alt={`Panda Cub Meal ${index + 1}`} className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} />
-                                    {itemName}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
-            )}
-
             {/* A LA CARTE */}
             { (item === 15) && ( 
                 <div className="item-type"> 
@@ -500,21 +619,58 @@ function SelectItem(props) {
                         {aLaCarteimages.map((imageObj, index) => {
                             const itemId = parseInt(imageObj.name.split(".")[0], 10);
                             const itemName = compItemsDictionary[itemId]?.component_name || "Unknown Item";
+                            const allergenList = compItemsDictionary[itemId]?.allergens;
                 
                             return (
                                 <div key={index}>
-                                    <button 
-                                        className={`menu-button ${isEnlarged ? 'enlarged' : ''}`} 
-                                        onClick={() => handleOpen(itemId)} // Pass the item's ID
-                                        disabled={disableEntrees}
+                                    <Card
+                                        key={index}
+                                        className={`item-card ${isEnlarged ? 'enlarged' : ''}`}
+                                        onClick={() => {
+                                            handleOpen(itemId);
+                                        }}
+                                        sx={{
+                                        maxWidth: 200,
+                                        margin: 2,
+                                        }}
                                     >
-                                        <img 
-                                            src={imageObj.src} 
-                                            alt={`A La Carte Item  ${index + 1}`} 
-                                            className={`menu-image ${isEnlarged ? 'enlarged' : ''}`} 
-                                        />
-                                        {itemName}
-                                    </button>
+                                        <CardActionArea>
+                                            <div className="image-container">
+                                            <CardMedia
+                                                component="img"
+                                                image={imageObj.src}
+                                                alt={`A La Carte Item ${index + 1}`}
+                                                className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                            />
+                                            <IconButton
+                                                    className="priority-icon"
+                                                    aria-label="priority"
+                                                    onClick={(event) => {
+                                                        event.stopPropagation(); // Prevent click event from propagating to the card
+                                                        handleNutrition(itemId);
+                                                    }}
+                                                >
+                                                    <PriorityHighIcon />
+                                                </IconButton>
+                                            </div>
+                                        <div className="menu-card-content">
+                                            <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>
+                                                {itemName}
+                                            </Typography>
+                                        </div>
+                                        </CardActionArea>
+                                    </Card>
+                                    <Modal
+                                        open={openNutrition === itemId} // Check if this item's modal should be open
+                                        onClose={closeNutrition}
+                                        aria-labelledby="modal-modal-title"
+                                        aria-describedby="modal-modal-description"
+                                    >
+                                        <Box sx={style}>
+                                            <h3>Allergens: </h3>
+                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                        </Box>
+                                    </Modal>
                                     <Modal
                                         open={openItem === itemId} // Check if this item's modal should be open
                                         onClose={handleClose}
