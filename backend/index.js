@@ -166,7 +166,7 @@ app.get('/api/todayTopItem', async (req, res) => {
       FROM "transactions" t
       JOIN "orderxcomponents" oc ON t."orderid" = oc."orderid"
       JOIN "components" c ON oc."componentid" = c."componentid"
-      WHERE t."timestamp"::date = $1 AND c."category" != 'Side'
+      WHERE t."timestamp"::date = $1 AND c."category" != 'Side' AND c."category" != 'Beverage'
       GROUP BY c."component_name"
       ORDER BY "Frequency" DESC;
     `;
@@ -185,11 +185,13 @@ app.get('/api/todayTopItem', async (req, res) => {
 
 //gets the count of the payment type based on the type of payment provided
 app.get('/api/todayPayments/:type', async (req, res) => {
-  const {type} = req.params;
+  const { type } = req.params;
+  const { date } = req.query;
   try {
+    console.log('Type:', type); // Logs the value of 'c'
+    console.log('Date:', date);
     const HourlyCards = [];
 
-    const date = "2023-12-10";
     var start = date + " 10:00:00";
     var end = date + " 11:00:00";
 
@@ -308,9 +310,9 @@ app.get('/api/todayPayments/:type', async (req, res) => {
 //gets the total sales per hour in an array
 app.get('/api/todaySales', async (req, res) => {
   try {
+    const { date } = req.query;
     const salesPerHour = [];
 
-    const date = "2023-12-10";
     var start = date + " 10:00:00";
     var end = date + " 11:00:00";
 
