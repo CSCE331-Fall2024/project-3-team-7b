@@ -20,7 +20,20 @@ function PaymentsBarGraph(){
     const getCardSales = async () =>{
         try{
             console.log("Here 2");
-            const response = await axios.get(`http://localhost:5001/api/todayPayments/${c}`);
+            // UNCOMMENT THIS IF WE ACTUALLY WANT TO USE THE CURRENT DATE
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayDate = `${year}-${month}-${day}`;
+            console.log("date: ", todayDate);
+
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            // makes the API call with the correct parameters
+            const response = await axios.get(`${baseURL}/api/todayPayments/${c}`, {
+                params: { date: todayDate },
+            });
+
             const cards = response.data.map(cardNum => Number(cardNum) || 0);
             setCard(cards);
             console.log(cards);
@@ -35,7 +48,20 @@ function PaymentsBarGraph(){
     //call to api to retrieve number of transactions using digital wallet
     const getDigitalSales = async () =>{
         try{
-            const response = await axios.get(`http://localhost:5001/api/todayPayments/${dw}`);
+            // UNCOMMENT THIS IF WE ACTUALLY WANT TO USE THE CURRENT DATE
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const todayDate = `${year}-${month}-${day}`;
+            console.log("date: ", todayDate);
+
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            // makes the API call with the correct parameters
+            const response = await axios.get(`${baseURL}/api/todayPayments/${dw}`, {
+                params: { date: todayDate },
+            });
+            
             //place 0 if nothing is returned
             const digitals = response.data.map(dwCount => Number(dwCount) || 0);
             setDigitalWallet(digitals);

@@ -16,13 +16,13 @@ function TransactionSummary(props){
     const getTopItem = async () =>{
         try{
             // UNCOMMENT THIS IF WE ACTUALLY WANT TO USE THE CURRENT DATE
-            // const today = new Date();
-            // const year = today.getFullYear();
-            // const month = String(today.getMonth() + 1).padStart(2, '0');
-            // const day = String(today.getDate()).padStart(2, '0');
-            // const date = `${year}-${month}-${day}`;
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const date = `${year}-${month}-${day}`;
 
-            const date = '2023-10-30'
+            // const date = '2023-10-30'
 
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
             // makes the API call with the correct parameters

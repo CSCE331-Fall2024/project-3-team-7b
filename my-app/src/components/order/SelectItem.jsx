@@ -21,9 +21,6 @@ const importAll = (r) => {
 }
 
 // TODO::::: 
-//           PUSH + MERGE
-//           REMOVE CATERING OPTION
-//           PUSH + MERGE
 //           ENSURE ALL ENLARGES WORK
 
 const style = {

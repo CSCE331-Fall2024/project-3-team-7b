@@ -16,8 +16,19 @@ function TodaysSalesBarGraph(){
     //function to get the total sales per hour
     const getSales = async () =>{
         try{
-            console.log("Here 2");
-            const response = await axios.get("http://localhost:5001/api/todaySales");
+            // UNCOMMENT THIS IF WE ACTUALLY WANT TO USE THE CURRENT DATE
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const date = `${year}-${month}-${day}`;
+
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            // makes the API call with the correct parameters
+            const response = await axios.get(`${baseURL}/api/todaySales`, {
+                params: { date: date },
+            });
+
             // places 0 if nothing is returned
             const nums = response.data.map(hour => Number(hour.sum) || 0);
             setSales(nums);
