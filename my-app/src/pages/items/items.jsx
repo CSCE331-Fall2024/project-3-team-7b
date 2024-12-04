@@ -35,7 +35,8 @@ function Items(props){
         // retrieves all of the components from the components table within the database
         const getItems = async () => {
             try{
-                const response = await axios.get("http://localhost:5001/api/menu");
+                const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+                const response = await axios.get(`${baseURL}/api/menu`);
                 setItems(response.data);
                 
             } catch(error){
@@ -85,7 +86,8 @@ function Items(props){
     //function returns whether given menu item exists in the menu_items table within the db
     const doesItemExist = async(itemName) => {
         try{
-            const response = await axios.get(`http://localhost:5001/api/menu/check/${itemName}`)
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.get(`${baseURL}/api/menu/check/${itemName}`)
             return response.data;
         } catch (error){
             console.log("Error checking item: ", error);
@@ -95,7 +97,8 @@ function Items(props){
     // call that takes in the componentID and updated data and sends to database
     const updateItem = async (itemName, newData) => {
         try{
-            const response = await axios.put(`http://localhost:5001/api/menu/${itemName}`, newData);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.put(`${baseURL}/api/menu/${itemName}`, newData);
         } catch(error){
             console.error("Unable to update item");
         }
@@ -104,7 +107,8 @@ function Items(props){
     //returns the maximum componentID in the components table
     const getItemID = async () =>{
         try{
-            const response = await axios.get("http://localhost:5001/api/menuID");
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.get(`${baseURL}/api/menuID`);
             return response.data;
         } catch (error){
             console.error("Unable to get new componentID", error);
@@ -116,7 +120,8 @@ function Items(props){
     const addItem = async (newData) => {
         console.log("Date we sending: ", newData);
         try{
-            const response = await axios.post(`http://localhost:5001/api/menu/add/${newData.itemID}`, newData);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.post(`${baseURL}/api/menu/add/${newData.itemID}`, newData);
             return response.data;
         } catch(error){
             console.error("Fails post: ", error);
@@ -126,8 +131,9 @@ function Items(props){
     // call that requests specified item to be deleted from menu_items table
     const deleteItem = async(itemName) => {
         try{
-            const response = await axios.delete(`http://localhost:5001/api/menu/delete/${itemName}`);
-            console.log("Meny item deleted")
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.delete(`${baseURL}/api/menu/delete/${itemName}`);
+            console.log("Menu item deleted")
         } catch(error){
             console.log("Error deleting inventory item: ", error);
         }
