@@ -6,6 +6,7 @@ import { useEnlarge } from "../../EnlargeContext";
 import axios from 'axios';
 
 // Purpose: banner to be displayed at the top of all ordering pages
+
 function TransactionSummary(props){
     const navigate = useNavigate();
 

@@ -7,6 +7,7 @@ import { useEnlarge } from "../../EnlargeContext";
 import Weather from "../customer/Weather";
 
 // Purpose: banner to be displayed at the top of all ordering pages
+
 function Banner(props) {
     const navigate = useNavigate();
 

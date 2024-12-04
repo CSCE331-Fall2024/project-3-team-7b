@@ -123,7 +123,7 @@ app.get('/api/components', async (req, res) => {
   }
 });
 
-//gets all necessary information from the inventory table in the database
+// gets all necessary information from the inventory table in the database
 app.get('/api/inventory', async (req, res) => {
   try {
     const result = await pool.query('SELECT item_name, quantity, unit, supplier, threshold, needs_restock, itemID FROM inventory');
@@ -134,7 +134,7 @@ app.get('/api/inventory', async (req, res) => {
   }
 });
 
-
+// API route to get transactions summary
 app.get('/api/transactionSummary', async (req, res) => {
   try {
     const { todayDate } = req.query;
@@ -155,6 +155,7 @@ app.get('/api/transactionSummary', async (req, res) => {
   }
 });
 
+// API route to acquire today's top item
 app.get('/api/todayTopItem', async (req, res) => {
   try {
     const { todayDate } = req.query;
@@ -303,7 +304,7 @@ app.get('/api/todayPayments/:type', async (req, res) => {
   }
 });
 
-//gets the total sales per hour in an array
+// gets the total sales per hour in an array
 app.get('/api/todaySales', async (req, res) => {
   try {
     const { date } = req.query;
@@ -648,7 +649,7 @@ app.put('/api/components/:origComponent', async(req, res) =>{
   }
 });
 
-//deletes specifient inventory item from the database
+// deletes specifient inventory item from the database
 app.delete('/api/inventory/delete/:itemName', async (req, res) => {
   const {itemName} = req.params;
   try{
@@ -666,7 +667,7 @@ app.delete('/api/inventory/delete/:itemName', async (req, res) => {
   }
 });
 
-//deletes the given component from the components table in the database
+// deletes the given component from the components table in the database
 app.delete('/api/components/delete/:compName', async (req, res) => {
   const {compName} = req.params;
   try{
@@ -684,7 +685,7 @@ app.delete('/api/components/delete/:compName', async (req, res) => {
   }
 });
 
-//deletes the given component from the components table in the database
+// deletes the given component from the components table in the database
 app.delete('/api/menu/delete/:itemName', async (req, res) => {
   const {itemName} = req.params;
   try{
@@ -702,7 +703,7 @@ app.delete('/api/menu/delete/:itemName', async (req, res) => {
   }
 });
 
-//generates a new inventory item within the inventory table
+// generates a new inventory item within the inventory table
 app.post('/api/inventory/add/:itemid', async(req, res) => {
   const {itemid} = req.params;
   const {item_name, quantity, unit, supplier, needs_restock, threshold} = req.body;

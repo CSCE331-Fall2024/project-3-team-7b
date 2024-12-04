@@ -7,6 +7,8 @@ import axios from 'axios';
 import profileImage from '../../images/profile.png';
 import "./employees.css";
 
+// Purpose: Manager view for employee CRUD
+
 const style = {
     position: 'absolute',
     top: '50%',

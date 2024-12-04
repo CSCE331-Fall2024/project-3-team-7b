@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Typography, Box } from '@mui/material';
 
+// Purpose: Presents real weather data in a card format
+
 const Weather = (props) => {
     const city = "College Station";
     const [weatherData, setWeatherData] = useState(null);
