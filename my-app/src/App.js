@@ -21,6 +21,7 @@ import { EnlargeProvider} from './EnlargeContext';
 
 
 // Purpose: directs the webpage to a specific route and renders the proper page
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState("");
