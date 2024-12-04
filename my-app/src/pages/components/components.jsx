@@ -40,7 +40,8 @@ function Components(props){
         // retrieves all of the components from the components table within the database
         const getComponents = async () => {
             try{
-                const response = await axios.get("http://localhost:5001/api/components");
+                const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+                const response = await axios.get(`${baseURL}/api/components`);
                 setComponents(response.data);
                 
             } catch(error){
@@ -96,7 +97,8 @@ function Components(props){
     //function returns whether given component exists in the db
     const doesComponentExist = async(compName) => {
         try{
-            const response = await axios.get(`http://localhost:5001/api/components/check/${compName}`)
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.get(`${baseURL}/api/components/check/${compName}`)
             return response.data;
         } catch (error){
             console.log("Error checking item: ", error);
@@ -106,7 +108,8 @@ function Components(props){
     // call that takes in the componentID and updated data and sends to database
     const updateComponent = async (compName, newData) => {
         try{
-            const response = await axios.put(`http://localhost:5001/api/components/${compName}`, newData);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.put(`${baseURL}/api/components/${compName}`, newData);
         } catch(error){
             console.error("Unable to update item");
         }
@@ -115,7 +118,8 @@ function Components(props){
     //returns the maximum componentID in the components table
     const getComponentID = async () =>{
         try{
-            const response = await axios.get("http://localhost:5001/api/componentID");
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.get(`${baseURL}/api/componentID`);
             return response.data;
         } catch (error){
             console.error("Unable to get new componentID", error);
@@ -127,7 +131,8 @@ function Components(props){
     const addComponent = async (newData) => {
         // console.log("Date we sending: ", newData);
         try{
-            const response = await axios.post(`http://localhost:5001/api/components/add/${newData.compID}`, newData);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.post(`${baseURL}/api/components/add/${newData.compID}`, newData);
             return response.data;
         } catch(error){
             console.error("Fails post: ", error);
@@ -137,7 +142,8 @@ function Components(props){
     // call that requests specified component to be deleted from components table
     const deleteComponent = async(compName) => {
         try{
-            const response = await axios.delete(`http://localhost:5001/api/components/delete/${compName}`);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.delete(`${baseURL}/api/components/delete/${compName}`);
             console.log("Component deleted")
         } catch(error){
             console.log("Error deleting component: ", error);
