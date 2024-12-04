@@ -1,4 +1,4 @@
-import ManagerBanner from '../manager/managerBanner';
+import ManagerBanner from '../manager/ManagerBanner';
 import React, {useEffect, useState} from "react";
 import { ThemeProvider } from '@mui/material/styles';
 import styles from "./inventory.module.css";
