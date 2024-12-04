@@ -37,7 +37,8 @@ function Inventory(props){
         //gets all of the inventory from the inventory table within the database
         const getInventory = async () => {
             try{
-                const response = await axios.get("http://localhost:5001/api/inventory");
+                const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+                const response = await axios.get(`${baseURL}/api/inventory`);
                 setInventory(response.data);
                 
             } catch(error){
@@ -52,7 +53,8 @@ function Inventory(props){
     //call to update specified inventory item to new data
     const updateInventory = async (itemID, newData) => {
         try{
-            const response = await axios.put(`http://localhost:5001/api/inventory/${itemID}`, newData);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.put(`${baseURL}/api/inventory/${itemID}`, newData);
         } catch(error){
             console.error("Unable to update item");
         }
@@ -61,7 +63,8 @@ function Inventory(props){
     //retrieves the maximum inventory ID from the inventory table within the database
     const getInventoryID = async () =>{
         try{
-            const response = await axios.get("http://localhost:5001/api/inventoryID");
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.get(`${baseURL}/api/inventoryID`);
             return response.data;
         } catch (error){
             console.error("Unable to get new ItemID");
@@ -72,7 +75,8 @@ function Inventory(props){
     //call to add new inventory item to inventory table within the databse
     const addInventory = async (newData) => {
         try{
-            const response = await axios.post(`http://localhost:5001/api/inventory/add/${newData.itemID}`, newData);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.post(`${baseURL}/api/inventory/add/${newData.itemID}`, newData);
             return response.data;
         } catch(error){
             console.error("Fails post: ", error);
@@ -82,7 +86,8 @@ function Inventory(props){
     // deletes specified inventory item within the inventory table of the database
     const deleteInventory = async(itemName) => {
         try{
-            const response = await axios.delete(`http://localhost:5001/api/inventory/delete/${itemName}`);
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.delete(`${baseURL}/api/inventory/delete/${itemName}`);
             // console.log("Inventory item deleted")
         } catch(error){
             console.log("Error deleting inventory item: ", error);
@@ -92,7 +97,8 @@ function Inventory(props){
     //checks whether specified inventory item already exists given its name
     const doesInventoryExist = async(itemName) => {
         try{
-            const response = await axios.get(`http://localhost:5001/api/inventory/check/${itemName}`)
+            const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
+            const response = await axios.get(`${baseURL}/api/inventory/check/${itemName}`)
             return response.data;
         } catch (error){
             console.log("Error checking item: ", error);
