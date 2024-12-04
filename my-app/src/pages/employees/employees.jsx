@@ -1,4 +1,4 @@
-import ManagerBanner from '../manager/managerBanner';
+import ManagerBanner from '../manager/ManagerBanner';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from "../../createTheme";
 import { Select, MenuItem, FormControl, InputLabel, Typography, Box, TextField, Modal, Button } from '@mui/material';

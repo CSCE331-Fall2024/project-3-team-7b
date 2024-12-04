@@ -1,4 +1,4 @@
-import ManagerBanner from '../manager/managerBanner';
+import ManagerBanner from '../manager/ManagerBanner';
 import { ThemeProvider } from '@mui/material/styles';
 // import styles from "./trends.module.css";
 import theme from "../../createTheme"
