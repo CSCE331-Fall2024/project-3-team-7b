@@ -80,10 +80,6 @@ function SelectItem(props) {
     else if (item === 13 || item === 15 || item === 19) {
         maxSides = 0;
     }
-    else if (item === 23) {
-        maxSides = 0;
-        maxEntrees = 0;
-    }
 
     const [compData, setCompData] = useState([]);
     const [menuData, setMenuData] = useState([]);
@@ -360,6 +356,7 @@ function SelectItem(props) {
                                         }}
                                     >
                                         <CardActionArea>
+                                            {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
                                                 <CardMedia
                                                     component="img"
@@ -385,6 +382,7 @@ function SelectItem(props) {
                                             </div>
                                         </CardActionArea>
                                     </Card>
+                                    {/* POPUP TO DISPLAY ALLERGEN ALERTS */}
                                     <Modal
                                         open={openNutrition === itemId} // Check if this item's modal should be open
                                         onClose={closeNutrition}
@@ -392,8 +390,8 @@ function SelectItem(props) {
                                         aria-describedby="modal-modal-description"
                                     >
                                         <Box sx={style}>
-                                            <h3>Allergens: </h3>
-                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                            <h3 className={`label-h3 ${isEnlarged ? 'enlarged' : ''}`}>Allergens: </h3>
+                                            <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>{allergenList}</Typography>
                                         </Box>
                                     </Modal>
                                 </div>
@@ -427,6 +425,7 @@ function SelectItem(props) {
                                         }}
                                     >
                                         <CardActionArea>
+                                            {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
                                                 <CardMedia
                                                     component="img"
@@ -452,6 +451,7 @@ function SelectItem(props) {
                                             </div>
                                         </CardActionArea>
                                     </Card>
+                                    {/* POPUP TO DISPLAY ALLERGEN ALERTS */}
                                     <Modal
                                         open={openNutrition === itemId} // Check if this item's modal should be open
                                         onClose={closeNutrition}
@@ -459,8 +459,8 @@ function SelectItem(props) {
                                         aria-describedby="modal-modal-description"
                                     >
                                         <Box sx={style}>
-                                            <h3>Allergens: </h3>
-                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                            <h3 className={`label-h3 ${isEnlarged ? 'enlarged' : ''}`}>Allergens: </h3>
+                                            <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>{allergenList}</Typography>
                                         </Box>
                                     </Modal>
                                 </div>
@@ -490,6 +490,7 @@ function SelectItem(props) {
                                         }}
                                     >
                                         <CardActionArea>
+                                            {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
                                                 <CardMedia
                                                     component="img"
@@ -505,6 +506,7 @@ function SelectItem(props) {
                                             </Typography>
                                         </div>
                                     </Card>
+                                    {/* POPUP TO DISPLAY SIZE OPTIONS */}
                                     <Modal
                                         open={openItem === itemId} // Check if this item's modal should be open
                                         onClose={handleClose}
@@ -515,9 +517,11 @@ function SelectItem(props) {
                                             <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
                                                 Select A Size:
                                             </Typography>
-                                            <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
-                                            <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
-                                            <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                            <div className='size-options'>
+                                                <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
+                                                <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
+                                                <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                            </div>
                                         </Box>
                                     </Modal>
                                 </div>
@@ -549,6 +553,7 @@ function SelectItem(props) {
                                         }}
                                     >
                                         <CardActionArea>
+                                            {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
                                                 <CardMedia
                                                     component="img"
@@ -574,6 +579,7 @@ function SelectItem(props) {
                                         </div>
                                         </CardActionArea>
                                     </Card>
+                                    {/* POPUP TO DISPLAY ALLERGEN ALERTS */}
                                     <Modal
                                         open={openNutrition === itemId} // Check if this item's modal should be open
                                         onClose={closeNutrition}
@@ -581,10 +587,11 @@ function SelectItem(props) {
                                         aria-describedby="modal-modal-description"
                                     >
                                         <Box sx={style}>
-                                            <h3>Allergens: </h3>
-                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                            <h3 className={`label-h3 ${isEnlarged ? 'enlarged' : ''}`}>Allergens: </h3>
+                                            <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>{allergenList}</Typography>
                                         </Box>
                                     </Modal>
+                                    {/* POPUP TO DISPLAY SIZE OPTIONS */}
                                     <Modal
                                         open={openItem === itemId} // Check if this item's modal should be open
                                         onClose={handleClose}
@@ -595,8 +602,10 @@ function SelectItem(props) {
                                             <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
                                                 Select A Size:
                                             </Typography>
-                                            <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
-                                            <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                            <div className='size-options'>
+                                                <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
+                                                <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                            </div>
                                         </Box>
                                     </Modal>
                                 </div>
@@ -632,6 +641,7 @@ function SelectItem(props) {
                                         }}
                                     >
                                         <CardActionArea>
+                                            {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
                                             <CardMedia
                                                 component="img"
@@ -657,6 +667,7 @@ function SelectItem(props) {
                                         </div>
                                         </CardActionArea>
                                     </Card>
+                                    {/* POPUP TO DISPLAY ALLERGEN ALERTS */}
                                     <Modal
                                         open={openNutrition === itemId} // Check if this item's modal should be open
                                         onClose={closeNutrition}
@@ -664,10 +675,11 @@ function SelectItem(props) {
                                         aria-describedby="modal-modal-description"
                                     >
                                         <Box sx={style}>
-                                            <h3>Allergens: </h3>
-                                            <Typography variant="body1" align="center">{allergenList}</Typography>
+                                            <h3 className={`label-h3 ${isEnlarged ? 'enlarged' : ''}`}>Allergens: </h3>
+                                            <Typography className={`item-name ${isEnlarged ? 'enlarged' : ''}`}>{allergenList}</Typography>
                                         </Box>
                                     </Modal>
+                                    {/* POPUP TO DISPLAY SIZE OPTIONS */}
                                     <Modal
                                         open={openItem === itemId} // Check if this item's modal should be open
                                         onClose={handleClose}
@@ -678,9 +690,11 @@ function SelectItem(props) {
                                             <Typography id="modal-modal-title" variant="h4" component="h2" sx={{ textAlign: 'center' }}>
                                                 Select A Size:
                                             </Typography>
-                                            <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
-                                            <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
-                                            <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                            <div className='size-options'>
+                                                <Button variant='contained' onClick={() => handleSize("S", itemId)}>S</Button>
+                                                <Button variant='contained' onClick={() => handleSize("M", itemId)}>M</Button>
+                                                <Button variant='contained' onClick={() => handleSize("L", itemId)}>L</Button>
+                                            </div>
                                         </Box>
                                     </Modal>
                                 </div>

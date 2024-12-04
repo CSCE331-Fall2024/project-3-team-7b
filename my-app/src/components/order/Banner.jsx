@@ -1,18 +1,16 @@
 import banner from "../../images/banner.PNG"
 import Button from '@mui/material/Button';
-import Select from '@mui/material/Select'
-import { MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from 'react';
+import React from 'react';
 import "./orderComponents.css"
 import { useEnlarge } from "../../EnlargeContext";
 import Weather from "../customer/Weather";
 
 // Purpose: banner to be displayed at the top of all ordering pages
-function Banner(props){
+function Banner(props) {
     const navigate = useNavigate();
 
-    const [selectedLanguage, setSelectedLanguage] = useState("en");
+    // const [selectedLanguage, setSelectedLanguage] = useState("en");
     const { isEnlarged, setIsEnlarged } = useEnlarge();
 
     const view = props.view;
@@ -32,7 +30,7 @@ function Banner(props){
     return (
         <div className={`banner ${isEnlarged ? 'large-text' : ''}`}>
             <div className="accesible-buttons">
-                <Select
+                {/* <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={selectedLanguage}
@@ -42,7 +40,7 @@ function Banner(props){
                 >
                     <MenuItem value={'en'}>English</MenuItem>
                     <MenuItem value={'span'}>Spanish</MenuItem>
-                </Select>
+                </Select> */}
                 <Button variant="contained" onClick={toggleTextSize}>
                     {isEnlarged ? 'NORMAL TEXT' : 'ENLARGE TEXT'}
                 </Button>
@@ -52,19 +50,19 @@ function Banner(props){
             <img className="banner-image" src={banner} alt="Panda Express Banner w/ Logo" ></img>
 
             {/* only displays logout button for cashiers and managers */}
-            { (view === "cashier" || view === "manager") && (
+            {(view === "cashier" || view === "manager") && (
                 <div className="logout-button">
-                    <Button  sx={isEnlarged ? { fontSize: '1rem'} : {}} variant="contained" onClick={logout}>Logout</Button>
+                    <Button sx={isEnlarged ? { fontSize: '1rem' } : {}} variant="contained" onClick={logout}>Logout</Button>
                 </div>
             )}
 
             {/* only displays weater for customers */}
-            { (view === "customer") && (
+            {(view === "customer") && (
                 <div className="weather-card">
-                    <Weather isBanner={true}/>
+                    <Weather isBanner={true} />
                 </div>
             )}
-            
+
         </div>
     );
 }

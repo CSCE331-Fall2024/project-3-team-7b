@@ -86,7 +86,6 @@ const MenuBoard = () => {
           };
         });
 
-        console.log('Transformed Data:', transformedData);
         setComponents(transformedData);
         setLoading(false);
       } catch (err) {

@@ -118,7 +118,6 @@ function Items(props){
 
     // call that takes in all of the required data and creates a new menu item within the database
     const addItem = async (newData) => {
-        console.log("Date we sending: ", newData);
         try{
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
             const response = await axios.post(`${baseURL}/api/menu/add/${newData.itemID}`, newData);
@@ -178,7 +177,6 @@ function Items(props){
             return;
         }
         setPriceError(false);
-        console.log(newData);
 
         try{
             await updateItem(whichRow.item_name, newData);
@@ -202,7 +200,6 @@ function Items(props){
         setPriceError(false);
         setNameError(false);
         setAvailError(false);
-        console.log("current data: ", data);
         if(data.name == null || data.name == ""){
             setNameError(true);
             return;
@@ -230,7 +227,6 @@ function Items(props){
 
         const newID = await getItemID();
         
-        console.log("returned id: ", newID);
         if(newID == null){
             alert("Unable to return new id");
             return;
@@ -243,7 +239,6 @@ function Items(props){
                 price: data.price,
                 availability: data.avail == "True"
             };
-            console.log(newData);
 
             const additional = await addItem(newData);
             setItems((prev) =>
@@ -265,7 +260,6 @@ function Items(props){
         setAvailError(false);
         try{
             const ex = await doesItemExist(data.name);
-            console.log("Delete item exists? ", ex);
             if(!ex){
                 setError(true);
                 return;

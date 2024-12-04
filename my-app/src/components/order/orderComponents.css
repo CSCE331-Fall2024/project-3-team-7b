@@ -67,6 +67,10 @@
     font-size: 1.25rem;
 }
 
+.label-h3 {
+    font-size: 1.25rem;
+}
+
 .label-h3-enlarged {
     font-size: 1.5rem;
 }
@@ -142,4 +146,13 @@
     right: 0 !important;
     background-color: rgba(255, 255, 255, 0.8); 
     z-index: 10; 
+}
+
+.size-options {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+    margin-top: 1vh;
 }

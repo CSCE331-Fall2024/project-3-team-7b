@@ -11,7 +11,7 @@
     "moment": "^2.30.1"
   },
   "scripts": {
-    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix my-app\""
+    "dev": "concurrently \"npm install --prefix .\" \"npm install --prefix my-app\" \"npm install --prefix backend\" \"npm run dev --prefix backend\" \"npm start --prefix my-app\""
   },
   "devDependencies": {
     "concurrently": "^9.1.0",

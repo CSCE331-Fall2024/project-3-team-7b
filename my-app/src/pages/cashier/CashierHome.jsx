@@ -4,17 +4,20 @@ import { ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import "./cashier.css";
 import theme from "../../createTheme";
-import { useDispatch, useSelector } from 'react-redux';
 import TodayTopItem from "../../components/order/TodayTopItem";
 import TransactionSummary from "../../components/order/TransactionSummary";
+// import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Overall home page for the cashiers
 
 function CashierHome() {
     // Fetch current values of subtotal and order from redux storage
     const navigate = useNavigate();
-    const subtotal = useSelector((state) => state.subtotal);
-    const order = useSelector((state) => state.order);
+    // const subtotal = useSelector((state) => state.subtotal);
+    // const order = useSelector((state) => state.order);
+
+    // context to know if text should be enlarged
+    // const { isEnlarged, setIsEnlarged } = useEnlarge();
     
     // Navigates cashier to start an order
     const startTransaction = () => {
@@ -26,12 +29,16 @@ function CashierHome() {
         navigate("/"); 
     }
 
+    // const toggleTextSize = () => {
+    //     setIsEnlarged((prev) => !prev);
+    // };
+
     return (
         <ThemeProvider theme={theme}>
             <div>
                 {/* Accessibility features */}
-                <div>
-                    <Button className="translate-button" variant="contained">Select A Language</Button>
+                <div className="translate-button">
+                    {/* <Button className="translate-button" variant="contained">Select A Language</Button> */}
                 </div>
 
                 {/* Main content of page */}

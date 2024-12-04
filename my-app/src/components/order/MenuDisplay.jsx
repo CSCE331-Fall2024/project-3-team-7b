@@ -26,8 +26,6 @@ function MenuDisplay(props) {
     const subtotals = useSelector((state) => state.orders.at(0));
     const orders = useSelector((state) => state.orders.at(1));
     const isComplete = useSelector((state) => state.isComplete);
-    console.log(isComplete);
-
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const view = props.view;
@@ -71,7 +69,6 @@ function MenuDisplay(props) {
             itemId === 13 ? ["Appetizers and More"] :
             itemId === 15 ? ["A La Carte"] :
             itemId === 19 ? ["Drinks"] :
-            itemId === 23 ? ["Catering"] :
             [itemsDictionary[itemId]?.item_name || "Unknown Item"];
 
         // only updates the price if the there are no further menu choices
