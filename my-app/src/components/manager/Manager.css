@@ -8,7 +8,7 @@
     align-items: center;
 }
 .total th {
-    background-color: #D95451;
+    background-color: #bd3633;
     color: white;
     font-weight: bold; 
     padding: 1vh;
@@ -78,7 +78,7 @@
 }
 
 .item-table th {
-    background-color: #D95451;
+    background-color: #bd3633;
     color: white;
     font-weight: bold; 
     padding: 1vh;
@@ -152,7 +152,7 @@
 }
 
 .usage-chart th {
-    background-color: #D95451;
+    background-color: #bd3633;
     color: white;
     font-weight: bold; 
     padding: 1vh;
