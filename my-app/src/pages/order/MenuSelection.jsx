@@ -11,8 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 // Purpose: displays all menu options
 
 function MenuSelection(props) {
-    // Fetch current values of subtotal and order from redux storage
-    const {state} = useLocation();
     const view = props.view;
     const setAuthentication = props.setAuthentication;
     

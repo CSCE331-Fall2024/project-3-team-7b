@@ -11,7 +11,6 @@ import Weather from "../customer/Weather";
 function Banner(props) {
     const navigate = useNavigate();
 
-    // const [selectedLanguage, setSelectedLanguage] = useState("en");
     const { isEnlarged, setIsEnlarged } = useEnlarge();
 
     const view = props.view;
@@ -31,17 +30,6 @@ function Banner(props) {
     return (
         <div className={`banner ${isEnlarged ? 'large-text' : ''}`}>
             <div className="accesible-buttons">
-                {/* <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={selectedLanguage}
-                    label="SELECT A LANGUAGE"
-                    // onChange={translateText}
-                    // variant="contained"
-                >
-                    <MenuItem value={'en'}>English</MenuItem>
-                    <MenuItem value={'span'}>Spanish</MenuItem>
-                </Select> */}
                 <Button variant="contained" onClick={toggleTextSize}>
                     {isEnlarged ? 'NORMAL TEXT' : 'ENLARGE TEXT'}
                 </Button>
