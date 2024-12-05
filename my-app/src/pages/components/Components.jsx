@@ -24,6 +24,7 @@ function Components(props){
     const[availError, setAvailError] = useState(false);
     const[premError, setPremError] = useState(false);
     const[seasError, setSeasError] = useState(false);
+    const[allerError, setAllerError] = useState(false);
     const[addError, setAddError] = useState(false);
     //boolean value used to rerender the table once new components have been added
     const[render, setRender] = useState(false);
@@ -33,7 +34,8 @@ function Components(props){
         cat: '',
         avail: '',
         prem: '',
-        seas: ''
+        seas: '',
+        aller: ''
     });
 
     useEffect(() => {
@@ -63,7 +65,8 @@ function Components(props){
                 cat: '',
                 avail: '',
                 prem: '',
-                seas: ''
+                seas: '',
+                aller: ''
             });
         }
         else{
@@ -73,7 +76,8 @@ function Components(props){
                 cat: row.category,
                 avail: row.availability ? "True" : "False",
                 prem: row.premium ? "True" : "False",
-                seas: row.seasonal ? "True" : "False"
+                seas: row.seasonal ? "True" : "False",
+                aller: row.allergens
             });
         }
         setError(false);
@@ -82,6 +86,7 @@ function Components(props){
         setAvailError(false);
         setPremError(false);
         setSeasError(false);
+        setAllerError(false);
         setAddError(false);
     }; 
 
@@ -159,6 +164,7 @@ function Components(props){
         setAvailError(false);
         setPremError(false);
         setSeasError(false);
+        setAllerError(false);
         setAddError(false);
 
         if(whichRow == null){
@@ -171,35 +177,40 @@ function Components(props){
             return;
         }
         setError(false);
-        if(data.name == ""){
+        if(data.name === ""){
             setNameError(true);
             return;
         }
         setNameError(false);
-        if(data.cat == ""){
+        if(data.cat === ""){
             setCatError(true);
         }
         setCatError(false);
-        if(data.avail == ""){
+        if(data.avail === ""){
             setAvailError(true);
         }
         setAvailError(false);
-        if(data.prem == ""){
+        if(data.prem === ""){
             setPremError(true);
             return;
         }
         setPremError(false);
-        if(data.seas == ""){
+        if(data.seas === ""){
             setSeasError(true);
         }
         setSeasError(false);
+        if(data.aller === ""){
+            setAllerError(true);
+        }
+        setAllerError(false);
 
         const newData = {
             component_name: data.name,
             category: data.cat,
             availability: data.avail == "True",
             premium: data.prem == "True",
-            seasonal: data.seas == "True"
+            seasonal: data.seas == "True",
+            allergens: data.aller
         };
         if(newData.component_name == ''){
             setNameError(true);
@@ -230,10 +241,11 @@ function Components(props){
         setAvailError(false);
         setPremError(false);
         setSeasError(false);
+        setAllerError(false);
         setAddError(false);
 
         // console.log("current data: ", data);
-        if(data.name == null || data.name == ""){
+        if(data.name === null || data.name === ""){
             setNameError(true);
             return;
         }
@@ -246,29 +258,35 @@ function Components(props){
         }
         setAddError(false);
 
-        if(data.cat == ""){
+        if(data.cat === ""){
             setCatError(true);
             return
         }
         setCatError(false);
 
-        if(data.avail == null || data.avail == ""){
+        if(data.avail === null || data.avail === ""){
             setAvailError(true);
             return;
         }
         setAvailError(false);
 
-        if(data.prem == null || data.prem == ""){
+        if(data.prem === null || data.prem === ""){
             setPremError(true);
             return;
         }
         setPremError(false);
 
-        if(data.seas == null || data.seas == ""){
+        if(data.seas === null || data.seas === ""){
             setSeasError(true);
             return;
         }
         setSeasError(false);
+
+        if(data.aller === null || data.aller === ""){
+            setAllerError(true);
+            return;
+        }
+        setAllerError(false);
 
         const newID = await getComponentID();
         
@@ -285,7 +303,8 @@ function Components(props){
                 category: data.cat,
                 availability: data.avail == "True",
                 premium: data.prem == "True",
-                seasonal: data.seas == "True"
+                seasonal: data.seas == "True",
+                allrgens: data.aller
             };
             // console.log(newData);
 
@@ -308,6 +327,7 @@ function Components(props){
         setAvailError(false);
         setPremError(false);
         setSeasError(false);
+        setAllerError(false);
         setAddError(false);
 
         try{
@@ -328,7 +348,8 @@ function Components(props){
                 cat: '',
                 avail: '',
                 prem: '',
-                seas: ''
+                seas: '',
+                aller: ''
             });
             alert(data.name + " Successfully Deleted!")
         } catch (error){
@@ -421,6 +442,17 @@ function Components(props){
                                 <MenuItem key="True" value="True">Yes</MenuItem>
                                 <MenuItem key="False" value="False">No</MenuItem>
                             </TextField>
+                        </FormControl>
+                        <FormControl sx={{ mb: 2 }} fullWidth>
+                            <TextField
+                                name="name"
+                                label="Allergens"
+                                onChange={input}
+                                value={data.name}
+                                error={error || addError || allerError}
+                                helperText={error ? "Please select an item" : allerError ? "Please input valid allergens" : addError ? "Please create a new item" : ""}
+                            />
+
                         </FormControl>
                         
                         {/* Buttons */}

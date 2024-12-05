@@ -23,6 +23,7 @@ const ComponentsTable = ({data, rowSelect}) => {
                             <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Availability </TableCell>
                             <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Premium </TableCell>
                             <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Seasonal </TableCell>
+                            <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}> Allergens </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -35,6 +36,7 @@ const ComponentsTable = ({data, rowSelect}) => {
                                 <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.availability ? "Yes" : "No"}</TableCell>
                                 <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.premium ? "Yes" : "No"}</TableCell>
                                 <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.seasonal ? "Yes" : "No"}</TableCell>
+                                <TableCell sx={isEnlarged ? { fontSize: '1rem'} : {}}>{item.allergens}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

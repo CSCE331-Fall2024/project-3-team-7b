@@ -20,9 +20,6 @@ const importAll = (r) => {
     });
 }
 
-// TODO::::: 
-//           ENSURE ALL ENLARGES WORK
-
 const style = {
     position: 'absolute',
     top: '50%',
