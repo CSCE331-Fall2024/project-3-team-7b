@@ -67,6 +67,8 @@ function Items(props){
                 avail: row.availability ? "True" : "False"
             });
         }
+
+        //reset error states everytime row is selected or deselected
         setError(false);
         setAddError(false);
         setPriceError(false);
@@ -131,8 +133,19 @@ function Items(props){
     const deleteItem = async(itemName) => {
         try{
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-            const response = await axios.delete(`${baseURL}/api/menu/delete/${itemName}`);
-            console.log("Menu item deleted")
+            //get the itemID
+            const response = await axios.get(`${baseURL}/api/menu/itemID/${itemName}`);
+            console.log("itemid: ", response.data.itemid);
+
+            //delete the entries that contain this itemid in the junction tables
+            const resp = await axios.delete(`${baseURL}/api/menu/deletemxi/${response.data.itemid}`);
+            console.log("resp: ", resp);
+
+            const re = await axios.delete(`${baseURL}/api/menu/deleteoxm/${response.data.itemid}`);
+            console.log("re: ", re);
+
+            const r = await axios.delete(`${baseURL}/api/menu/delete/${itemName}`);
+            console.log("r: ", r);
         } catch(error){
             console.log("Error deleting inventory item: ", error);
         }
@@ -140,21 +153,28 @@ function Items(props){
 
     //function to call when update button is pressed
     const updateButton = async () => {
+        //reset error states
         setError(false);
         setAddError(false);
         setPriceError(false);
         setNameError(false);
         setAvailError(false);
+
+        //check if row is selected
         if(whichRow == null){
             setError(true);
             return;
         }
+
+        //check if item already exists
         const exist = await doesItemExist(whichRow.item_name);
         if(!exist){
             setError(true);
             return;
         }
         setError(false);
+
+        //make sure availability is selected
         if(data.avail == ""){
             setAvailError(true);
             return;
@@ -167,11 +187,14 @@ function Items(props){
             availability: data.avail == "True"
         };
 
+        //ensure updated item name is not a blank string
         if(newData.item_name == ''){
             setNameError(true);
             return;
         }
         setNameError(false);
+
+        // make sure valid price is inputed
         if(isNaN(parseFloat(data.price))){
             setPriceError(true);
             return;
@@ -179,8 +202,10 @@ function Items(props){
         setPriceError(false);
 
         try{
+            // update the item
             await updateItem(whichRow.item_name, newData);
 
+            // update the table
             setItems((prev) =>
                 prev.map((it) =>
                    it.item_name == whichRow.item_name ? {...it, ...newData} : it 
@@ -195,17 +220,21 @@ function Items(props){
 
     // function that is called when add button is pressed
     const addButton = async () => {
+        // reset error states
         setError(false);
         setAddError(false);
         setPriceError(false);
         setNameError(false);
         setAvailError(false);
+
+        // make sure valid name is input
         if(data.name == null || data.name == ""){
             setNameError(true);
             return;
         }
         setNameError(false);
 
+        // sure sure item does not already exist
         const ex = await doesItemExist(data.name);
         if(ex){
             setAddError(true);
@@ -213,20 +242,22 @@ function Items(props){
         }
         setAddError(false);
 
+        // make sure valid price is input
         if(isNaN(parseFloat(data.price))){
             setPriceError(true);
             return;
         }
         setPriceError(false);
 
+        //make sure availability is selected
         if(data.avail == null || data.avail == ""){
             setAvailError(true);
             return;
         }
         setAvailError(false);
 
+        // generate new item_id
         const newID = await getItemID();
-        
         if(newID == null){
             alert("Unable to return new id");
             return;
@@ -239,8 +270,11 @@ function Items(props){
                 price: data.price,
                 availability: data.avail == "True"
             };
-
+            
+            // add the new item to the database
             const additional = await addItem(newData);
+
+            //update the table with the new item
             setItems((prev) =>
                 [...prev, additional]
             );
@@ -253,20 +287,36 @@ function Items(props){
 
     //function that is called when delete button is clicked
     const deleteButton = async () =>{
+        //reset the error states
         setError(false);
         setAddError(false);
         setPriceError(false);
         setNameError(false);
         setAvailError(false);
+
         try{
+            // make sure an item is selected
+            if(data.name == ""){
+                setError(true);
+                return;
+            }
+            setError(false);
+
+            // make sure item trying to be deleted exists
             const ex = await doesItemExist(data.name);
             if(!ex){
                 setError(true);
                 return;
             }
             setError(false);
+
+            //delete item from database
             await deleteItem(data.name);
+
+            //remove the item from the table
             setRender((prev) => !prev);
+
+            //reset editor panel values
             setData({
                 name: '',
                 price: '',
@@ -282,12 +332,16 @@ function Items(props){
     return (
         <ThemeProvider theme={theme}>
             <div>
+                {/* contains the manager banner */}
                 <ManagerBanner view={view} setAuthentication={setAuthentication}/>
             </div>
+            {/* divides the table from the editor */}
             <div className={styles['divider']}>
+                {/* contains the table */}
                 <div className={styles['table-container']}>
                     <ItemsTable data={menu} rowSelect={getRow}/>
                 </div>
+                {/* contains the editor panel */}
                 <div className={styles['editor-container']}>
                      <div className={styles["modify-items"]}>
                         {/* Item textbox */}
