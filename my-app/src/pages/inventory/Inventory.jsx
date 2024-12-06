@@ -87,8 +87,20 @@ function Inventory(props){
     const deleteInventory = async(itemName) => {
         try{
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-            const response = await axios.delete(`${baseURL}/api/inventory/delete/${itemName}`);
-            // console.log("Inventory item deleted")
+            //retrieve the inventoryid of the inventory item
+            const response = await axios.get(`${baseURL}/api/inventory/itemID/${itemName}`);
+            console.log("itemid: ", response.data);
+
+            //delete the entries that contain this itemid in the junction tables
+            const resp = await axios.delete(`${baseURL}/api/inventory/deletemxi/${response.data.itemid}`);
+            console.log("resp: ", resp);
+
+            const re = await axios.delete(`${baseURL}/api/inventory/deletecxi/${response.data.itemid}`);
+            console.log("re: ", re);
+
+            const r = await axios.delete(`${baseURL}/api/inventory/delete/${itemName}`);
+            console.log("r: ", r);
+            console.log("Inventory item deleted");
         } catch(error){
             console.log("Error deleting inventory item: ", error);
         }
@@ -128,6 +140,8 @@ function Inventory(props){
                 thresh: row.threshold
             });
         }
+
+        // reset error states
         setError(false);
         setAddError(false);
         setNameError(false);
@@ -148,6 +162,7 @@ function Inventory(props){
 
     //function that is called once the update button is clicked
     const updateButton = async () => {
+        //reset error states
         setError(false);
         setAddError(false);
         setNameError(false);
@@ -156,33 +171,39 @@ function Inventory(props){
         setSupError(false);
         setThreshError(false);
 
+        //make sure a row is selected
         if(whichRow == null){
             setError(true);
             return;
         }
         setError(false);
 
+        // make sure valid name is inputted
         if(data.name == ""){
             setNameError(true);
         }
         setNameError(false);
         
+        //make sure quantity is specified
         if(data.quant == ""){
             setQuantError(true);
             return;
         }
 
+        //make sure unit is specified
         if(data.unit == ""){
             setUnitError(true);
             return;
         }
 
+        //make sure supplier is specified
         if(data.sup == ""){
             setSupError(true);
             return;
         }
         setSupError(false);
 
+        //make sure threshold is specified
         if(data.thresh == ""){
             setThreshError(true);
             return;
@@ -198,12 +219,14 @@ function Inventory(props){
             needs_restock: data.quant < data.thresh
         };
 
+        //make quantity is a valid number
         if(isNaN(parseFloat(data.quant))){
             setQuantError(true);
             return;
         }
         setQuantError(false);
 
+        //make sure threshold is a valid number
         if(isNaN(parseFloat(data.thresh))){
             setThreshError(true);
             return;
@@ -211,8 +234,10 @@ function Inventory(props){
         setThreshError(false);
 
         try{
+            //update the inventory with new values
             await updateInventory(whichRow.item_name, newData);
 
+            //update the inventory table
             setInventory((prev) =>
                 prev.map((item) =>
                    item.item_name == whichRow.item_name ? {...item, ...newData} : item 
@@ -226,6 +251,7 @@ function Inventory(props){
 
     //function that is called when add button is clicked
     const addButton = async () => {
+        //reset all of the error states
         setError(false);
         setAddError(false);
         setNameError(false);
@@ -234,36 +260,40 @@ function Inventory(props){
         setSupError(false);
         setThreshError(false);
 
-        // console.log("current data: ", data);
-
+        // make sure valid name is input
         if(data.name == ""){
             setNameError(true);
             return;
         }
         setNameError(false);
         
+        // make sure valid quantity is given
         if(data.quant == ""){
             setQuantError(true);
             return;
         }
 
+        // make sure valid unit provided
         if(data.unit == ""){
             setUnitError(true);
             return;
         }
 
+        //make sure valid supplier is given
         if(data.sup == ""){
             setSupError(true);
             return;
         }
         setSupError(false);
 
+        //make sure valid threshold is given
         if(data.thresh == ""){
             setThreshError(true);
             return;
         }
         setThreshError(false);
 
+        //obtain new inventory_id for new item
         const newID = await getInventoryID();
         
         // console.log("returned id: ", newID);
@@ -273,17 +303,14 @@ function Inventory(props){
         }
         setError('');
         
+        // chack to see if inventory item already exists
         const ex = await doesInventoryExist(data.name);
-        // console.log("Does ", data.name, " exist? ", ex);
         if(ex){
             setAddError(true);
-            // console.log("exists");
             return;
         }
         setAddError(false);
-        // console.log("finished");
 
-        // console.log("after data: ", data);
         try {
             const newData = {
                 itemID: (parseInt(newID) + 1),
@@ -295,20 +322,24 @@ function Inventory(props){
                 threshold: parseInt(data.thresh),
             };
 
+            //make sure quantity is a valid number
             if(isNaN(parseFloat(data.quant))){
                 setQuantError(true);
                 return;
             }
             setQuantError(false);
             
+            //make sure threshold is a valid number
             if(isNaN(parseFloat(data.thresh))){
                 setThreshError(true);
                 return;
             }
             setThreshError(false);
-            // console.log("up to here", newData);
 
+            //add new inventory item to the database
             const additional = await addInventory(newData);
+
+            //update the table with new iteam
             setInventory((prev) =>
                 [...prev, additional]
             );
@@ -322,6 +353,7 @@ function Inventory(props){
 
     //function that is called once the delete button is clicked
     const deleteButton = async () =>{
+        //reset error states
         setError(false);
         setAddError(false);
         setNameError(false);
@@ -330,6 +362,7 @@ function Inventory(props){
         setSupError(false);
         setThreshError(false);
 
+        //make valid name is given
         if(data.name == null || data.name == ""){
             setError(true);
             return;
@@ -337,15 +370,18 @@ function Inventory(props){
 
         const deleteName = data.name;
         try{
+            //make sure item being deleted exists
             const ex = await doesInventoryExist(deleteName);
-            // console.log("exists: ", ex);
-
             if(!ex){
                 setError(true);
                 return;
             }
             setError(false);
+            
+            //delete the inventory
             await deleteInventory(deleteName);
+
+            //remove the item from the database
             setRender((prev) => !prev);
             setData({
                 name: '',

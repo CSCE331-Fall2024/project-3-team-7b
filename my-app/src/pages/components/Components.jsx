@@ -44,6 +44,7 @@ function Components(props){
             try{
                 const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
                 const response = await axios.get(`${baseURL}/api/components`);
+                //store all of the retrieved components
                 setComponents(response.data);
                 
             } catch(error){
@@ -80,6 +81,8 @@ function Components(props){
                 aller: row.allergens
             });
         }
+
+        // reset error states
         setError(false);
         setNameError(false);
         setCatError(false);
@@ -148,8 +151,21 @@ function Components(props){
     const deleteComponent = async(compName) => {
         try{
             const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-            const response = await axios.delete(`${baseURL}/api/components/delete/${compName}`);
-            console.log("Component deleted")
+            
+            //get the component id
+            const response = await axios.get(`${baseURL}/api/components/compID/${compName}`);
+            console.log("what is the id of the component we deleting: ", response.data.componentid);
+
+            //delete from junction tables
+            const resp = await axios.delete(`${baseURL}/api/components/deletecxi/${response.data.componentid}`);
+            console.log("resp: ", resp);
+
+            const re = await axios.delete(`${baseURL}/api/components/deleteoxc/${response.data.componentid}`);
+            console.log("re: ", re);
+
+            //delete from main table
+            const r = await axios.delete(`${baseURL}/api/components/delete/${compName}`);
+            console.log("r: ", r);
         } catch(error){
             console.log("Error deleting component: ", error);
         }
@@ -158,6 +174,7 @@ function Components(props){
 
     //function to call when update button is pressed
     const updateButton = async () => {
+        //reset error states
         setError(false);
         setNameError(false);
         setCatError(false);
@@ -167,40 +184,59 @@ function Components(props){
         setAllerError(false);
         setAddError(false);
 
+        //check if a row is selected
         if(whichRow == null){
             setError(true);
             return;
         }
+
+        //make sure component exists
         const exist = await doesComponentExist(whichRow.component_name);
         if(!exist){
             setError(true);
             return;
         }
         setError(false);
+
+        // make sure valid name is given
         if(data.name === ""){
             setNameError(true);
             return;
         }
         setNameError(false);
+
+        //ensure valid category is selected
         if(data.cat === ""){
             setCatError(true);
+            return;
         }
         setCatError(false);
+
+        //make sure availability is specified
         if(data.avail === ""){
             setAvailError(true);
+            return;
         }
         setAvailError(false);
+
+        //make sure is premium is specified
         if(data.prem === ""){
             setPremError(true);
             return;
         }
         setPremError(false);
+
+        //make sure if it's seasonal
         if(data.seas === ""){
             setSeasError(true);
+            return;
         }
         setSeasError(false);
+
+        //make sure allergen is specified
         if(data.aller === ""){
             setAllerError(true);
+            return;
         }
         setAllerError(false);
 
@@ -212,20 +248,25 @@ function Components(props){
             seasonal: data.seas == "True",
             allergens: data.aller
         };
+
+        //make sure valid name is given
         if(newData.component_name == ''){
             setNameError(true);
             return;
         }
-        // console.log(newData);
 
         try{
+            //update the data by specifying the component and new data
             await updateComponent(whichRow.component_name, newData);
 
+            //update the table to reflect the changes
             setComponents((prev) =>
                 prev.map((comp) =>
                    comp.component_name == whichRow.component_name ? {...comp, ...newData} : comp 
                 )
             );
+
+            //notify the user of successful modification
             alert(data.name + " Successfully Updated!")
         } catch (error){
         console.error("Can't update item: ", error);
@@ -235,6 +276,7 @@ function Components(props){
 
     // function that is called when add button is pressed
     const addButton = async () => {
+        //reset error states
         setError(false);
         setNameError(false);
         setCatError(false);
@@ -245,12 +287,14 @@ function Components(props){
         setAddError(false);
 
         // console.log("current data: ", data);
+        //make sure valid name is given
         if(data.name === null || data.name === ""){
             setNameError(true);
             return;
         }
         setNameError(false);
 
+        //make sure component does not already exist
         const ex = await doesComponentExist(data.name);
         if(ex){
             setAddError(true);
@@ -258,36 +302,42 @@ function Components(props){
         }
         setAddError(false);
 
+        //check if category is specified
         if(data.cat === ""){
             setCatError(true);
             return
         }
         setCatError(false);
 
+        //check if availability is specified
         if(data.avail === null || data.avail === ""){
             setAvailError(true);
             return;
         }
         setAvailError(false);
 
+        //check if premium is specified
         if(data.prem === null || data.prem === ""){
             setPremError(true);
             return;
         }
         setPremError(false);
 
+        //check if seasonal is specified
         if(data.seas === null || data.seas === ""){
             setSeasError(true);
             return;
         }
         setSeasError(false);
 
+        //check if allergens are specified
         if(data.aller === null || data.aller === ""){
             setAllerError(true);
             return;
         }
         setAllerError(false);
 
+        //get new component_id 
         const newID = await getComponentID();
         
         // console.log("returned id: ", newID);
@@ -304,14 +354,19 @@ function Components(props){
                 availability: data.avail == "True",
                 premium: data.prem == "True",
                 seasonal: data.seas == "True",
-                allrgens: data.aller
+                allergens: data.aller
             };
             // console.log(newData);
 
+            //add the new component to database
             const additional = await addComponent(newData);
+
+            //update the table to show the newly added components
             setComponents((prev) =>
                 [...prev, additional]
             );
+
+            //notify the user of successful completion
             alert(data.name + " Successfully Added!");
           } catch (error) {
             // Handle errors
@@ -321,6 +376,7 @@ function Components(props){
 
     //function that is called when delete button is clicked
     const deleteButton = async () =>{
+        //reset error values
         setError(false);
         setNameError(false);
         setCatError(false);
@@ -331,18 +387,31 @@ function Components(props){
         setAddError(false);
 
         try{
-            console.log("this has been clicked");
-            console.log(data.name);
+            //make sure item is selected
+            if(data.name == ""){
+                setError(true);
+                return;
+            }
+            setError(false);
+
+            //make sure specified item exists
             const ex = await doesComponentExist(data.name);
-            console.log("Delete item exists? ", ex);
             if(!ex){
                 setError(true);
                 return;
             }
-            console.log("passed");
             setError(false);
+
+            //delete the component
             await deleteComponent(data.name);
+
+            //notify user of successful removal
+            alert(data.name + " Successfully Deleted!")
+
+            //update the table to show removal
             setRender((prev) => !prev);
+
+            //clear the data in the panel
             setData({
                 name: '',
                 cat: '',
@@ -351,7 +420,6 @@ function Components(props){
                 seas: '',
                 aller: ''
             });
-            alert(data.name + " Successfully Deleted!")
         } catch (error){
             console.log(error);
         }
@@ -445,12 +513,12 @@ function Components(props){
                         </FormControl>
                         <FormControl sx={{ mb: 2 }} fullWidth>
                             <TextField
-                                name="name"
+                                name="aller"
                                 label="Allergens"
                                 onChange={input}
-                                value={data.name}
-                                error={error || addError || allerError}
-                                helperText={error ? "Please select an item" : allerError ? "Please input valid allergens" : addError ? "Please create a new item" : ""}
+                                value={data.aller}
+                                error={allerError}
+                                helperText={allerError ? "Please input valid allergens" : ""}
                             />
 
                         </FormControl>

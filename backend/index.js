@@ -649,6 +649,61 @@ app.put('/api/components/:origComponent', async(req, res) =>{
   }
 });
 
+// Call to database that returns inventoryID of a given inventory
+app.get('/api/inventory/itemID/:itemName', async (req, res) =>{
+  const {itemName} = req.params;
+  try{
+    const result = await pool.query(`SELECT itemid FROM inventory WHERE item_name ILIKE $1`, [itemName]);
+    res.json(result.rows[0]);
+    return result.rows[0];
+  } catch (error){
+    console.error("Error in API checking inventory: ", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// deletes the given entries including specified id componentsxinventory table
+app.delete('/api/inventory/deletecxi/:itemID', async (req, res) => {
+  const {itemID} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM Componentxinventory WHERE itemid = $1`, [itemID]
+    );
+
+    res.json({message: 'Inventory item deleted', item: result.rows[0]});
+
+    // if(result.rowCount > 0){
+    //   res.json({message: 'Component item deleted', item: result.rows[0]});
+    // } else{
+    //   res.status(404).send('Component item not found');
+    // }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
+// deletes the given entries including specified id menu_itemsxinventory table
+app.delete('/api/inventory/deletemxi/:itemID', async (req, res) => {
+  const {itemID} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM menu_itemsxinventory WHERE inventoryid = $1`, [itemID]
+    );
+
+    res.json({message: 'Component item deleted', item: result.rows[0]});
+
+    // if(result.rowCount > 0){
+    //   res.json({message: 'Component item deleted', item: result.rows[0]});
+    // } else{
+    //   res.status(404).send('Component item not found');
+    // }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
 // deletes specifient inventory item from the database
 app.delete('/api/inventory/delete/:itemName', async (req, res) => {
   const {itemName} = req.params;
@@ -667,6 +722,59 @@ app.delete('/api/inventory/delete/:itemName', async (req, res) => {
   }
 });
 
+// Call to database that returns componentID of a given component
+app.get('/api/components/compID/:compName', async (req, res) =>{
+  const {compName} = req.params;
+  try{
+    const result = await pool.query(`SELECT ComponentId FROM Components WHERE component_name ILIKE $1`, [compName]);
+    res.json(result.rows[0]);
+    return result.rows[0];
+  } catch (error){
+    console.error("Error in API checking inventory: ", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// deletes the given entries including specified id componentsxinventory table
+app.delete('/api/components/deletecxi/:compID', async (req, res) => {
+  const {compID} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM Componentxinventory WHERE componentid = $1`, [compID]
+    );
+
+    res.json({message: 'Component item deleted', item: result.rows[0]});
+
+    // if(result.rowCount > 0){
+    //   res.json({message: 'Component item deleted', item: result.rows[0]});
+    // } else{
+    //   res.status(404).send('Component item not found');
+    // }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
+// deletes the given entries including specified id orderxcomponent table
+app.delete('/api/components/deleteoxc/:compID', async (req, res) => {
+  const {compID} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM orderxcomponents WHERE componentid = $1 RETURNING*`, [compID]
+    );
+    res.json({message: 'Component item deleted', item: result.rows[0]});
+    // if(result.rowCount > 0){
+    //   res.json({message: 'Component item deleted', item: result.rows[0]});
+    // } else{
+    //   res.status(404).send('Component item not found');
+    // }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
 // deletes the given component from the components table in the database
 app.delete('/api/components/delete/:compName', async (req, res) => {
   const {compName} = req.params;
@@ -679,6 +787,62 @@ app.delete('/api/components/delete/:compName', async (req, res) => {
     } else{
       res.status(404).send('Component item not found');
     }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
+
+// Call to database that returns componentID of a given component
+app.get('/api/menu/itemID/:itemName', async (req, res) =>{
+  const {itemName} = req.params;
+  try{
+    const result = await pool.query(`SELECT itemid FROM menu_items WHERE item_name ILIKE $1`, [itemName]);
+    res.json(result.rows[0]);
+    return result.rows[0];
+  } catch (error){
+    console.error("Error in API checking inventory: ", error);
+    res.status(500).send('Server error');
+  }
+});
+
+// deletes the given entries including specified id menu_itemsxinventory table
+app.delete('/api/menu/deletemxi/:itemID', async (req, res) => {
+  const {itemID} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM menu_itemsxinventory WHERE menuid = $1`, [itemID]
+    );
+
+    res.json({message: 'Component item deleted', item: result.rows[0]});
+
+    // if(result.rowCount > 0){
+    //   res.json({message: 'Component item deleted', item: result.rows[0]});
+    // } else{
+    //   res.status(404).send('Component item not found');
+    // }
+  } catch (error){
+      console.log(error);
+      res.status(500).send('Server error');
+  }
+});
+
+// deletes the given entries including specified id orderxmenu_item table
+app.delete('/api/menu/deleteoxm/:itemID', async (req, res) => {
+  const {itemID} = req.params;
+  try{
+    const result = await pool.query(
+      `DELETE FROM orderxmenu_item WHERE itemid = $1`, [itemID]
+    );
+
+    res.json({message: 'Component item deleted', item: result.rows[0]});
+
+    // if(result.rowCount > 0){
+    //   res.json({message: 'Component item deleted', item: result.rows[0]});
+    // } else{
+    //   res.status(404).send('Component item not found');
+    // }
   } catch (error){
       console.log(error);
       res.status(500).send('Server error');
@@ -729,12 +893,12 @@ app.post('/api/inventory/add/:itemid', async(req, res) => {
 // adds a new component to the components table within the database
 app.post('/api/components/add/:componentID', async(req, res) => {
   const {componentID} = req.params;
-  const {component_name, category, availability, premium, seasonal} = req.body;
+  const {component_name, category, availability, premium, seasonal, allergens} = req.body;
 
   try{
     const result = await pool.query(
-      `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal) VALUES ($1, $2, $3, $4, $5, $6) RETURNING*;`,
-      [componentID, component_name, category, availability, premium, seasonal]
+      `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal, Allergens) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING*;`,
+      [componentID, component_name, category, availability, premium, seasonal, allergens]
     );
     if(result.rowCount > 0){
       res.json(result.rows[0]);
