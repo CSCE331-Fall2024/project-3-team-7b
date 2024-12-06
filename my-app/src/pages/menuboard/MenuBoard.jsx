@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "./menu.css";
-
+// Purpose: this page creates the menu board, renders the pictures, and connects to the database to see what is available
 // Component to display the menu board
 const MenuBoard = () => {
   // State to store menu components data, loading status, and error messages
