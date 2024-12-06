@@ -29,11 +29,23 @@ This project is a streamlined solution for managing orders, inventory, and emplo
 ## Architecture Overview
 ![Local Picture](/my-app/public/high-level.png "High Level Design")
 #
-The system is composed of:
-- **Frontend:** Customer, Cashier, and Manager Views built with [technology stack].
-- **Backend:** Database and API services for data management and communication.
-- **External APIs:** Authentication and accessibility features.
+The system is built using the **PERN** tech stack and consists of the following components:
 
+- **Frontend:**  
+  The **Customer**, **Cashier**, and **Manager Views** are developed using **React.js** for building dynamic and interactive user interfaces.
+
+- **Backend:**  
+  The backend is powered by **Node.js** and **Express.js** to provide API services for data management and communication with the frontend and database.
+
+- **Database:**  
+  Uses **PostgreSQL** as the relational database to store and manage all system data, including inventory, employee records, orders, and transactions.
+
+- **External APIs:**  
+  External APIs are integrated for:
+  - **Authentication** (e.g., OAuth or third-party login services).
+  - Accessibility features such as **website translation**.
+  - Providing contextual information like **weather data**.
+  
 ## Usage
 - Deploy the system in Panda Express to manage sales, orders, and inventory.
 - Use the self-service kiosk to reduce customer wait times.
