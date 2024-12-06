@@ -5,7 +5,7 @@ import "./orderComponents.css"
 import { useEnlarge } from "../../EnlargeContext";
 import axios from 'axios';
 
-// Purpose: banner to be displayed at the top of all ordering pages
+// Purpose: Displays the top selling of the item for the cashier
 
 function TodayTopItem(props){
     const navigate = useNavigate();

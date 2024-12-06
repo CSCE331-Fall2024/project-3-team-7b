@@ -5,7 +5,7 @@ import "./orderComponents.css"
 import { useEnlarge } from "../../EnlargeContext";
 import axios from 'axios';
 
-// Purpose: banner to be displayed at the top of all ordering pages
+// Purpose: Displays how much in sales were made during the current day for the cashier
 
 function TransactionSummary(props){
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ function TransactionSummary(props){
 
               
         } catch (error){
-            console.error("Unable to get today's top item", error);
+            console.error("Unable to get today's sales total", error);
             return null;
         }
     };
