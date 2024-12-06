@@ -8,6 +8,9 @@ import OrderArea from '../../components/order/OrderArea';
 import SelectItem from '../../components/order/SelectItem';
 import { useDispatch, useSelector } from 'react-redux';
 
+// Purpose: Order page that displays all food options
+// ex: orange chicken, chow mein, egg rolls, etc
+
 function ItemSelection(props) {
     // Fetch current values of subtotal and order from redux storage
     const {state} = useLocation();

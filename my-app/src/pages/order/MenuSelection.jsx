@@ -9,6 +9,7 @@ import OrderArea from '../../components/order/OrderArea';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Purpose: displays all menu options
+// ex: bowl, plate, a la carte
 
 function MenuSelection(props) {
     const view = props.view;

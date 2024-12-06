@@ -1,5 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 
+// sets up a consistent color scheme for all mui components used in the app
+
 const theme = createTheme({
   palette: {
     primary: {
