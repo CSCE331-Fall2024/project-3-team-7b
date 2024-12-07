@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { flushSync } from 'react-dom';
 import { useEnlarge } from '../../EnlargeContext';
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import Magnifier from "react-magnifier";
 
 // Purpose: Displays individual items such as orange chicken, dr. pepper, cream cheese rangoons, etc
 
@@ -355,10 +356,14 @@ function SelectItem(props) {
                                         <CardActionArea>
                                             {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
-                                                <CardMedia
+                                                {/* <CardMedia
                                                     component="img"
                                                     image={imageObj.src}
                                                     alt={`Menu Item ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                /> */}
+                                                <Magnifier 
+                                                    src={imageObj.src} 
                                                     className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                                 />
                                                 <IconButton
@@ -424,10 +429,14 @@ function SelectItem(props) {
                                         <CardActionArea>
                                             {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
-                                                <CardMedia
+                                                {/* <CardMedia
                                                     component="img"
                                                     image={imageObj.src}
                                                     alt={`Menu Item ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                /> */}
+                                                <Magnifier 
+                                                    src={imageObj.src} 
                                                     className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                                 />
                                                 <IconButton
@@ -489,10 +498,14 @@ function SelectItem(props) {
                                         <CardActionArea>
                                             {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
-                                                <CardMedia
+                                                {/* <CardMedia
                                                     component="img"
                                                     image={imageObj.src}
                                                     alt={`Drink ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                /> */}
+                                                <Magnifier 
+                                                    src={imageObj.src} 
                                                     className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                                 />
                                             </div>
@@ -552,10 +565,14 @@ function SelectItem(props) {
                                         <CardActionArea>
                                             {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
-                                                <CardMedia
+                                                {/* <CardMedia
                                                     component="img"
                                                     image={imageObj.src}
                                                     alt={`Appetizer Item ${index + 1}`}
+                                                    className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                                /> */}
+                                                <Magnifier 
+                                                    src={imageObj.src} 
                                                     className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                                 />
                                                 <IconButton
@@ -640,10 +657,14 @@ function SelectItem(props) {
                                         <CardActionArea>
                                             {/* ADDS PICTURE TO THE CARD */}
                                             <div className="image-container">
-                                            <CardMedia
+                                            {/* <CardMedia
                                                 component="img"
                                                 image={imageObj.src}
                                                 alt={`A La Carte Item ${index + 1}`}
+                                                className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                            /> */}
+                                            <Magnifier 
+                                                src={imageObj.src} 
                                                 className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                             />
                                             <IconButton

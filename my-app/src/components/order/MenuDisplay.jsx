@@ -5,6 +5,7 @@ import "./orderComponents.css";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEnlarge } from '../../EnlargeContext';
 import { Card, CardActionArea, CardMedia, Typography } from "@mui/material";
+import Magnifier from "react-magnifier";
 
 // Purpose: Displays the menu items such as bowls, plates, etc
 
@@ -31,7 +32,7 @@ function MenuDisplay(props) {
     const view = props.view;
 
     // context to know if text should be enlarged
-    const { isEnlarged } = useEnlarge();
+    const { isEnlarged, setIsEnlarged } = useEnlarge();
 
     // Makes API call to retreive menu item information
     useEffect(() => {
@@ -129,10 +130,8 @@ function MenuDisplay(props) {
                     >
                         <CardActionArea>
                             <div className="image-container">
-                                <CardMedia
-                                    component="img"
-                                    image={imageObj.src}
-                                    alt={`Menu Item ${index + 1}`}
+                                <Magnifier 
+                                    src={imageObj.src} 
                                     className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                 />
                             </div>
