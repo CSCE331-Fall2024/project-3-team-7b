@@ -112,7 +112,7 @@
 
 .card-image.enlarged {
     width: auto !important;
-    height: 100px;
+    height: 75px;
     object-fit: cover;
 }
 

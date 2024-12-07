@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { flushSync } from 'react-dom';
 import { useEnlarge } from '../../EnlargeContext';
+import Magnifier from "react-magnifier";
 
 // Purpose: Displays meal options such as bowl/plate/bigger plate bundle
 
@@ -145,10 +146,14 @@ function ChooseMeal(props) {
                                 >
                                     <CardActionArea>
                                         <div className="image-container">
-                                            <CardMedia
+                                            {/* <CardMedia
                                                 component="img"
                                                 image={imageObj.src}
                                                 alt={`Panda Cub Meal ${index + 1}`}
+                                                className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                            /> */}
+                                            <Magnifier 
+                                                src={imageObj.src} 
                                                 className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                             />
                                         </div>
@@ -184,10 +189,14 @@ function ChooseMeal(props) {
                                 >
                                     <CardActionArea>
                                         <div className="image-container">
-                                            <CardMedia
+                                            {/* <CardMedia
                                                 component="img"
                                                 image={imageObj.src}
                                                 alt={`Panda Bundle ${index + 1}`}
+                                                className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
+                                            /> */}
+                                            <Magnifier 
+                                                src={imageObj.src} 
                                                 className={`card-image ${isEnlarged ? 'enlarged' : ''}`}
                                             />
                                         </div>
