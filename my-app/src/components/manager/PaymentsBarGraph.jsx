@@ -93,10 +93,47 @@ function PaymentsBarGraph(){
         ],
     };
 
+    const options = {
+        responsive: true,
+        plugins: {
+            title:{
+                display: true,
+                text: "Payment Methods per Hour",
+                font: {
+                    size: 20
+                },
+            },
+            legend:{
+                position: "top",
+                align: "end",
+            },
+        },
+        scales: {
+            x : {
+                title: {
+                    display: true,
+                    text: "Time of Day",
+                    font: {
+                        size: 16,
+                    },
+                },
+            },
+            y : {
+                title: {
+                    display: true,
+                    text: "Number of Transactions",
+                    font: {
+                        size: 16,
+                    },
+                },
+            },
+        },
+    };
+
     //set loading status if still retrieving payment data
     if(cardSales.length === 0 || digitalWallet.length === 0){
         return <p>Loading sales</p>
     }
-    return <Bar data={data}/>
+    return <Bar data={data} options={options}/>
 }
 export default PaymentsBarGraph;

@@ -55,10 +55,47 @@ function TodaysSalesBarGraph(){
         ],
     };
 
+    const options = {
+        responsive: true,
+        plugins: {
+            title:{
+                display: true,
+                text: "Total Sales per Hour",
+                font: {
+                    size: 20
+                },
+            },
+            legend:{
+                position: "top",
+                align: "end",
+            },
+        },
+        scales: {
+            x : {
+                title: {
+                    display: true,
+                    text: "Time of Day",
+                    font: {
+                        size: 16,
+                    },
+                },
+            },
+            y : {
+                title: {
+                    display: true,
+                    text: "Total Sales",
+                    font: {
+                        size: 16,
+                    },
+                },
+            },
+        },
+    };
+
     // waits for the sales to be retrieved before displaying the data
     if(sales.length == 0){
         return <p>Loading sales</p>
     }
-    return <Bar data={data}/>
+    return <Bar data={data} options={options}/>
 }
 export default TodaysSalesBarGraph;
