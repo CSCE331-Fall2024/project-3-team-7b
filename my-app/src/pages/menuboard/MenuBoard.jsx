@@ -191,7 +191,12 @@ const MenuBoard = () => {
             .map(item => (
               <MenuItem
                 key={item.component_name}
-                {...item}
+                name={item.component_name}
+                calories={item.calories}
+                available={item.availability}
+                seasonal={item.seasonal}
+                ComponentId={item.ComponentID}
+                category={item.category}
               />
             ))}
         </div>
@@ -199,6 +204,121 @@ const MenuBoard = () => {
 
       {/* Step 3: Select entrees */}
       {/* Additional steps and categories are rendered similarly */}
+      <header className="header">
+        <h1>STEP 3: SELECT YOUR ENTREE(S)</h1>
+      </header>
+
+      {/* Entrees */}
+      <section className="entrees-grid">
+        <div className="entree-category">
+          <h3 className="category-title">CLASSIC ENTREES</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => 
+                item.category === 'Main Course' && 
+                !item.premium
+              )
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
+        </div>
+
+        <div className="separator-line"></div> 
+
+        <div className="entree-category">
+          <h3 className="category-title">PREMIUM ENTREES (+$1.50)</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => 
+                item.category === 'Main Course' && 
+                item.premium
+              )
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Step 4 */}
+      <header className="header">
+        <h1>A LA CARTE ENTREE & SIDES</h1>
+      </header>
+      <section className="ala-carte-grid"> {/* New class for 3-column layout */}
+        <div className="ala-carte-category">
+          <h3 className="category-title">APPETIZERS</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => item.category === 'Appetizer')
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
+        </div>
+
+        <div className="ala-carte-category">
+          <h3 className="category-title">BEVERAGES</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => item.category === 'Beverage')
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
+        </div>
+
+        <div className="ala-carte-category">
+          <h3 className="category-title">DESSERTS</h3>
+          <div className="entree-items">
+            {components
+              .filter(item => item.category === 'Dessert')
+              .map(item => (
+                <MenuItem
+                  key={item.component_name}
+                  name={item.component_name}
+                  calories={item.calories}
+                  available={item.availability}
+                  seasonal={item.seasonal}
+                  ComponentId={item.ComponentID}
+                  category={item.category}
+                />
+              ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
