@@ -15,7 +15,6 @@ const MenuBoard = () => {
    * @returns {object} - An object mapping image IDs to their paths.
    */
   const importCategoryImages = (category) => {
-    try {
       const images = {};
       const context = {
         entrees: require.context('../../images/components/entrees', false, /\.(png|jpe?g)$/),
@@ -31,10 +30,7 @@ const MenuBoard = () => {
       });
       
       return images;
-    } catch (error) {
-      console.error(`Error importing ${category} images:`, error);
-      return {};
-    }
+  
   };
 
   // Map of categories to their respective images
@@ -53,22 +49,8 @@ const MenuBoard = () => {
    * @returns {string|null} - The image path or null if not found.
    */
   const getItemImage = (ComponentId, category) => {
-    if (!ComponentId || !category) {
-      console.log('Missing ComponentId or category:', { ComponentId, category });
-      return null;
-    }
-  
     const categoryImages = imagesByCategory[category];
-    if (!categoryImages) {
-      console.log(`No images found for category: ${category}`);
-      return null;
-    }
-  
     const image = categoryImages[ComponentId.toString()];
-    if (!image) {
-      console.log(`No image found for componentId: ${ComponentId} in category: ${category}`);
-      return null;
-    }
   
     return image;
   };
@@ -78,7 +60,6 @@ const MenuBoard = () => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      try {
         const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
         const response = await axios.get(`${baseURL}/api/components`);
         
@@ -97,14 +78,9 @@ const MenuBoard = () => {
           calories: item.calories || null
         }));
 
-        console.log('Transformed Data:', transformedData);
         setComponents(transformedData);
         setLoading(false);
-      } catch (err) {
-        console.error('Fetch error:', err);
-        setError('Failed to load menu data');
-        setLoading(false);
-      }
+  
     };
 
     fetchData();
@@ -122,10 +98,6 @@ const MenuBoard = () => {
             src={getItemImage(ComponentId, category)} 
             alt={name} 
             className="menu-item-image"
-            onError={(e) => {
-              console.error(`Failed to load image for ${name} (${ComponentId})`);
-              e.target.src = '/api/placeholder/200/150';
-            }}
           />
         ) : (
           <img 
