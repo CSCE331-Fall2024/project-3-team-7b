@@ -70,16 +70,6 @@ function FinishOrder(props) {
             console.error("Error adding to transactions table")
         }
 
-        // insert into orderxmenu_item table
-        // insert into orderxcomponents table
-
-        
-
-        // decrement inventory
-
-        // decrement inventory plastics
-
-
         dispatch({type: "write", data: {orders: [[], []], isComplete: false}});
         navigate("/" + view + "/order/confirmation");
     }
