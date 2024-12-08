@@ -195,3 +195,10 @@ body, html {
   width: 33.33%; /* Each category takes up one-third of the space */
   max-width: 33.33%;
 }
+
+.separator-line {
+  width: 4px; /* Thickness of the line */
+  background-color: red; /* Light gray color */
+  height: 100%; /* Full height of the container */
+  align-self: stretch; /* Make it stretch across the container height */
+}
