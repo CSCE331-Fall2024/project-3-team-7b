@@ -4,11 +4,13 @@ import { ThemeProvider } from "@emotion/react";
 import theme from "../../createTheme"
 import { useNavigate } from "react-router-dom";
 import { useEnlarge } from "../../EnlargeContext";
+import axios from 'axios';
 
 // Purpose: page to display order confirmation information
 
 function OrderConfirmation(props) {
-    const orderNumber = 123456;
+    let orderNumber = 123456;
+    const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
     const view = props.view;
     const setAuthentication = props.setAuthentication;
 

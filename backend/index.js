@@ -856,9 +856,9 @@ app.delete('/api/menu/delete/:itemName', async (req, res) => {
     const result = await pool.query(
       `DELETE FROM menu_items WHERE item_name ILIKE $1 RETURNING*`, [itemName]
     );
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json({message: 'Item deleted', item: result.rows[0]});
-    } else{
+    } else {
       res.status(404).send('Item item not found');
     }
   } catch (error){
@@ -878,13 +878,13 @@ app.post('/api/inventory/add/:itemid', async(req, res) => {
       [itemid, item_name, quantity, unit, supplier, needs_restock, threshold]
     );
 
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json(result.rows[0]);
     }
-    else{
+    else {
       res.status(404).send('Item not found');
     }
-  } catch (error){
+  } catch (error) {
     console.error("Inside API error: ", error);
     res.status(500).send('Server Error');
   }
@@ -897,16 +897,16 @@ app.post('/api/components/add/:componentID', async(req, res) => {
 
   try{
     const result = await pool.query(
-      `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal, Allergens) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING*;`,
+      `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal, Allergens) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
       [componentID, component_name, category, availability, premium, seasonal, allergens]
     );
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json(result.rows[0]);
     }
-    else{
+    else {
       res.status(404).send('Item not found');
     }
-  } catch (error){
+  } catch (error) {
     console.error("Inside API error: ", error);
     res.status(500).send('Server Error');
   }
@@ -917,18 +917,58 @@ app.post('/api/menu/add/:itemID', async(req, res) => {
   const {itemID} = req.params;
   const {item_name, price, availability} = req.body;
 
-  try{
+  try {
     const result = await pool.query(
-      `INSERT INTO menu_items (ItemID, item_name, price, availability) VALUES ($1, $2, $3, $4) RETURNING*;`,
+      `INSERT INTO menu_items (ItemID, item_name, price, availability) VALUES ($1, $2, $3, $4) RETURNING *;`,
       [itemID, item_name, price, availability]
     );
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json(result.rows[0]);
     }
-    else{
+    else {
       res.status(404).send('Item not found');
     }
-  } catch (error){
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new order to the orders table within the database
+app.post('/api/orders/add', async(req, res) => {
+  const {orderID, employeeID, numItems, orderTotal} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO Orders (OrderID, EmployeeID, Num_Items_Ordered, Order_Amount) VALUES ($1, $2, $3, $4) RETURNING *;`,
+      [orderID, employeeID, numItems, orderTotal]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to orders table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new transaction to the transactions table within the database
+app.post('/api/transactions/add', async(req, res) => {
+  const {transactionID, orderID, employeeID, paymentMethod, orderTotal} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO Transactions (TransactionID, OrderID, EmployeeID, Payment_Method, Amount, Timestamp, Status) VALUES ($1, $2, $3, $4, $5, NOW()::Timestamp(0) - interval '6 hours', 'Complete') RETURNING *;`,
+      [transactionID, orderID, employeeID, paymentMethod, orderTotal]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to transactions table");
+    }
+  } catch (error) {
     console.error("Inside API error: ", error);
     res.status(500).send('Server Error');
   }

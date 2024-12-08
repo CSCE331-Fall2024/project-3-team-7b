@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 function MenuSelection(props) {
     const view = props.view;
     const setAuthentication = props.setAuthentication;
+    const employeeID = props.employeeID;
     
     return (
         <ThemeProvider theme={theme}>
@@ -26,7 +27,7 @@ function MenuSelection(props) {
                         <MenuDisplay view={view}/>
                     </div>
                     <div>
-                        <OrderArea view={view}/>
+                        <OrderArea view={view} employeeID={employeeID}/>
                     </div>
                 </div>
             </div>
