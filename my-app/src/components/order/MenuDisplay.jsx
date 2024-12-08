@@ -41,6 +41,8 @@ function MenuDisplay(props) {
                 const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
                 const response = await axios.get(`${baseURL}/api/menu_items`);
                 setData(response.data);
+
+                console.log(response.data);
             } catch (error) {
                 console.error(error);
             }
@@ -54,6 +56,8 @@ function MenuDisplay(props) {
         dict[item.itemid] = item;
         return dict;
     }, {});
+
+    console.log(itemsDictionary);
     
     // Update values of subtotal, order, and isComplete in redux storage
     const dispatch = useDispatch();

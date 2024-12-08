@@ -230,6 +230,7 @@ function SelectItem(props) {
         tempNumSides = maxSides;
         tempNumEntrees = maxEntrees;
         handleUpdate(subtotals, orders, tempNumSides, maxSides, tempNumEntrees, maxEntrees);
+        handleClose();
     }
 
     // Import all images from the images folder (you can adjust the path)
