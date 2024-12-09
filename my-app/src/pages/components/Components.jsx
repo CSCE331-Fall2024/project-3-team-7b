@@ -9,6 +9,8 @@ import axios from "axios";
 import { Button, MenuItem } from '@mui/material';
 import { FormControl, Box, TextField } from '@mui/material';
 
+//Purpose: Components page under the manager view
+
 function Components(props){
     const view = props.view;
     const setAuthentication = props.setAuthentication;

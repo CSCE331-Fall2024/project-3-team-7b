@@ -8,6 +8,7 @@ import InventoryTable from '../../components/manager/InventoryTable';
 import { Button } from '@mui/material';
 import { FormControl, Box, TextField } from '@mui/material';
 
+// Purpose: Inventory page under the manager view
 
 function Inventory(props){
     //stores the inventory in inventory table and function used to set the inventory

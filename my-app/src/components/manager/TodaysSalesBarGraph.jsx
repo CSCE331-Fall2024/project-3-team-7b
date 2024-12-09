@@ -6,6 +6,8 @@ import {
     Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 } from "chart.js";
 
+//Purpose: bar graph for today's sales per hour
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function TodaysSalesBarGraph(){
