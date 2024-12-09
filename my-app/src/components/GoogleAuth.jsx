@@ -27,7 +27,7 @@ function GoogleAuth({ onLogin, userType }) {
             if (user) {
                 // Check the user's role
                 if (userType === "Cashier" ? (user.role === userType || user.role === "Manager") : user.role === userType) {
-                    onLogin(userType);
+                    onLogin(userType, user.employeeid);
                     navigate(`/${userType.toLowerCase()}`); // Redirect based on role
                 } else {
                     alert("User role mismatch.");
