@@ -1,5 +1,11 @@
-.translate-button {
-    margin: 3vh !important;
+.cashier-main {
+    width: 100%;
+}
+
+.cashier-logout {
+    width: fit-content;
+    margin-right: 3vw;
+    margin-left: auto;
     border-radius: 10px;
 }
 

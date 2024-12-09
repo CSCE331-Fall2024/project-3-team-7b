@@ -1,11 +1,22 @@
 .banner-div {
     margin-top: 5vh;
     margin-bottom: 5vh;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem; 
+    position: relative;
 }
 
 .main-banner {
-    margin: auto;
+    display: block;
+}
+
+.logout-button {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .button-div {

@@ -6,12 +6,15 @@ import "./cashier.css";
 import theme from "../../createTheme";
 import TodayTopItem from "../../components/order/TodayTopItem";
 import TransactionSummary from "../../components/order/TransactionSummary";
-// import { useEnlarge } from '../../EnlargeContext';
+import { useEnlarge } from '../../EnlargeContext';
 
 // Purpose: Overall home page for the cashiers
 
-function CashierHome() {
+function CashierHome(props) {
     const navigate = useNavigate();
+    const { isEnlarged } = useEnlarge();
+
+    const setAuthentication = props.setAuthentication;
     
     // Navigates cashier to start an order
     const startTransaction = () => {
@@ -23,16 +26,17 @@ function CashierHome() {
         navigate("/"); 
     }
 
-    // const toggleTextSize = () => {
-    //     setIsEnlarged((prev) => !prev);
-    // };
+    const logout = () => {
+        navigate("/");
+        setAuthentication(false);
+    }
 
     return (
         <ThemeProvider theme={theme}>
-            <div>
+            <div className="cashier-main">
                 {/* Accessibility features */}
-                <div className="translate-button">
-                    {/* <Button className="translate-button" variant="contained">Select A Language</Button> */}
+                <div className="cashier-logout">
+                    <Button sx={isEnlarged ? { fontSize: '1rem' } : {}} variant="contained" onClick={logout}>Logout</Button>
                 </div>
 
                 {/* Main content of page */}
