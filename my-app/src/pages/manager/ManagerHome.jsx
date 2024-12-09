@@ -40,7 +40,7 @@ function ManagerHome(props){
             <div>
                 <div className="banner-div">
                     <img className="main-banner" src={banner} alt="Panda Express Banner"></img>
-                    <div className="logout-button">
+                    <div className="manager-logout">
                         <Button sx={isEnlarged ? { fontSize: '1rem' } : {}} variant="contained" onClick={logout}>Logout</Button>
                     </div>
                 </div>
