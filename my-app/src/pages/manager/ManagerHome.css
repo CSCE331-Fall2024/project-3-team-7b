@@ -12,7 +12,7 @@
     display: block;
 }
 
-.logout-button {
+.manager-logout {
     position: absolute;
     right: 1rem;
     top: 50%;
