@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEnlarge } from "../../EnlargeContext";
 import axios from 'axios';
 
+// Purpose: Handles order submission
+
 function FinishOrder(props) {
     const subtotals = useSelector((state) => state.orders.at(0));
     const orders = useSelector((state) => state.orders.at(1));
