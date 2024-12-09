@@ -41,7 +41,8 @@ function Login({ onLogin, userType }) {
 
         // If user is correctly authenticated
         if (user && user.password === password) {
-            onLogin(userType); // Set authentication state
+            onLogin(userType, user.employeeid); // Set authentication state
+
             if (userType === "Manager") {
                 navigate("/manager");
             } else if (userType === "Cashier") {

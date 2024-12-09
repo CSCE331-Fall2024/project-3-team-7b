@@ -12,6 +12,7 @@ function FinishOrder(props) {
     const orders = useSelector((state) => state.orders.at(1));
     const view = props.view;
     const setAuthentication = props.setAuthentication;
+    const employeeID = props.employeeID;
   
     // context to know if text should be enlarged
     const { isEnlarged } = useEnlarge();
@@ -28,60 +29,16 @@ function FinishOrder(props) {
         return current_sum;
     }
 
-    // const submitOrder = async() => {
-    //     const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
-    //     try {
-    //         axios.put('${baseURL}/api/orders/submit', {
-    //             params: {
-    //                 orderID: orderID,
-    //                 employeeID: employeeID,
-    //                 numItems: numItems,
-    //                 orderTotal: orderTotal
-    //             }
-    //         });
-    //         axios.put('${baseURL}/api/orderxmenu_item/submit', {
-    //             params: {
-    //                 ID: menuItemTableID,
-    //                 orderID: orderID,
-    //                 itemID: itemID
-    //             }
-    //         })
-    //         axios.put('${baseURL}/api/orderxcomponent/submit', {
-    //             params: {
-    //                 ID: componentTableID,
-    //                 orderID: orderID,
-    //                 componentID: componentID
-    //             }
-    //         })
-
-    //         axios.put('${baseURL}/api/transactions/submit', {
-    //             params: {
-    //                 transactionID: transactionID,
-    //                 orderID: orderID,
-    //                 employeeID: employeeID,
-    //                 paymentMethod: paymentMethod,
-    //                 amount: orderTotal,
-    //                 timestamp: timestamp,
-    //                 status: "Complete"
-    //             }
-    //         });
-    //     }
-    // }
-
-
     // Place the order and clear redux storage for new order
     const placeOrder = async() => {
         const baseURL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5001';
         let orderID;
         let transactionID;
-        let employeeID;
         const numItems = subtotals.length;
         const orderTotal = sum(subtotals) * 1.0875;
         const paymentMethod = Math.random() < 0.5 ? "card" : "digital wallet";
-        const timestamp = "CURRENT_TIMESTAMP";
-        const status = "Complete";
 
-        // get last order id
+        // get new order id
         try {
             const response = await axios.get(`${baseURL}/api/orderID`);
             orderID = parseInt(response.data) + 1;
@@ -89,7 +46,7 @@ function FinishOrder(props) {
             console.error("Error fetching order ID");
         }
 
-        // get last transaction id
+        // get new transaction id
         try {
             const response = await axios.get(`${baseURL}/api/transactionID`);
             transactionID = parseInt(response.data) + 1;
@@ -97,32 +54,67 @@ function FinishOrder(props) {
             console.error("Error fetching transaction ID");
         }
 
-        // if cashier view, get id
-        // else, set id to 0
-        if (view == "cashier") {
-            try {
-                const response = await axios.get(`${baseURL}/bruh`);
-                employeeID = parseInt(response.data);
-            } catch (error) {
-                console.error("Error fetching employee ID");
-            }
+        // insert into orders table
+        try {
+            const order = {orderID: orderID, employeeID: employeeID, numItems: numItems, orderTotal: orderTotal};
+            const response = await axios.post(`${baseURL}/api/orders/add`, order);
+        } catch (error) {
+            console.error("Error adding to orders table");
         }
-        else {
-            employeeID = 0;
-        }
-
-        console.log(baseURL, orderID, transactionID, employeeID, numItems, orderTotal, paymentMethod, timestamp, status);
-
-        // insert into order table
-        // insert into orderxmenu_item table
-        // insert into orderxcomponents table
 
         // insert into transactions table
+        try {
+            const transaction = {transactionID: transactionID, orderID: orderID, employeeID: employeeID, paymentMethod: paymentMethod, orderTotal: orderTotal};
+            const response = await axios.post(`${baseURL}/api/transactions/add`, transaction)
+        } catch (error) {
+            console.error("Error adding to transactions table");
+        }
 
-        // decrement inventory
+        //get item ids and component ids in order
+        let itemIDs = []
+        let componentIDs = []
+        for (let i = 0; i < orders.length; i++) {
+            for (let j = 0; j < orders.at(i).length; j++) {
+                try {
+                    const item_id = (await axios.get(`${baseURL}/api/item-id/${orders.at(i).at(j)}`)).data.itemid;
+                    if (item_id != -1) {
+                        itemIDs.push(item_id);
+                    }
+                    else {
+                        const component_id = (await axios.get(`${baseURL}/api/component-id/${orders.at(i).at(j)}`)).data.componentid;
+                        if (component_id != -1) {
+                            componentIDs.push(component_id);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error getting IDs");
+                }
+            }
+        }
 
-        // decrement inventory plastics
+        // insert into order x menu_item table
+        for (let i = 0; i < itemIDs.length; i++)
+        {
+            try {
+                const ID = (await axios.get(`${baseURL}/api/order-item-id/`)).data + 1;
+                const row = {ID: ID, orderID: orderID, itemID: itemIDs.at(i)};
+                const response = await axios.post(`${baseURL}/api/order-item/add`, row);
+            } catch (error) {
+                console.error("Error in adding to order x menu_item table and updating inventory")
+            }
+        }
 
+        // insert into order x components table
+        for (let i = 0; i < componentIDs.length; i++)
+        {
+            try {
+                const ID = (await axios.get(`${baseURL}/api/order-components-id/`)).data + 1;
+                const row = {ID: ID, orderID: orderID, componentID: componentIDs.at(i)};
+                const response = await axios.post(`${baseURL}/api/order-components/add`, row);
+            } catch (error) {
+                console.error("Error in adding to order x components table and updating inventory")
+            }
+        }
 
         dispatch({type: "write", data: {orders: [[], []], isComplete: false}});
         navigate("/" + view + "/order/confirmation");

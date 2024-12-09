@@ -11,13 +11,7 @@ import TransactionSummary from "../../components/order/TransactionSummary";
 // Purpose: Overall home page for the cashiers
 
 function CashierHome() {
-    // Fetch current values of subtotal and order from redux storage
     const navigate = useNavigate();
-    // const subtotal = useSelector((state) => state.subtotal);
-    // const order = useSelector((state) => state.order);
-
-    // context to know if text should be enlarged
-    // const { isEnlarged, setIsEnlarged } = useEnlarge();
     
     // Navigates cashier to start an order
     const startTransaction = () => {

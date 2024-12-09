@@ -25,11 +25,13 @@ import { EnlargeProvider} from './EnlargeContext';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const [employeeID, setEmployeeID] = useState(-1);
 
   // Function to set user as authenticated after login
-  const handleLogin = (role) => {
+  const handleLogin = (role, employeeID) => {
     setIsAuthenticated(true);
     setUserRole(role);
+    setEmployeeID(employeeID);
   };
 
   return (
@@ -51,22 +53,22 @@ function App() {
 
             {/* Pages related to the customer view */}
             <Route path="/customer" element={<CustomerHome />}/>
-            <Route path="/customer/order" element={<MenuSelection view="customer" />}/>
-            <Route path="/customer/order/select" element={<ItemSelection view="customer"/>}/>
-            <Route path="/customer/order/choose-meal" element={<MealOptions view="customer"/>}/>
-            <Route path="/customer/order/finish" element={<FinishOrder view="customer"/>}/>
-            <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer"/>}/>
+            <Route path="/customer/order" element={<MenuSelection view="customer" employeeID={employeeID}/>}/>
+            <Route path="/customer/order/select" element={<ItemSelection view="customer" employeeID={employeeID}/>}/>
+            <Route path="/customer/order/choose-meal" element={<MealOptions view="customer" employeeID={employeeID}/>}/>
+            <Route path="/customer/order/finish" element={<FinishOrder view="customer" employeeID={employeeID}/>}/>
+            <Route path="/customer/order/confirmation" element={<OrderConfirmation view="customer" employeeID={employeeID}/>}/>
               
             {/* Pages related to the cashier view */}
             <Route 
               path="/cashier" 
               element={isAuthenticated && userRole === "Cashier" ? <CashierHome /> : <Navigate to="/login/cashier" replace />}
             />
-            <Route path="/cashier/order/" element={<MenuSelection view="cashier" setAuthentication={setIsAuthenticated}/>}/>
-            <Route path="/cashier/order/select" element={<ItemSelection view="cashier" setAuthentication={setIsAuthenticated}/>}/>
-            <Route path="/cashier/order/choose-meal" element={<MealOptions view="cashier" setAuthentication={setIsAuthenticated}/>}/>
-            <Route path="/cashier/order/finish" element={<FinishOrder view="cashier" setAuthentication={setIsAuthenticated}/>}/>
-            <Route path="/cashier/order/confirmation" element={<OrderConfirmation view="cashier" setAuthentication={setIsAuthenticated}/>}/>
+            <Route path="/cashier/order/" element={<MenuSelection view="cashier" setAuthentication={setIsAuthenticated} employeeID={employeeID}/>}/>
+            <Route path="/cashier/order/select" element={<ItemSelection view="cashier" setAuthentication={setIsAuthenticated} employeeID={employeeID}/>}/>
+            <Route path="/cashier/order/choose-meal" element={<MealOptions view="cashier" setAuthentication={setIsAuthenticated} employeeID={employeeID}/>}/>
+            <Route path="/cashier/order/finish" element={<FinishOrder view="cashier" setAuthentication={setIsAuthenticated} employeeID={employeeID}/>}/>
+            <Route path="/cashier/order/confirmation" element={<OrderConfirmation view="cashier" setAuthentication={setIsAuthenticated} employeeID={employeeID}/>}/>
       
             {/* Pages related to the manager view */}
             <Route 

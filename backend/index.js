@@ -541,6 +541,28 @@ app.get('/api/transactionID', async (req, res) => {
   }
 })
 
+// Retrives the max ID from the orderxmenu_item table from the database
+app.get('/api/order-item-id', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(ID) AS id FROM OrderXMenu_Item;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
+// Retrives the max ID from the orderxcomponent table from the database
+app.get('/api/order-components-id', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(ID) AS id FROM OrderXComponents;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
 // Call to database that returns if given inventory item exists within the inventory table
 app.get('/api/inventory/check/:itemName', async (req, res) =>{
   const {itemName} = req.params;
@@ -856,9 +878,9 @@ app.delete('/api/menu/delete/:itemName', async (req, res) => {
     const result = await pool.query(
       `DELETE FROM menu_items WHERE item_name ILIKE $1 RETURNING*`, [itemName]
     );
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json({message: 'Item deleted', item: result.rows[0]});
-    } else{
+    } else {
       res.status(404).send('Item item not found');
     }
   } catch (error){
@@ -878,13 +900,13 @@ app.post('/api/inventory/add/:itemid', async(req, res) => {
       [itemid, item_name, quantity, unit, supplier, needs_restock, threshold]
     );
 
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json(result.rows[0]);
     }
-    else{
+    else {
       res.status(404).send('Item not found');
     }
-  } catch (error){
+  } catch (error) {
     console.error("Inside API error: ", error);
     res.status(500).send('Server Error');
   }
@@ -897,16 +919,16 @@ app.post('/api/components/add/:componentID', async(req, res) => {
 
   try{
     const result = await pool.query(
-      `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal, Allergens) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING*;`,
+      `INSERT INTO Components (ComponentID, Component_Name, Category, Availability, Premium, Seasonal, Allergens) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
       [componentID, component_name, category, availability, premium, seasonal, allergens]
     );
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json(result.rows[0]);
     }
-    else{
+    else {
       res.status(404).send('Item not found');
     }
-  } catch (error){
+  } catch (error) {
     console.error("Inside API error: ", error);
     res.status(500).send('Server Error');
   }
@@ -917,18 +939,132 @@ app.post('/api/menu/add/:itemID', async(req, res) => {
   const {itemID} = req.params;
   const {item_name, price, availability} = req.body;
 
-  try{
+  try {
     const result = await pool.query(
-      `INSERT INTO menu_items (ItemID, item_name, price, availability) VALUES ($1, $2, $3, $4) RETURNING*;`,
+      `INSERT INTO menu_items (ItemID, item_name, price, availability) VALUES ($1, $2, $3, $4) RETURNING *;`,
       [itemID, item_name, price, availability]
     );
-    if(result.rowCount > 0){
+    if (result.rowCount > 0) {
       res.json(result.rows[0]);
     }
-    else{
+    else {
       res.status(404).send('Item not found');
     }
-  } catch (error){
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new order to the orders table within the database
+app.post('/api/orders/add', async(req, res) => {
+  const {orderID, employeeID, numItems, orderTotal} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO Orders (OrderID, EmployeeID, Num_Items_Ordered, Order_Amount) VALUES ($1, $2, $3, $4) RETURNING *;`,
+      [orderID, employeeID, numItems, orderTotal]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to orders table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new transaction to the transactions table within the database
+app.post('/api/transactions/add', async(req, res) => {
+  const {transactionID, orderID, employeeID, paymentMethod, orderTotal} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO Transactions (TransactionID, OrderID, EmployeeID, Payment_Method, Amount, Timestamp, Status) VALUES ($1, $2, $3, $4, $5, NOW()::Timestamp(0) - interval '6 hours', 'Complete') RETURNING *;`,
+      [transactionID, orderID, employeeID, paymentMethod, orderTotal]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to transactions table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new row to the order x menu_item table within the database
+app.post('/api/order-item/add', async(req, res) => {
+  const {ID, orderID, itemID} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO OrderxMenu_Item (ID, OrderID, ItemID) VALUES ($1, $2, $3) RETURNING *;`,
+      [ID, orderID, itemID]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to order x menu_item table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new row to the order x components table within the database
+app.post('/api/order-components/add', async(req, res) => {
+  const {ID, orderID, componentID} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO OrderxComponents (ID, OrderID, ComponentID) VALUES ($1, $2, $3) RETURNING *;`,
+      [ID, orderID, componentID]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to order x components table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// API to get the Item ID of a Menu Item
+app.get('/api/item-id/:name', async(req, res) => {
+  const {name} = req.params;
+  try {
+    const result = await pool.query("SELECT ItemID FROM Menu_Items WHERE Item_Name = '" + name + "';");
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.json({"itemid": -1});
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// API to get the Component ID of a Component
+app.get('/api/component-id/:name', async(req, res) => {
+  const {name} = req.params;
+  try {
+    const result = await pool.query("SELECT ComponentID FROM Components WHERE Component_Name = '" + name + "';");
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.json({"componentid": -1});
+    }
+  } catch (error) {
     console.error("Inside API error: ", error);
     res.status(500).send('Server Error');
   }
