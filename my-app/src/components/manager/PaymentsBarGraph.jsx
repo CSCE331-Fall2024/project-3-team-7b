@@ -5,6 +5,8 @@ import {
     Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 } from "chart.js";
 
+// Purpose: double bar graph for all of the payments of the current day
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function PaymentsBarGraph(){

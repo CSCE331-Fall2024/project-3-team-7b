@@ -8,6 +8,8 @@ import ItemsTable from '../../components/manager/ItemsTable';
 import { Button, MenuItem } from '@mui/material';
 import { FormControl, Box, TextField } from '@mui/material';
 
+// Purpose: items page under the manager view
+
 function Items(props){
     const view = props.view;
     const setAuthentication = props.setAuthentication;

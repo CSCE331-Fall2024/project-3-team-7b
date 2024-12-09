@@ -6,6 +6,8 @@ import styles from "./managerBanner.module.css";
 import theme from '../../createTheme';
 import { useEnlarge } from "../../EnlargeContext";
 
+//Purpose: Manager view banner accross all of the pages
+
 function ManagerBanner(props){
     const navigate = useNavigate();
     const view = props.view;
