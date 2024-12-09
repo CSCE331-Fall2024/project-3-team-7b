@@ -67,7 +67,53 @@ function FinishOrder(props) {
             const transaction = {transactionID: transactionID, orderID: orderID, employeeID: employeeID, paymentMethod: paymentMethod, orderTotal: orderTotal};
             const response = await axios.post(`${baseURL}/api/transactions/add`, transaction)
         } catch (error) {
-            console.error("Error adding to transactions table")
+            console.error("Error adding to transactions table");
+        }
+
+        //get item ids and component ids in order
+        let itemIDs = []
+        let componentIDs = []
+        for (let i = 0; i < orders.length; i++) {
+            for (let j = 0; j < orders.at(i).length; j++) {
+                try {
+                    const item_id = (await axios.get(`${baseURL}/api/item-id/${orders.at(i).at(j)}`)).data.itemid;
+                    if (item_id != -1) {
+                        itemIDs.push(item_id);
+                    }
+                    else {
+                        const component_id = (await axios.get(`${baseURL}/api/component-id/${orders.at(i).at(j)}`)).data.componentid;
+                        if (component_id != -1) {
+                            componentIDs.push(component_id);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error getting IDs");
+                }
+            }
+        }
+
+        // insert into order x menu_item table
+        for (let i = 0; i < itemIDs.length; i++)
+        {
+            try {
+                const ID = (await axios.get(`${baseURL}/api/order-item-id/`)).data + 1;
+                const row = {ID: ID, orderID: orderID, itemID: itemIDs.at(i)};
+                const response = await axios.post(`${baseURL}/api/order-item/add`, row);
+            } catch (error) {
+                console.error("Error in adding to order x menu_item table and updating inventory")
+            }
+        }
+
+        // insert into order x components table
+        for (let i = 0; i < componentIDs.length; i++)
+        {
+            try {
+                const ID = (await axios.get(`${baseURL}/api/order-components-id/`)).data + 1;
+                const row = {ID: ID, orderID: orderID, componentID: componentIDs.at(i)};
+                const response = await axios.post(`${baseURL}/api/order-components/add`, row);
+            } catch (error) {
+                console.error("Error in adding to order x components table and updating inventory")
+            }
         }
 
         dispatch({type: "write", data: {orders: [[], []], isComplete: false}});

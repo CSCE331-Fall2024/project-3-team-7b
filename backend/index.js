@@ -541,6 +541,28 @@ app.get('/api/transactionID', async (req, res) => {
   }
 })
 
+// Retrives the max ID from the orderxmenu_item table from the database
+app.get('/api/order-item-id', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(ID) AS id FROM OrderXMenu_Item;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
+// Retrives the max ID from the orderxcomponent table from the database
+app.get('/api/order-components-id', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT MAX(ID) AS id FROM OrderXComponents;');
+    res.json(result.rows[0].id);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+})
+
 // Call to database that returns if given inventory item exists within the inventory table
 app.get('/api/inventory/check/:itemName', async (req, res) =>{
   const {itemName} = req.params;
@@ -967,6 +989,80 @@ app.post('/api/transactions/add', async(req, res) => {
     }
     else {
       res.status(500).send("Error adding to transactions table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new row to the order x menu_item table within the database
+app.post('/api/order-item/add', async(req, res) => {
+  const {ID, orderID, itemID} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO OrderxMenu_Item (ID, OrderID, ItemID) VALUES ($1, $2, $3) RETURNING *;`,
+      [ID, orderID, itemID]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to order x menu_item table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// adds a new row to the order x components table within the database
+app.post('/api/order-components/add', async(req, res) => {
+  const {ID, orderID, componentID} = req.body;
+  try {
+    const result = await pool.query(
+      `INSERT INTO OrderxComponents (ID, OrderID, ComponentID) VALUES ($1, $2, $3) RETURNING *;`,
+      [ID, orderID, componentID]
+    );
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.status(500).send("Error adding to order x components table");
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// API to get the Item ID of a Menu Item
+app.get('/api/item-id/:name', async(req, res) => {
+  const {name} = req.params;
+  try {
+    const result = await pool.query("SELECT ItemID FROM Menu_Items WHERE Item_Name = '" + name + "';");
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.json({"itemid": -1});
+    }
+  } catch (error) {
+    console.error("Inside API error: ", error);
+    res.status(500).send('Server Error');
+  }
+});
+
+// API to get the Component ID of a Component
+app.get('/api/component-id/:name', async(req, res) => {
+  const {name} = req.params;
+  try {
+    const result = await pool.query("SELECT ComponentID FROM Components WHERE Component_Name = '" + name + "';");
+    if (result.rowCount > 0) {
+      res.json(result.rows[0]);
+    }
+    else {
+      res.json({"componentid": -1});
     }
   } catch (error) {
     console.error("Inside API error: ", error);
