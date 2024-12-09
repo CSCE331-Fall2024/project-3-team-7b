@@ -6,6 +6,8 @@ import "./ManagerHome.css";
 import theme from "../../createTheme"
 import { useEnlarge } from "../../EnlargeContext";
 
+// Purpose: Landing page for the manager view
+
 function ManagerHome(props){
     const navigate = useNavigate();
     const { isEnlarged } = useEnlarge();
