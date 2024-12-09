@@ -1,3 +1,5 @@
+// Purpose: Creates the Redux database and actions that can be performed on it (reducers)
+
 // Creates the initial state (no order)
 const initialState = {
     orders: [[], []],
