@@ -62,7 +62,7 @@ function App() {
             {/* Pages related to the cashier view */}
             <Route 
               path="/cashier" 
-              element={isAuthenticated && userRole === "Cashier" ? <CashierHome /> : <Navigate to="/login/cashier" replace />}
+              element={isAuthenticated && userRole === "Cashier" ? <CashierHome setAuthentication={setIsAuthenticated} /> : <Navigate to="/login/cashier" replace />}
             />
             <Route path="/cashier/order/" element={<MenuSelection view="cashier" setAuthentication={setIsAuthenticated} employeeID={employeeID}/>}/>
             <Route path="/cashier/order/select" element={<ItemSelection view="cashier" setAuthentication={setIsAuthenticated} employeeID={employeeID}/>}/>
@@ -73,7 +73,7 @@ function App() {
             {/* Pages related to the manager view */}
             <Route 
               path="/manager" 
-              element={isAuthenticated && userRole === "Manager" ? <ManagerHome /> : <Navigate to="/login/manager" replace />}
+              element={isAuthenticated && userRole === "Manager" ? <ManagerHome setAuthentication={setIsAuthenticated}/> : <Navigate to="/login/manager" replace />}
             />
             <Route path="/manager/inventory" element={<Inventory view="manager" setAuthentication={setIsAuthenticated}/>}/>
             <Route path="/manager/trends" element={<Trends view="manager" setAuthentication={setIsAuthenticated}/>}/>
