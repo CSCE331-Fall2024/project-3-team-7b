@@ -8,10 +8,13 @@ const Weather = (props) => {
     const city = "College Station";
     const [weatherData, setWeatherData] = useState(null);
     const isBanner = props.isBanner;
+    const apiKey = process.env.REACT_APP_WEATHER_KEY;
+    console.log(apiKey)
+
     const fetchData = async () => {
         try {
             const response = await axios.get(
-                `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=288fb59188b407967c9459d6080c9f1d`
+                `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`
             );
             setWeatherData(response.data);
         } catch (error) {
